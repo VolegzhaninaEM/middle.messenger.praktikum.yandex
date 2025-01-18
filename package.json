@@ -1,5 +1,6 @@
 {
   "devDependencies": {
+    "@actions/core": "^1.11.1",
     "@types/node": "^22.10.5",
     "less": "^4.2.1",
     "vite": "^6.0.7"
@@ -15,7 +16,8 @@
     "moduleResolution": "Node"
   },
   "scripts": {
-    "start": "vite",
+    "dev": "vite",
+    "start": "vite build && vite preview",
     "build": "vite build --emptyOutDir"
   },
   "type": "module",
