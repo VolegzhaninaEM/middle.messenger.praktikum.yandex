@@ -36,6 +36,7 @@ export default defineConfig({
         chats: resolve(__dirname, "/pages/chats/chats.html"),
         "404": resolve(__dirname, "/pages/errors/404.html"),
         "5xx": resolve(__dirname, "/pages/errors/5xx.html"),
+        "profile": resolve(__dirname, "/pages/profile/profile.html"),
       },
     },
   },
