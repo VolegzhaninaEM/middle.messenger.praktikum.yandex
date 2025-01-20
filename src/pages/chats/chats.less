@@ -1,0 +1,135 @@
+@import url(src/style.less);
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+.messenger {
+    display: flex;
+    height: 100vh;
+}
+
+.left-panel {
+    width: 300px;
+    background-color: @base-white;
+    display: flex;
+    flex-direction: column;
+}
+
+.header {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    background-color: @base-white;
+}
+
+.menu {
+    margin-right: 10px;
+    cursor: pointer;
+
+    &__input {
+        flex: 1;
+        padding: 10px 40px 10px 40px;
+        /* Увеличено поле слева и справа для иконок */
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        position: relative;
+    }
+
+    &__icon {
+        width: 20px;
+        height: 20px;
+    }
+}
+
+.search {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    padding: 0 5px;
+    border: 1px solid @dark-grey;
+    border-radius: 22px;
+    background-color: @dark-grey;
+    color: @dark-beige;
+
+    &__button {
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding-left: 10px;
+        padding-right: 0;
+    }
+
+    &__icon {
+        width: 15px;
+        height: 15px;
+    }
+
+    &__input {
+        border: none;
+        outline: none;
+        padding: 8px;
+        flex: 1;
+        background: none;
+    }
+}
+
+.chat {
+    padding: 10px;
+    cursor: pointer;
+
+    &__list {
+        padding: 10px;
+        overflow-y: auto;
+    }
+
+    &__window {
+        flex: 1;
+        padding: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-bottom: 1px solid #ccc;
+    }
+
+    &:hover {
+        background-color: @dark-grey;
+    }
+
+    &__item {
+        padding: 10px;
+        cursor: pointer;
+
+        &:hover {
+            background-color: @dark-grey;
+        }
+    }
+
+    &__empty {
+        border-radius: 22px;
+        background-color: @base-white;
+        padding: 10px;
+        color: @dark-beige;
+        font-size: 16px;
+    }
+}
+
+
+.right-panel {
+    flex: 1;
+    background-color: @light-beige;
+    display: flex;
+    flex-direction: column;
+    border-left: 1px solid #ccc;
+}
+
+.input {
+    flex: 1;
+    padding: 10px 40px 10px 40px;
+    /* Увеличено поле слева и справа для иконок */
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    position: relative;
+}

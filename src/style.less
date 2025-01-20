@@ -1,0 +1,31 @@
+@base-white: #FFFFFF;
+@font-black: #1E1E1E;
+@pale-green: #7A9376;
+@light-beige: #E3D5CA;
+@dark-grey: rgba(89, 89, 89, 0.2);
+@shadow: @dark-grey;
+@shadow-hover: rgba(89, 89, 89, 0.5);
+@button-hover: #ffffffc5;
+@dark-beige: #595959;
+
+.flex-column {
+    display: flex;
+    flex-direction: column;
+}
+
+.container {
+    &__main {
+        display: flex;
+        height: 100vh;
+        justify-content: center;
+        align-items: center;
+        font-family: "Montserrat", serif;
+    }
+}
+
+#nav {
+    .flex-column;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
