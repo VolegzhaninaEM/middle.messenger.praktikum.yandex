@@ -6,12 +6,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Profile</title>
 
-    {{> lessInfo styleHref="profile.less"}}
+    {{> "partials/lessInfo" styleHref="profile.less"}}
 </head>
 
 <body>
     <main class="modal">
-        {{> nav }}
+        {{> "partials/nav" }}
         <button class="close-btn">&times;</button>
         <div class="profile-photo">
             <img src="/user-photo.png" alt="User Photo">

@@ -2,12 +2,17 @@
   "devDependencies": {
     "@actions/core": "^1.11.1",
     "@types/node": "^22.10.5",
+    "@typescript-eslint/eslint-plugin": "^8.22.0",
+    "@typescript-eslint/parser": "^8.22.0",
+    "eslint": "^8.2.0",
+    "eslint-config-airbnb": "^19.0.4",
     "less": "^4.2.1",
     "vite": "^5.4.11"
   },
   "dependencies": {
     "handlebars": "^4.7.8",
     "path": "^0.12.7",
+    "uuid": "^11.0.5",
     "vite-plugin-handlebars": "^2.0.0"
   },
   "compilerOptions": {
@@ -17,8 +22,9 @@
   },
   "scripts": {
     "dev": "vite",
+    "prebuild": "tsc --noEmit",
     "start": "vite build && vite preview",
-    "build": "vite build --emptyOutDir"
+    "build": "npm run prebuild && vite build --emptyOutDir"
   },
   "type": "module",
   "engines": {
