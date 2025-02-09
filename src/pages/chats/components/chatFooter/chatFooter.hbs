@@ -1,0 +1,14 @@
+<div class="chat__img_container"><img
+    src="/attach-icon.png"
+    alt="Attach icon"
+    class="chat__img"
+  /></div>
+<div class="chat__message_container">
+  {{inputMessage}}
+  {{#if hasErrors}}
+    {{error}}
+  {{/if}}
+</div>
+<div class="chat__btn_container">
+  {{sendButton}}
+</div>

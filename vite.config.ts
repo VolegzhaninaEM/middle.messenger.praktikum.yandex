@@ -2,7 +2,17 @@ import { defineConfig } from "vite";
 import { resolve } from "path";
 import handlebars from "vite-plugin-handlebars";
 
-const pageData = {
+interface IPageData {
+  [key: string]: PageInfo;
+}
+
+interface PageInfo {
+  title?: string; // Заголовок страницы (необязательный)
+  error?: string; // Код ошибки (необязательный)
+  message?: string; // Сообщение об ошибке (необязательное)
+}
+
+const pageData: IPageData = {
   "/": {
     title: "Main Page",
   },
@@ -23,22 +33,12 @@ const pageData = {
 };
 
 export default defineConfig({
+  assetsInclude: ["**/*.hbs"],
   root: resolve(__dirname, "src"),
   build: {
     outDir: resolve(__dirname, "dist"),
     assetsDir: "partials",
     emptyOutDir: true,
-    rollupOptions: {
-      input: {
-        main: resolve(__dirname, "/index.html"),
-        signUp: resolve(__dirname, "/pages/signs/signUp.html"),
-        signIn: resolve(__dirname, "/pages/signs/signIn.html"),
-        chats: resolve(__dirname, "/pages/chats/chats.html"),
-        "404": resolve(__dirname, "/pages/errors/404.html"),
-        "5xx": resolve(__dirname, "/pages/errors/5xx.html"),
-        "profile": resolve(__dirname, "/pages/profile/profile.html"),
-      },
-    },
   },
   preview: { port: 3000 },
   server: {
@@ -55,8 +55,8 @@ export default defineConfig({
   },
   plugins: [
     handlebars({
-      partialDirectory: resolve(__dirname, "src", "partials"),
-      context(pagePath) {
+      partialDirectory: resolve(__dirname, 'src'),
+      context(pagePath: string) {
         return pageData[pagePath];
       },
     }),
