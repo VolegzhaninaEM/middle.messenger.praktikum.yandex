@@ -1,18 +1,30 @@
+import "./chats.less";
 import { Component } from "../../services/component";
-import { default as template } from './chats.hbs?raw';
-import {default as lessInfo } from '../../partials/lessInfo.hbs?raw';
+import { default as template } from "./chats.hbs?raw";
 import { TProps } from "../../types/types";
-import Handlebars from 'handlebars';
+import { ChatWindow } from "./components/chatWindow/chatWindow";
+import { Sidebar } from "./components/sidebar/sidebar";
 
-Handlebars.registerPartial("partials/lessInfo", lessInfo);
 export class ChatPage extends Component {
+  constructor(tagName: string, props: TProps) {
+    super(tagName,  {
+      ...props,
+      attr: {
+        class: "messenger",
+      },
+    });
 
-    constructor(tagName: string, props: TProps) {
-        super(tagName, props);
+    if (!this.children.sidebar) {
+        this.children.sidebar = new Sidebar('div', {});
     }
 
-    render(): DocumentFragment {
-        return this.compile(template, this.childProps);
-      }
 
+    if (!this.children.chatWindow) {
+        this.children.chatWindow = new ChatWindow('div', {attr: {id: 'chat__window', class: 'chat__window'}});
+    }
+  }
+
+  render(): DocumentFragment {
+    return this.compile(template, this.childProps);
+  }
 }

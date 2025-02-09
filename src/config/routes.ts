@@ -1,5 +1,17 @@
-import { ChatPage } from '../pages'; 
+import {
+  ChatPage,
+  Error,
+  LoginPage,
+  NavigationPage,
+  Profile,
+  RegistrationPage,
+} from "../pages";
 
 export const routes: Record<string, any> = {
-    '/': ChatPage,
+  "/": NavigationPage,
+  "/chats": ChatPage,
+  "/profile": Profile,
+  "/login": LoginPage,
+  "/registration": RegistrationPage,
+  "*": Error,
 };

@@ -1,9 +1,10 @@
 import { v4 as makeUUID } from "uuid";
 import { EventBus } from "./eventBus";
-import { TProps, TChildren } from "../types/types";
+import { TProps, TChildren, TArrayChildren } from "../types/types";
 import Handlebars from "handlebars";
 
 export abstract class Component {
+  [x: string]: any;
   static readonly EVENTS = {
     INIT: "init",
     FLOW_CDM: "flow:component-did-mount",
@@ -15,6 +16,7 @@ export abstract class Component {
   protected _meta: { tagName: string; props: TProps };
   private _id: string | null = null;
   public children: TChildren;
+  public arrayChildren: TArrayChildren;
   public childProps: TProps;
   private eventBus: () => EventBus;
 
@@ -25,7 +27,7 @@ export abstract class Component {
    * @returns {void}
    */
   constructor(tagName = "div", props = {}) {
-    const { children, childProps } = this._getChildren(props);
+    const { children, childProps, arrayChildren } = this._getChildren(props);
     const eventBus: EventBus = new EventBus();
     this._id = makeUUID();
     this._meta = {
@@ -34,8 +36,8 @@ export abstract class Component {
     };
 
     this.children = this._makePropsProxy(children) as TChildren;
-
     this.childProps = this._makePropsProxy(childProps);
+    this.arrayChildren = this._makePropsProxy(arrayChildren) as TArrayChildren;
 
     this.eventBus = () => eventBus;
 
@@ -46,15 +48,21 @@ export abstract class Component {
   private _getChildren(propsAndChildren: TProps) {
     const children: TChildren = {};
     const childProps: TProps = {};
+    const arrayChildren: TArrayChildren = {};
 
     Object.entries(propsAndChildren).forEach(([key, value]) => {
       if (value instanceof Component) {
         children[key] = value;
+      } else if (
+        Array.isArray(value) &&
+        value.every((item) => item instanceof Component)
+      ) {
+        arrayChildren[key] = value;
       } else {
         childProps[key] = value;
       }
     });
-    return { children, childProps };
+    return { children, childProps, arrayChildren };
   }
 
   _registerEvents(eventBus: EventBus) {
@@ -111,21 +119,55 @@ export abstract class Component {
 
   private _render(): void {
     const block = this.render();
-  
+    this._removeEvents();
+
     if (this._element) {
-      this._element.innerHTML = '';
+      this._element.innerHTML = "";
       if (block instanceof Node) {
         this._element.appendChild(block);
       }
+      this._addAttribute();
+      this._addEvents();
     }
   }
 
   public render(): string | DocumentFragment {
-    return new DocumentFragment(); ;
+    return new DocumentFragment();
+  }
+
+  private _addEvents() {
+    const { events = {} } = this.childProps;
+
+    Object.keys(events).forEach((eventName) => {
+      if (this._element) {
+        this._element.addEventListener(eventName, events[eventName], true);
+      }
+    });
+  }
+
+  private _removeEvents() {
+    const { events = {} } = this.childProps;
+
+    Object.keys(events).forEach((eventName) => {
+      this._element!.removeEventListener(eventName, events[eventName]);
+    });
   }
 
   public getContent() {
     return this._element;
+  }
+
+  private _addAttribute() {
+    const { attr = {} } = this.childProps;
+    Object.entries(attr!).forEach(([key, value]) => {
+      if (value) {
+        if (Array.isArray(value)) {
+          this._element?.setAttribute(key, value.join(" "));
+        } else {
+          this._element?.setAttribute(key, String(value));
+        }
+      }
+    });
   }
 
   public compile(template: string, props: TProps) {
@@ -136,7 +178,15 @@ export abstract class Component {
       );
     });
 
-    const fragment = document.createElement('template');
+    Object.entries(this.arrayChildren).forEach(([key, arr]) => {
+      arr.forEach((item) => {
+        propsAndStubs[key] = new Handlebars.SafeString(
+          `<div data-id="${key}_${(item as { _id: string })._id}"></div>`
+        );
+      });
+    });
+
+    const fragment = document.createElement("template");
     fragment.innerHTML = Handlebars.compile(template)(propsAndStubs);
 
     Object.values(this.children).forEach((child) => {
@@ -145,7 +195,29 @@ export abstract class Component {
 
       if (stub) stub.replaceWith(content as HTMLElement);
     });
-    console.log("Block type:", typeof fragment.content); // Должно быть "string" или "object"
+
+    Object.entries(this.arrayChildren).forEach(([key, arr]) => {
+      const listTemplate = this._createDocumentElement(
+        "template"
+      ) as HTMLTemplateElement;
+
+      arr.forEach((item) => {
+        if (item instanceof Component) {
+          const content = item.getContent();
+          if (content) {
+            listTemplate.content.append(content);
+          }
+        } else {
+          listTemplate.content.append(`${item}`);
+        }
+        const stub = fragment.content.querySelector(
+          `[data-id="${key}_${(item as { _id: string })._id}"]`
+        );
+        if (stub) {
+          stub.replaceWith(listTemplate.content);
+        }
+      });
+    });
     return fragment.content;
   }
 

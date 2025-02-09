@@ -5,12 +5,9 @@ const app = document.getElementById("app");
 function renderPage(PageComponent: any) {
   if (app) {
     const page = new PageComponent();
-    console.log("Page instance:", page); // Что это за объект?
-    console.log("Page content:", page.getContent()); // Если есть метод для получения DOM
-
-    bindNavLinks();
     app.replaceChildren(page.getContent());
     page.dispatchComponentDidMount();
+    bindNavLinks();
 
     return app;
   }
@@ -34,14 +31,7 @@ export function navigateTo(path: string) {
   } else {
     // Обработка 404
     if (app) {
-      app.innerHTML = `
-                <div class="page">
-                    <h1>404</h1>
-                    <p>Страница не найдена.</p>
-                    <a href="/" class="nav-link">Вернуться на главную</a>
-                </div>
-            `;
-      bindNavLinks();
+      renderPage(routes["*"]);
     }
   }
 }

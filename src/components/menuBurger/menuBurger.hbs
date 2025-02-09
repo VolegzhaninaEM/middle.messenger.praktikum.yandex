@@ -1,0 +1,8 @@
+
+
+<button class="menu__button" onclick="{{toggleMenu}}"><img src="/burger-icon.png" alt="burger-icon" /></button>
+{{#if isOpen}}
+  <ul class="menu__dropdown">
+    {{actions}}
+  </ul>
+{{/if}}
