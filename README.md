@@ -16,3 +16,12 @@ https://sprint1-volegzhanina.netlify.app/
 Страница чатов - https://sprint1-volegzhanina.netlify.app/pages/chats/chats
 Ошибка 404 - https://sprint1-volegzhanina.netlify.app/pages/errors/404
 Ошибка 5хх - https://sprint1-volegzhanina.netlify.app/pages/errors/5xx
+
+## Sprint 2
+- Внедрен компонентный подход, создан базовый компонент Component и настроено взаимодействие EventBus
+- Добавлен ESLint
+- Добавлен Stylelint
+- Добавлены валидации для всех страниц
+- Добавлен класс HTTPTransport для работы с запросами
+- Настроен вывод ошибок как в консоль, так и дружелюбных ошибок для пользователя
+- Данные собранные по введенным полям выводятся в console.log()
