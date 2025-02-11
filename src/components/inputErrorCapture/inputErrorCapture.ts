@@ -1,32 +1,32 @@
 import './inputErrorCapture.less'
-import { Component } from "../../services/component";
-import { TProps } from "../../types/types";
+import { Component } from '../../services/component'
+import { TProps } from '../../types/types'
 
 interface IFooter {
-  errorMessage: string;
+  errorMessage: string
 }
 
 export class InputErrorCapture extends Component implements IFooter {
-  errorMessage: string = "";
+  errorMessage: string = ''
   constructor(tagName: string, props: TProps) {
     super(tagName, {
       ...props,
       attr: {
         ...props.attr,
-        errorMessage: "",
-      },
-    });
+        errorMessage: ''
+      }
+    })
   }
 
   componentDidUpdate(oldProps: TProps, newProps: TProps) {
-    return oldProps !== newProps;
+    return oldProps !== newProps
   }
 
   getValue() {
-    return (this.element as HTMLInputElement).value;
+    return (this.element as HTMLInputElement).value
   }
 
   render(): DocumentFragment {
-    return this.compile('{{errorMessage}}', this.childProps);
+    return this.compile('{{errorMessage}}', this.childProps)
   }
 }

@@ -17,10 +17,7 @@ type HTTPMethod = (
   options: GeneralOptions
 ) => Promise<XMLHttpRequest>
 
-type HTTPRequest = (
-  url: string,
-  options: Options
-) => Promise<XMLHttpRequest>
+type HTTPRequest = (url: string, options: Options) => Promise<XMLHttpRequest>
 
 type GeneralOptions = Omit<Options, 'method'>
 
@@ -93,4 +90,3 @@ function queryStringify(data: unknown) {
     }, '?')
   }
 }
-

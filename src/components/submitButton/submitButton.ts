@@ -1,7 +1,7 @@
-import { Component } from "../../services/component";
-import { TProps, TAttributesButton } from "../../types/types";
+import { Component } from '../../services/component'
+import { TProps, TAttributesButton } from '../../types/types'
 
-type TPropsButton = TProps & TAttributesButton;
+type TPropsButton = TProps & TAttributesButton
 
 export class SubmitButton extends Component {
   constructor(tagName: string, props: TPropsButton) {
@@ -9,16 +9,16 @@ export class SubmitButton extends Component {
       ...props,
       attr: {
         ...props.attr,
-        type: "submit",
-      },
-    });
+        type: 'submit'
+      }
+    })
   }
 
   getValue() {
-    return (this.element as HTMLInputElement).value;
+    return (this.element as HTMLInputElement).value
   }
 
   render(): DocumentFragment {
-    return this.compile("", this.childProps);
+    return this.compile('', this.childProps)
   }
 }
