@@ -40,7 +40,7 @@ export class LoginPage extends Component {
       },
       events: {
         click: (event: unknown) => this.handleSubmit(event as Event, this),
-        blur: () => this.handleBlur(this)
+        blur: (event: unknown) => this.handleBlur(event as FocusEvent, this)
       }
     })
 
@@ -91,7 +91,8 @@ export class LoginPage extends Component {
     this.validateLogin(context)
   }
 
-  handleBlur(context: Component) {
+  handleBlur(event: FocusEvent, context: Component) {
+    event.preventDefault()
     this.validateLogin(context)
   }
 

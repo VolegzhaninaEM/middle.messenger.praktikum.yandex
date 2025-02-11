@@ -6,7 +6,7 @@ import { ChatWindow } from './components/chatWindow/chatWindow'
 import { Sidebar } from './components/sidebar/sidebar'
 
 export class ChatPage extends Component {
-  constructor(tagName: string, props: TProps) {
+  constructor(tagName: string = 'main', props: TProps) {
     super(tagName, {
       ...props,
       attr: {

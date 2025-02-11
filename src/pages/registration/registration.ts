@@ -58,7 +58,7 @@ export class RegistrationPage extends Component {
       },
       events: {
         click: (event: unknown) => this.handleSubmit(event as Event, this),
-        blur: () => this.handleBlur(this)
+        blur: (event: unknown) => this.handleBlur(event as FocusEvent, this)
       }
     })
 
@@ -117,7 +117,8 @@ export class RegistrationPage extends Component {
     this.validateRegistration(context)
   }
 
-  handleBlur(context: Component) {
+  handleBlur(event: FocusEvent, context: Component) {
+    event.preventDefault()
     this.validateRegistration(context)
   }
 

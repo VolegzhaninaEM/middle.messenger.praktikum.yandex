@@ -9,7 +9,7 @@ export class PhoneInput extends Component {
       attr: {
         ...props.attr,
         type: 'text',
-        class: 'inputField'
+        class: 'input-field'
       }
     })
   }

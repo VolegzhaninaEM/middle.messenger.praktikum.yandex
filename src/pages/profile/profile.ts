@@ -5,6 +5,7 @@ import { TData, TProps } from '../../types/types'
 import { validateForm } from '../../utils/validators'
 import {
   Avatar,
+  AvatarLoadModal,
   CloseButton,
   EmailInput,
   InputErrorCapture,
@@ -33,9 +34,14 @@ export class Profile extends Component {
 
     if (!this.children.profilePhoto) {
       this.children.profilePhoto = new Avatar('div', {
-        attr: { class: 'profile-photo' }
+        attr: { class: 'profile-photo' },
+        events: {
+          click: this._handleAvatarClick.bind(this)
+        }
       })
     }
+
+    this.uploadModal = new AvatarLoadModal('main', {})
 
     if (!this.children.login) {
       this.children.login = new TextInput('input', {
@@ -75,7 +81,7 @@ export class Profile extends Component {
         },
         events: {
           click: (event: unknown) => this.handleSubmit(event as Event, this),
-          blur: () => this.handleBlur(this)
+          blur: (event: unknown) => this.handleBlur(event as FocusEvent, this)
         }
       })
     }
@@ -87,6 +93,10 @@ export class Profile extends Component {
         }
       })
     }
+  }
+
+  private _handleAvatarClick() {
+    this.uploadModal.open()
   }
 
   getValues(context: Component) {
@@ -129,7 +139,8 @@ export class Profile extends Component {
     this.validateProfile(context)
   }
 
-  handleBlur(context: Component) {
+  handleBlur(event: FocusEvent, context: Component) {
+    event.preventDefault()
     this.validateProfile(context)
   }
 

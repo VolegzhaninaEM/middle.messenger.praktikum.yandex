@@ -48,8 +48,9 @@ export class ChatFooter extends Component implements IFooter {
           class: 'arrow__button'
         },
         events: {
-          click: () => this.handleClick(this),
-          blur: () => this.handleBlur(this)
+          click: (event: unknown) =>
+            this.handleClick(event as SubmitEvent, this),
+          blur: (event: unknown) => this.handleBlur(event as FocusEvent, this)
         }
       })
     }
@@ -61,7 +62,17 @@ export class ChatFooter extends Component implements IFooter {
     }
   }
 
-  handleClick(context: Component) {
+  handleClick(event: SubmitEvent, context: Component) {
+    event.preventDefault()
+    this._handleError(context)
+  }
+
+  handleBlur = (event: FocusEvent, context: Component) => {
+    event.preventDefault()
+    this._handleError(context)
+  }
+
+  private _handleError(context: Component) {
     const data = this.getMessage(context)
     const errors = validateForm(data as TMessage)
     if (errors) {
@@ -79,14 +90,6 @@ export class ChatFooter extends Component implements IFooter {
         hasErrors: false
       })
       console.log(data)
-    }
-  }
-
-  handleBlur = (context: Component) => {
-    const data = this.getMessage(context)
-    const errors = validateForm(data as TMessage)
-    if (errors) {
-      console.error(errors)
     }
   }
 

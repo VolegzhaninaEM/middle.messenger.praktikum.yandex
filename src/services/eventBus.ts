@@ -1,14 +1,9 @@
-interface IEventBus {
-  on(event: string, callback: Function): void
-  emit(event: string, ...args: any[]): void
-}
+export class EventBus<
+  T extends Record<string, (...args: Array<unknown>) => void>
+> {
+  private listeners: Partial<{ [E in keyof T]: Array<T[E]> }> = {}
 
-type Callback = (...args: any[]) => void
-
-export class EventBus implements IEventBus {
-  private listeners: Record<string, Callback[]> = {}
-
-  on(event: string, callback: Callback): void {
+  on<E extends keyof T>(event: E, callback: T[E]): void {
     if (!this.listeners[event]) {
       this.listeners[event] = []
     }
@@ -22,7 +17,7 @@ export class EventBus implements IEventBus {
     this.listeners[event].forEach(callback => callback(...args))
   }
 
-  off(event: string, callback: Callback): void {
+  off<E extends keyof T>(event: E, callback: T[E]): void {
     if (!this.listeners[event]) {
       return
     }

@@ -39,7 +39,7 @@ export function validateForm(formData: TData) {
 
   // Проверка first_name
   if (validateFields.firstName in formData) {
-    const nameRegex = /^[A-ZА-Я][a-zа-я-]*$/
+    const nameRegex = /^[A-ZА-ЯЁ][a-zа-яё-]*$/
     if (!nameRegex.test(formData.first_name)) {
       errors.first_name =
         'Имя должно начинаться с заглавной буквы, содержать только латиницу или кириллицу, без пробелов, цифр и спецсимволов (кроме дефиса)'
@@ -47,7 +47,7 @@ export function validateForm(formData: TData) {
   }
   //Проверка second_name
   if (validateFields.secondName in formData) {
-    const nameRegex = /^[A-ZА-Я][a-zа-я-]*$/
+    const nameRegex = /^[A-ZА-ЯЁ][a-zа-яё-]*$/
     if (!nameRegex.test(formData.second_name)) {
       errors.second_name =
         'Фамилия должна начинаться с заглавной буквы, содержать только латиницу или кириллицу, без пробелов, цифр и спецсимволов (кроме дефиса)'

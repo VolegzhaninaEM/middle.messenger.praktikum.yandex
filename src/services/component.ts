@@ -2,23 +2,23 @@ import { v4 as makeUUID } from 'uuid'
 import { EventBus } from './eventBus'
 import { TProps, TChildren, TArrayChildren } from '../types/types'
 import Handlebars from 'handlebars'
+import { EVENTS } from '../constants/enums'
+import { IEvents } from '../constants/interface'
 
+type TEvents = {
+  on: Function
+  off: Function
+  emit: Function
+}
 export abstract class Component {
   [x: string]: any
-  static readonly EVENTS = {
-    INIT: 'init',
-    FLOW_CDM: 'flow:component-did-mount',
-    FLOW_CDU: 'flow:component-did-update',
-    FLOW_RENDER: 'flow:render'
-  }
-
   protected _element: HTMLElement | null = null
   protected _meta: { tagName: string; props: TProps }
   private _id: string | null = null
   public children: TChildren
   public arrayChildren: TArrayChildren
-  public childProps: TProps
-  private eventBus: () => EventBus
+  public childProps: TProps & Partial<TEvents>
+  eventBus: () => EventBus<IEvents>
 
   /** JSDoc
    * @param {string} tagName
@@ -28,7 +28,7 @@ export abstract class Component {
    */
   constructor(tagName = 'div', props = {}) {
     const { children, childProps, arrayChildren } = this._getChildren(props)
-    const eventBus: EventBus = new EventBus()
+    const eventBus: EventBus<IEvents> = new EventBus<IEvents>()
     this._id = makeUUID()
     this._meta = {
       tagName,
@@ -42,7 +42,7 @@ export abstract class Component {
     this.eventBus = () => eventBus
 
     this._registerEvents(eventBus)
-    eventBus.emit(Component.EVENTS.INIT)
+    eventBus.emit(EVENTS.INIT)
   }
 
   private _getChildren(propsAndChildren: TProps) {
@@ -65,12 +65,17 @@ export abstract class Component {
     return { children, childProps, arrayChildren }
   }
 
-  _registerEvents(eventBus: EventBus) {
-    eventBus.on(Component.EVENTS.INIT, this.init.bind(this))
-    eventBus.on(Component.EVENTS.FLOW_CDM, this._componentDidMount.bind(this))
-    eventBus.on(Component.EVENTS.FLOW_CDU, this._componentDidUpdate.bind(this))
-    eventBus.on(Component.EVENTS.FLOW_RENDER, this._render.bind(this))
+  _registerEvents(eventBus: EventBus<IEvents>) {
+    this.registerEvents(eventBus)
+    eventBus.on(EVENTS.INIT, this.init.bind(this))
+    eventBus.on(EVENTS.FLOW_CDM, this._componentDidMount.bind(this))
+    eventBus.on(EVENTS.FLOW_CDU, (oldProps, newProps) =>
+      this._componentDidUpdate(oldProps as TProps, newProps as TProps)
+    )
+    eventBus.on(EVENTS.FLOW_RENDER, this._render.bind(this))
   }
+
+  registerEvents(eventBus?: EventBus<IEvents>): void {}
 
   _createResources() {
     const { tagName } = this._meta
@@ -80,7 +85,7 @@ export abstract class Component {
   init() {
     this._createResources()
 
-    this.eventBus().emit(Component.EVENTS.FLOW_RENDER)
+    this.eventBus().emit(EVENTS.FLOW_RENDER)
   }
 
   private _componentDidMount() {
@@ -90,7 +95,7 @@ export abstract class Component {
   public componentDidMount(_oldProps?: TProps) {}
 
   public dispatchComponentDidMount() {
-    this.eventBus().emit(Component.EVENTS.FLOW_CDM)
+    this.eventBus().emit(EVENTS.FLOW_CDM)
   }
 
   private _componentDidUpdate(oldProps: TProps, newProps: TProps) {
@@ -236,7 +241,7 @@ export abstract class Component {
 
         // Запускаем обновление компоненты
         // Плохой cloneDeep, в следующей итерации нужно заставлять добавлять cloneDeep им самим
-        self.eventBus().emit(Component.EVENTS.FLOW_CDU, { ...target }, target)
+        self.eventBus().emit(EVENTS.FLOW_CDU, { ...target }, target)
         return true
       },
       deleteProperty(): never {

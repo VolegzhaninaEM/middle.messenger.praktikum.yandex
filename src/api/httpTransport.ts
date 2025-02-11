@@ -50,7 +50,12 @@ export default class HttpTransport {
       const xhr = new XMLHttpRequest()
       const isGet = method === METHODS.GET
 
-      xhr.open(method, isGet && !!data ? `${url}${queryStringify(data)}` : url)
+      xhr.open(
+        method,
+        isGet && !!data
+          ? `${url}${queryStringify(data as Record<string, unknown>)}`
+          : url
+      )
 
       Object.keys(headers).forEach(key => {
         xhr.setRequestHeader(key, headers[key])
@@ -78,15 +83,30 @@ export default class HttpTransport {
     })
   }
 }
-function queryStringify(data: unknown) {
-  if (typeof data !== 'object') {
-    throw new Error('Data must be object')
+function queryStringify(data: Record<string, unknown>): string {
+  if (typeof data !== 'object' || data === null) {
+    throw new Error('Data must be an object')
   }
 
-  if (data instanceof Object) {
-    const keys = Object.keys(data)
-    return keys.reduce((result, key, index) => {
-      return `${result}${key}=${(data as Record<string, unknown>)[key]}${index < keys.length - 1 ? '&' : ''}`
-    }, '?')
+  const params = new URLSearchParams()
+
+  const processValue = (key: string, value: unknown) => {
+    if (Array.isArray(value)) {
+      value.forEach((item, index) => {
+        processValue(`${key}[${index}]`, item)
+      })
+    } else if (typeof value === 'object' && value !== null) {
+      Object.entries(value).forEach(([nestedKey, nestedValue]) => {
+        processValue(`${key}[${nestedKey}]`, nestedValue)
+      })
+    } else {
+      params.append(key, String(value))
+    }
   }
+
+  Object.entries(data).forEach(([key, value]) => {
+    processValue(key, value)
+  })
+
+  return `?${params.toString()}`
 }
