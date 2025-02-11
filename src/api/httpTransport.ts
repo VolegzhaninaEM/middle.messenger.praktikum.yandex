@@ -22,21 +22,13 @@ type HTTPRequest = (url: string, options: Options) => Promise<XMLHttpRequest>
 type GeneralOptions = Omit<Options, 'method'>
 
 export default class HttpTransport {
-  get: HTTPMethod = (url, options = {}) => {
-    return this.request(url, { ...options, method: METHODS.GET })
+  private createMethod(method: METHODS): HTTPMethod {
+    return (url, options = {}) => this.request(url, { ...options, method })
   }
-
-  post: HTTPMethod = (url, options = {}) => {
-    return this.request(url, { ...options, method: METHODS.POST })
-  }
-
-  put: HTTPMethod = (url, options = {}) => {
-    return this.request(url, { ...options, method: METHODS.PUT })
-  }
-
-  delete: HTTPMethod = (url, options = {}) => {
-    return this.request(url, { ...options, method: METHODS.DELETE })
-  }
+  get = this.createMethod(METHODS.GET)
+  put = this.createMethod(METHODS.PUT)
+  post = this.createMethod(METHODS.POST)
+  delete = this.createMethod(METHODS.DELETE)
 
   request: HTTPRequest = (url, options) => {
     const { headers = {}, method, data, timeout = 5000 } = options
