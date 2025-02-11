@@ -56,6 +56,7 @@ export class AvatarLoadModal extends Component {
   }
 
   private _handleFileSelect(e: Event) {
+    e.preventDefault()
     const file = (e.target as HTMLInputElement).files?.[0]
     if (file && this.eventBus()) {
       // Отправляем событие о выборе файла

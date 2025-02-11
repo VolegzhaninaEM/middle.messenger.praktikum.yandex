@@ -75,7 +75,7 @@ export abstract class Component {
     eventBus.on(EVENTS.FLOW_RENDER, this._render.bind(this))
   }
 
-  registerEvents(eventBus?: EventBus<IEvents>): void {}
+  registerEvents(_eventBus?: EventBus<IEvents>): void {}
 
   _createResources() {
     const { tagName } = this._meta
