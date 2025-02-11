@@ -20,19 +20,19 @@ export class RegistrationPage extends Component {
     super(tagName, props)
 
     this.children.email = new EmailInput('input', {
-      attr: { placeholder: 'Email', name: 'email' }
+      attr: { placeholder: 'Email', name: 'email', type: 'text' }
     })
 
     this.children.login = new TextInput('input', {
-      attr: { placeholder: 'Login', name: 'login' }
+      attr: { placeholder: 'Login', name: 'login', type: 'text' }
     })
 
     this.children.firstName = new TextInput('input', {
-      attr: { placeholder: 'First Name', name: 'first_name' }
+      attr: { placeholder: 'First Name', name: 'first_name', type: 'text' }
     })
 
     this.children.secondName = new TextInput('input', {
-      attr: { placeholder: 'Second Name', name: 'second_name' }
+      attr: { placeholder: 'Second Name', name: 'second_name', type: 'text' }
     })
 
     this.children.phone = new PhoneInput('input', {

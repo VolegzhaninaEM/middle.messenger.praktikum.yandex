@@ -1,20 +1,15 @@
-import './profile.less'
 import { Component } from '../../services/component'
-import { default as template } from './profile.hbs?raw'
+import { default as template } from './changePassword.hbs?raw'
 import { TData, TProps } from '../../types/types'
 import { validateForm } from '../../utils/validators'
 import {
-  Avatar,
-  AvatarLoadModal,
   CloseButton,
-  EmailInput,
   InputErrorCapture,
-  PhoneInput,
   SubmitButton,
   TextInput
 } from '../../components'
 
-export class Profile extends Component {
+export class PasswordChagePage extends Component {
   constructor(tagName: string, props: TProps) {
     super(tagName, { ...props, hasErrors: false, error: '' })
 
@@ -32,46 +27,29 @@ export class Profile extends Component {
       })
     }
 
-    if (!this.children.profilePhoto) {
-      this.children.profilePhoto = new Avatar('div', {
-        attr: { class: 'profile-photo' },
-        events: {
-          click: this._handleAvatarClick.bind(this)
-        }
-      })
-    }
+    this.children.oldPassword = new TextInput('input', {
+      attr: {
+        placeholder: 'Old Password',
+        name: 'oldPassword',
+        type: 'password'
+      }
+    })
 
-    this.uploadModal = new AvatarLoadModal('main', {})
+    this.children.newPassword = new TextInput('input', {
+      attr: {
+        placeholder: 'New Password',
+        name: 'newPassword',
+        type: 'password'
+      }
+    })
 
-    if (!this.children.login) {
-      this.children.login = new TextInput('input', {
-        attr: { placeholder: 'Login', name: 'login', type: 'text' }
-      })
-    }
-
-    if (!this.children.firstName) {
-      this.children.firstName = new TextInput('input', {
-        attr: { placeholder: 'First Name', name: 'first_name', type: 'text' }
-      })
-    }
-
-    if (!this.children.secondName) {
-      this.children.secondName = new TextInput('input', {
-        attr: { placeholder: 'Second Name', name: 'second_name', type: 'text' }
-      })
-    }
-
-    if (!this.children.email) {
-      this.children.email = new EmailInput('input', {
-        attr: { placeholder: 'Email account', name: 'email' }
-      })
-    }
-
-    if (!this.children.phone) {
-      this.children.phone = new PhoneInput('input', {
-        attr: { placeholder: 'Mobile number', name: 'phone' }
-      })
-    }
+    this.children.newPasswordControl = new TextInput('input', {
+      attr: {
+        placeholder: 'New Password Control',
+        name: 'newPasswordControl',
+        type: 'password'
+      }
+    })
 
     if (!this.children.saveButton) {
       this.children.saveButton = new SubmitButton('input', {
@@ -95,19 +73,13 @@ export class Profile extends Component {
     }
   }
 
-  private _handleAvatarClick() {
-    this.uploadModal.open()
-  }
-
   getValues(context: Component) {
     const values = []
     const fieldsValues = {}
     values.push(
-      { login: context.children.login.getValue() },
-      { firstName: context.children.firstName.getValue() },
-      { secondName: context.children.secondName.getValue() },
-      { email: context.children.email.getValue() },
-      { phone: context.children.phone.getValue() }
+      { oldPassword: context.children.oldPassword.getValue() },
+      { newPassword: context.children.newPassword.getValue() },
+      { newPasswordControl: context.children.newPasswordControl.getValue() }
     )
 
     values.forEach(item => {

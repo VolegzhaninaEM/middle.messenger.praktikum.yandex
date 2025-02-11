@@ -18,11 +18,11 @@ export class LoginPage extends Component {
     super(tagName, { ...props, hasErrors: false })
 
     this.children.login = new TextInput('input', {
-      attr: { placeholder: 'Login', name: 'login' }
+      attr: { placeholder: 'Login', name: 'login', type: 'text' }
     })
 
     this.children.password = new TextInput('input', {
-      attr: { placeholder: 'Password', name: 'password' }
+      attr: { placeholder: 'Password', name: 'password', type: 'text' }
     })
 
     if (!this.children.error) {
