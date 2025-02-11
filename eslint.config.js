@@ -18,7 +18,8 @@ export default tsEslint.config(
   {
     rules: {
       'no-console': 'warn',
-      'prettier/prettier': ['warn', prettierConfig]
+      'prettier/prettier': ['warn', prettierConfig],
+      "quotes": [2, "single", { "avoidEscape": true }]
     }
   }
 )
