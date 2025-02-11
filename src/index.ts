@@ -1,4 +1,4 @@
-import { initRouter } from './utils/router';
+import { initRouter } from './utils/router'
 
 // Инициализация роутера
-initRouter();
+initRouter()

@@ -1,4 +1,4 @@
-@import url(src/style.less);
+@import url("../../styles/variables.less");
 
 .modal {
     background: @base-white;
@@ -19,8 +19,7 @@
         color: @dark-beige;
     }
 
-    .inputField {
-        width: 100%;
+    .input-field {
         padding: 10px;
         border: 1px solid @light-beige;
         border-radius: 3px;
@@ -57,13 +56,11 @@
     }
 }
 
+
 .overlay {
     position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.5);
+    inset: 0;
+    background: rgb(0 0 0 / 50%);
     color: white;
     display: flex;
     justify-content: center;

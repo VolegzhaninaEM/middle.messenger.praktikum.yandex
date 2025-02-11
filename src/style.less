@@ -1,20 +1,7 @@
-@base-white: #FFFFFF;
-@font-black: #1E1E1E;
-@pale-green: #7A9376;
-@light-beige: #E3D5CA;
-@dark-grey: rgba(89, 89, 89, 0.2);
-@shadow: @dark-grey;
-@shadow-hover: rgba(89, 89, 89, 0.5);
-@button-hover: #ffffffc5;
-@dark-beige: #595959;
-@error: #F71735;
+@import url('src/styles/variables.less');
 
 #app {
     width: 100%;
-}
-.flex-column {
-    display: flex;
-    flex-direction: column;
 }
 
 .container {
@@ -23,19 +10,20 @@
         height: 100vh;
         justify-content: center;
         align-items: center;
-        font-family: "Montserrat", serif;
+        font-family: Montserrat, serif;
     }
 }
 
 #nav {
-    .flex-column;
+    display: flex;
+    flex-direction: column;
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
 }
 
-.inputField {
+.input-field {
     width: 100%;
     height: 50px;
     font-size: 14px;

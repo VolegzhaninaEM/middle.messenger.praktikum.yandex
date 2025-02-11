@@ -1,2 +1,7 @@
-<img src="/user-photo.png" alt="User Photo" />
-<div class="overlay">Change photo</div>
+<div onclick='{{handleAvatarClick}}'>
+  <img src='/user-photo.png' alt='User Photo' />
+  <div class='overlay'>Change photo</div>
+</div>
+{{#if isUpload}}
+  {{uploadModal}}
+{{/if}}

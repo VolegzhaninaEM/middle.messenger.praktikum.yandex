@@ -1,16 +1,16 @@
-import { Component } from "../../services/component.js";
-import { TLinks, TProps } from "../../types/types.js";
+import { Component } from '../../services/component.js'
+import { TLinks, TProps } from '../../types/types.js'
 
-type Props = TProps & TLinks;
+type Props = TProps & TLinks
 export class Links extends Component {
-  constructor(tagName: string = "a", props: Props) {
+  constructor(tagName: string = 'a', props: Props) {
     super(tagName, {
       ...props,
-      attr: { href: props.href },
-    });
+      attr: { href: props.href }
+    })
   }
 
   render() {
-    return this.compile("{{title}}", this.childProps);
+    return this.compile('{{title}}', this.childProps)
   }
 }

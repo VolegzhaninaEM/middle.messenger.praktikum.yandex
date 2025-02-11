@@ -1,6 +1,5 @@
-import { Component } from "../../../../services/component";
-import { TProps } from "../../../../types/types";
-
+import { Component } from '../../../../services/component'
+import { TProps } from '../../../../types/types'
 
 export class EmptyChat extends Component {
   constructor(tagName: string, props: TProps) {
@@ -10,11 +9,10 @@ export class EmptyChat extends Component {
         ...props.attr,
         class: 'chat__empty'
       }
-      
-    });
+    })
   }
 
   render(): DocumentFragment {
-    return this.compile('{{title}}', this.childProps);
+    return this.compile('{{title}}', this.childProps)
   }
 }

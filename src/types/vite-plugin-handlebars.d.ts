@@ -1,1 +1,1 @@
-declare module 'vite-plugin-handlebars';
+declare module 'vite-plugin-handlebars'
