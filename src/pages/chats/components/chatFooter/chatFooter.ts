@@ -30,6 +30,9 @@ export class ChatFooter extends Component implements IFooter {
         placeholder: 'Сообщение',
         attr: {
           class: 'message__input'
+        },
+        events: {
+          blur: () => this._handleError(this)
         }
       })
     }
@@ -49,8 +52,7 @@ export class ChatFooter extends Component implements IFooter {
         },
         events: {
           click: (event: unknown) =>
-            this.handleClick(event as SubmitEvent, this),
-          blur: (event: unknown) => this.handleBlur(event as FocusEvent, this)
+            this.handleClick(event as SubmitEvent, this)
         }
       })
     }
@@ -63,11 +65,6 @@ export class ChatFooter extends Component implements IFooter {
   }
 
   handleClick(event: SubmitEvent, context: Component) {
-    event.preventDefault()
-    this._handleError(context)
-  }
-
-  handleBlur = (event: FocusEvent, context: Component) => {
     event.preventDefault()
     this._handleError(context)
   }

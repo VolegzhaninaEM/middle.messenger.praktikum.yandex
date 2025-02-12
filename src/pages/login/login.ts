@@ -18,11 +18,17 @@ export class LoginPage extends Component {
     super(tagName, { ...props, hasErrors: false })
 
     this.children.login = new TextInput('input', {
-      attr: { placeholder: 'Login', name: 'login', type: 'text' }
+      attr: { placeholder: 'Login', name: 'login', type: 'text' },
+      events: {
+        blur: () => this.validateLogin(this)
+      }
     })
 
     this.children.password = new TextInput('input', {
-      attr: { placeholder: 'Password', name: 'password', type: 'text' }
+      attr: { placeholder: 'Password', name: 'password', type: 'text' },
+      events: {
+        blur: () => this.validateLogin(this)
+      }
     })
 
     if (!this.children.error) {
@@ -39,8 +45,7 @@ export class LoginPage extends Component {
         class: 'submitButton'
       },
       events: {
-        click: (event: unknown) => this.handleSubmit(event as Event, this),
-        blur: (event: unknown) => this.handleBlur(event as FocusEvent, this)
+        click: (event: unknown) => this.handleSubmit(event as Event, this)
       }
     })
 
@@ -87,11 +92,6 @@ export class LoginPage extends Component {
   }
 
   handleSubmit(event: Event, context: Component) {
-    event.preventDefault()
-    this.validateLogin(context)
-  }
-
-  handleBlur(event: FocusEvent, context: Component) {
     event.preventDefault()
     this.validateLogin(context)
   }
