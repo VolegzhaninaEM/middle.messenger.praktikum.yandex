@@ -32,6 +32,9 @@ export class PasswordChagePage extends Component {
         placeholder: 'Old Password',
         name: 'oldPassword',
         type: 'password'
+      },
+      events: {
+        blur: () => this.validatePassword(this)
       }
     })
 
@@ -40,6 +43,9 @@ export class PasswordChagePage extends Component {
         placeholder: 'New Password',
         name: 'newPassword',
         type: 'password'
+      },
+      events: {
+        blur: () => this.validatePassword(this)
       }
     })
 
@@ -48,6 +54,9 @@ export class PasswordChagePage extends Component {
         placeholder: 'New Password Control',
         name: 'newPasswordControl',
         type: 'password'
+      },
+      events: {
+        blur: () => this.validatePassword(this)
       }
     })
 
@@ -58,8 +67,7 @@ export class PasswordChagePage extends Component {
           class: 'save-btn'
         },
         events: {
-          click: (event: unknown) => this.handleSubmit(event as Event, this),
-          blur: (event: unknown) => this.handleBlur(event as FocusEvent, this)
+          click: (event: unknown) => this.handleSubmit(event as Event, this)
         }
       })
     }
@@ -91,7 +99,7 @@ export class PasswordChagePage extends Component {
     return fieldsValues
   }
 
-  validateProfile(context: Component) {
+  validatePassword(context: Component) {
     const data = this.getValues(context)
     const errors = validateForm(data as TData)
     if (errors) {
@@ -108,12 +116,7 @@ export class PasswordChagePage extends Component {
 
   handleSubmit(event: Event, context: Component) {
     event.preventDefault()
-    this.validateProfile(context)
-  }
-
-  handleBlur(event: FocusEvent, context: Component) {
-    event.preventDefault()
-    this.validateProfile(context)
+    this.validatePassword(context)
   }
 
   render(): DocumentFragment {

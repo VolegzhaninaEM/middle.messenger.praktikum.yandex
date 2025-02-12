@@ -45,31 +45,46 @@ export class Profile extends Component {
 
     if (!this.children.login) {
       this.children.login = new TextInput('input', {
-        attr: { placeholder: 'Login', name: 'login', type: 'text' }
+        attr: { placeholder: 'Login', name: 'login', type: 'text' },
+        events: {
+          blur: () => this.validateProfile(this)
+        }
       })
     }
 
     if (!this.children.firstName) {
       this.children.firstName = new TextInput('input', {
-        attr: { placeholder: 'First Name', name: 'first_name', type: 'text' }
+        attr: { placeholder: 'First Name', name: 'first_name', type: 'text' },
+        events: {
+          blur: () => this.validateProfile(this)
+        }
       })
     }
 
     if (!this.children.secondName) {
       this.children.secondName = new TextInput('input', {
-        attr: { placeholder: 'Second Name', name: 'second_name', type: 'text' }
+        attr: { placeholder: 'Second Name', name: 'second_name', type: 'text' },
+        events: {
+          blur: () => this.validateProfile(this)
+        }
       })
     }
 
     if (!this.children.email) {
       this.children.email = new EmailInput('input', {
-        attr: { placeholder: 'Email account', name: 'email' }
+        attr: { placeholder: 'Email account', name: 'email' },
+        events: {
+          blur: () => this.validateProfile(this)
+        }
       })
     }
 
     if (!this.children.phone) {
       this.children.phone = new PhoneInput('input', {
-        attr: { placeholder: 'Mobile number', name: 'phone' }
+        attr: { placeholder: 'Mobile number', name: 'phone' },
+        events: {
+          blur: () => this.validateProfile(this)
+        }
       })
     }
 
@@ -80,8 +95,7 @@ export class Profile extends Component {
           class: 'save-btn'
         },
         events: {
-          click: (event: unknown) => this.handleSubmit(event as Event, this),
-          blur: (event: unknown) => this.handleBlur(event as FocusEvent, this)
+          click: (event: unknown) => this.handleSubmit(event as Event, this)
         }
       })
     }
@@ -135,11 +149,6 @@ export class Profile extends Component {
   }
 
   handleSubmit(event: Event, context: Component) {
-    event.preventDefault()
-    this.validateProfile(context)
-  }
-
-  handleBlur(event: FocusEvent, context: Component) {
     event.preventDefault()
     this.validateProfile(context)
   }
