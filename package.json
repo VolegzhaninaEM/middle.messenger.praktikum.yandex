@@ -1,13 +1,23 @@
 {
   "devDependencies": {
-    "@actions/core": "^1.11.1",
-    "@types/node": "^22.10.5",
+    "@eslint/js": "^9.19.0",
+    "eslint": "^8.2.0",
+    "eslint-config-airbnb": "^19.0.4",
+    "eslint-config-prettier": "^10.0.1",
+    "eslint-plugin-prettier": "^5.2.3",
     "less": "^4.2.1",
+    "lint-staged": "^15.4.3",
+    "prettier": "^3.4.2",
+    "stylelint": "^16.14.1",
+    "typescript": "~5.6.2",
+    "typescript-eslint": "^8.21.0",
     "vite": "^5.4.11"
   },
   "dependencies": {
     "handlebars": "^4.7.8",
     "path": "^0.12.7",
+    "stylelint-less": "^3.0.1",
+    "uuid": "^11.0.5",
     "vite-plugin-handlebars": "^2.0.0"
   },
   "compilerOptions": {
@@ -17,8 +27,14 @@
   },
   "scripts": {
     "dev": "vite",
+    "prebuild": "tsc --noEmit",
     "start": "vite build && vite preview",
-    "build": "vite build --emptyOutDir"
+    "build": "npm run prebuild && vite build --emptyOutDir",
+    "lint:typecheck": "tsc --noEmit",
+    "lint:ts": "eslint",
+    "lint:less": "stylelint \"**/*.less\"",
+    "format:ts": "prettier --write \"**/*.ts\"",
+    "format:less": "stylelint \"**/*.less\" --fix"
   },
   "type": "module",
   "engines": {

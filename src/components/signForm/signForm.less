@@ -1,0 +1,53 @@
+
+@import url("../../style.less");
+
+.container {
+    &__sign {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+        background-color: @base-white;
+        box-sizing: border-box;
+        font-family: Montserrat, serif;
+
+        &-inner {
+            background-color: @light-beige;
+            border-radius: 25px;
+            box-shadow: 0 2px 10px rgb(0 0 0 / 10%);
+            width: 569px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+    }
+}
+
+h2 {
+    font-size: 32px;
+    text-align: center;
+    font-style: normal;
+    font-weight: normal;
+    margin: 0;
+    margin-bottom: 20px;
+    color: @dark-beige;
+    text-transform: uppercase;
+}
+
+.sign {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 300px;
+    margin: 50px 0;
+}
+
+.login-button {
+    display: flex;
+    justify-content: end;
+    text-decoration: none;
+    width: 100%;
+    margin-top: 10px;
+    color: @dark-beige;
+}
