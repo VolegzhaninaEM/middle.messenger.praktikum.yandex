@@ -4,6 +4,7 @@ import { default as template } from './chats.hbs?raw'
 import { TProps } from '../../types/types'
 import { ChatWindow } from './components/chatWindow/chatWindow'
 import { Sidebar } from './components/sidebar/sidebar'
+import { connect } from '../../utils/connect'
 
 export class ChatPage extends Component {
   constructor(tagName: string = 'main', props: TProps) {
@@ -29,3 +30,6 @@ export class ChatPage extends Component {
     return this.compile(template, this.childProps)
   }
 }
+
+const withUser = connect( state => ({user: state.user}))
+export default withUser(ChatPage)

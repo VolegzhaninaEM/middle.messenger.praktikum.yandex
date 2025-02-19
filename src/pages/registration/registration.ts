@@ -10,12 +10,13 @@ import {
   SubmitButton,
   TextInput
 } from '../../components'
+import { connect } from '../../utils/connect'
 
 type TRegistration = TProps & {
   title: string
 }
 
-export class RegistrationPage extends Component {
+class RegistrationPage extends Component {
   constructor(tagName: string, props: TRegistration) {
     super(tagName, props)
 
@@ -138,3 +139,6 @@ export class RegistrationPage extends Component {
     return this.compile(template, this.childProps)
   }
 }
+
+const withUser = connect( state => ({user: state.user}))
+export default withUser(RegistrationPage)

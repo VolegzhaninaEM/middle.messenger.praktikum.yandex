@@ -7,3 +7,7 @@ export enum EVENTS {
   MODAL_OPEN = 'modal:open', // Новое событие: открытие модального окна
   MODAL_CLOSE = 'modal:close'
 }
+
+export enum StoreEvents {
+  Updated = 'updated',
+}

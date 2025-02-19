@@ -9,11 +9,11 @@ import {
 } from '../pages'
 
 export const routes: Record<string, any> = {
-  '/': NavigationPage,
-  '/chats': ChatPage,
-  '/profile': Profile,
-  '/login': LoginPage,
-  '/registration': RegistrationPage,
+  '/': LoginPage,
+  '/nav': NavigationPage,
+  '/messenger': ChatPage,
+  '/settings': Profile,
+  '/sign-up': RegistrationPage,
   '/password-control': PasswordChagePage,
   '*': Error
 }

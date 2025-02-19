@@ -13,8 +13,9 @@ import {
   SubmitButton,
   TextInput
 } from '../../components'
+import { connect } from '../../utils/connect'
 
-export class Profile extends Component {
+class Profile extends Component {
   constructor(tagName: string, props: TProps) {
     super(tagName, { ...props, hasErrors: false, error: '' })
 
@@ -157,3 +158,6 @@ export class Profile extends Component {
     return this.compile(template, this.childProps)
   }
 }
+
+const withUser = connect( state => ({user: state.user}))
+export default withUser(Profile)

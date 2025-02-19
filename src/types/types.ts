@@ -5,6 +5,7 @@ export type TProps = Record<string, unknown> & {
   __id?: string | null
   withInternalID?: boolean
   attr?: Record<string, string | Array<string>> & TChildProps
+  rootQuery?: string;
 }
 export type TChildren = Record<string, Component>
 export type TCallback = (...args: Array<unknown>) => void
@@ -88,4 +89,8 @@ export interface TButton {
   class?: string
   type?: string
   value: string
+}
+
+export type Indexed<T = any> = {
+  [key in string]: T
 }

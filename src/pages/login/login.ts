@@ -8,12 +8,13 @@ import {
   SubmitButton,
   TextInput
 } from '../../components'
+import { connect } from '../../utils/connect'
 
 type TLogin = TProps & {
   title: string
 }
 
-export class LoginPage extends Component {
+class LoginPage extends Component {
   constructor(tagName: string, props: TLogin) {
     super(tagName, { ...props, hasErrors: false })
 
@@ -100,3 +101,6 @@ export class LoginPage extends Component {
     return this.compile(template, this.childProps)
   }
 }
+
+const withUser = connect( state => ({user: state.user}))
+export default withUser(LoginPage)
