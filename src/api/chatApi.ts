@@ -1,7 +1,8 @@
-import HTTP from 'modules/http';
-  import { BaseAPI } from 'modules/http/base-api';
 
-  const chatAPIInstance = new HTTP('api/v1/chats');
+import { BaseAPI } from './baseApi';
+import HttpTransport from './httpTransport';
+
+  const chatAPIInstance = new HttpTransport('api/v1/chats');
 
   class ChatAPI extends BaseAPI {
       create() {

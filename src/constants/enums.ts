@@ -11,3 +11,24 @@ export enum EVENTS {
 export enum StoreEvents {
   Updated = 'updated',
 }
+
+export enum USER_INFO {
+  login = 'login',
+  password = 'password',
+  id = 'id',
+  first_name = 'first_name',
+  second_name = 'second_name',
+  display_name = 'display_name',
+  phone = 'phone',
+  avatar = 'avatar',
+  email = 'email'
+}
+
+export enum ROUTES {
+  LOGIN = '/',
+  CHATS = '/messenger' ,
+  PROFILE_SETTINGS = '/settings',
+  SIGN_UP = '/signup',
+  PASSWORD_CONTROLS = '/password-control',
+  ERROR = '*'
+}

@@ -1,4 +1,4 @@
-export { Error } from './error/error'
+export { ErrorPage } from './error/error'
 export { default as ChatPage } from './chats/chats'
 export { default as LoginPage } from './login/login'
 export { default as RegistrationPage } from './registration/registration'

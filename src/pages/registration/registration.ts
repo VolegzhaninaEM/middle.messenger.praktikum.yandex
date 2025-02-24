@@ -1,6 +1,6 @@
 import { Component } from '../../services/component'
 import { default as template } from './registration.hbs?raw'
-import { TData, TProps } from '../../types/types'
+import { TData, TProps, TSignUpData } from '../../types/types'
 import { validateForm } from '../../utils/validators'
 import {
   EmailInput,
@@ -11,6 +11,8 @@ import {
   TextInput
 } from '../../components'
 import { connect } from '../../utils/connect'
+import authController from '../../controllers/authController'
+import { USER_INFO } from '../../constants/enums'
 
 type TRegistration = TProps & {
   title: string
@@ -101,12 +103,12 @@ class RegistrationPage extends Component {
     const values = []
     const fieldsValues = {}
     values.push(
-      { email: context.children.email.getValue() },
-      { login: context.children.login.getValue() },
-      { firstName: context.children.firstName.getValue() },
-      { secondName: context.children.secondName.getValue() },
-      { password: context.children.password.getValue() },
-      { phone: context.children.phone.getValue() }
+      { [USER_INFO.email]: context.children.email.getValue() },
+      { [USER_INFO.login]: context.children.login.getValue() },
+      { [USER_INFO.first_name]: context.children.firstName.getValue() },
+      { [USER_INFO.second_name]: context.children.secondName.getValue() },
+      { [USER_INFO.password]: context.children.password.getValue() },
+      { [USER_INFO.phone]: context.children.phone.getValue() }
     )
 
     values.forEach(item => {
@@ -133,6 +135,8 @@ class RegistrationPage extends Component {
   handleSubmit(event: Event, context: Component) {
     event.preventDefault()
     this.validateRegistration(context)
+    const data = this.getValues(context)
+    authController.signUp(data as TSignUpData)
   }
 
   render(): DocumentFragment {
@@ -140,5 +144,5 @@ class RegistrationPage extends Component {
   }
 }
 
-const withUser = connect( state => ({user: state.user}))
+const withUser = connect(state => ({ user: state.user }))
 export default withUser(RegistrationPage)

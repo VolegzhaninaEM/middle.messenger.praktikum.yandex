@@ -7,6 +7,14 @@ export class MenuBurgerActions extends Component {
     super(tagName, props)
   }
 
+  logout() {
+    return this.element?.children[1]
+  }
+
+  openProfile() {
+    return this.element?.children[0]
+  }
+
   render(): DocumentFragment {
     return this.compile(template, this.childProps)
   }

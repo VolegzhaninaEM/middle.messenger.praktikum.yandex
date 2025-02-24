@@ -1,3 +1,4 @@
+import { USER_INFO } from '../constants/enums'
 import { Component } from '../services/component'
 
 export type TProps = Record<string, unknown> & {
@@ -5,7 +6,7 @@ export type TProps = Record<string, unknown> & {
   __id?: string | null
   withInternalID?: boolean
   attr?: Record<string, string | Array<string>> & TChildProps
-  rootQuery?: string;
+  rootQuery?: string
 }
 export type TChildren = Record<string, Component>
 export type TCallback = (...args: Array<unknown>) => void
@@ -93,4 +94,23 @@ export interface TButton {
 
 export type Indexed<T = any> = {
   [key in string]: T
+}
+
+export type TSignInData = {
+  [USER_INFO.login]: string
+  [USER_INFO.password]: string
+}
+
+export type TSignUpData = {
+  [USER_INFO.first_name]: string
+  [USER_INFO.second_name]: string
+  [USER_INFO.login]: string
+  [USER_INFO.email]: string
+  [USER_INFO.password]: string
+  [USER_INFO.phone]: string
+}
+
+export type TRoute = {
+  path: string
+  component: Component
 }

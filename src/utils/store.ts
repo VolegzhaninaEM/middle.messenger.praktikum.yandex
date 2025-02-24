@@ -1,6 +1,6 @@
 import { StoreEvents } from "../constants/enums";
 import { EventBus } from "../services/eventBus";
-import { Indexed, TProps } from "../types/types";
+import { Indexed } from "../types/types";
 import { set } from "./helpers";
 
 class Store extends EventBus<Record<string, (...args: unknown[]) => void>>{

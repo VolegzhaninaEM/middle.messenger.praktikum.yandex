@@ -10,7 +10,7 @@ import {
 } from '../../components'
 
 export class PasswordChagePage extends Component {
-  constructor(tagName: string, props: TProps) {
+  constructor(tagName: string = 'div', props: TProps = {}) {
     super(tagName, { ...props, hasErrors: false, error: '' })
 
     if (!this.children.closeButton) {

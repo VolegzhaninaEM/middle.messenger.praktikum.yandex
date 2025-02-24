@@ -1,6 +1,6 @@
 import { Component } from '../../services/component'
 import { default as template } from './login.hbs?raw'
-import { TData, TProps } from '../../types/types'
+import { TData, TProps, TSignInData } from '../../types/types'
 import { validateForm } from '../../utils/validators'
 import {
   InputErrorCapture,
@@ -9,6 +9,7 @@ import {
   TextInput
 } from '../../components'
 import { connect } from '../../utils/connect'
+import authController from '../../controllers/authController'
 
 type TLogin = TProps & {
   title: string
@@ -95,6 +96,8 @@ class LoginPage extends Component {
   handleSubmit(event: Event, context: Component) {
     event.preventDefault()
     this.validateLogin(context)
+    const data = this.getValues(context)
+    authController.signIn(data as TSignInData)
   }
 
   render(): DocumentFragment {
@@ -102,5 +105,5 @@ class LoginPage extends Component {
   }
 }
 
-const withUser = connect( state => ({user: state.user}))
+const withUser = connect(state => ({ user: state.user }))
 export default withUser(LoginPage)
