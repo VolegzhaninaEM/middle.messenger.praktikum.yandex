@@ -8,14 +8,14 @@ class AuthAPI extends BaseAPI {
   }
 
   signIn(data: TSignInData): Promise<XMLHttpRequest> {
-    return this.http.post(ROUTES.LOGIN, { data })
+    return this.http.post('/signin', { data })
   }
 
   signUp(data: TSignUpData): Promise<XMLHttpRequest> {
     return this.http.post(ROUTES.SIGN_UP, { data })
   }
 
-  get(): Promise<XMLHttpRequest> {
+  fetchUser(): Promise<XMLHttpRequest> {
     return this.http.get('/user')
   }
 

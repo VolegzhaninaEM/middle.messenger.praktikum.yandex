@@ -34,7 +34,7 @@ export abstract class BaseAPI {
     throw new Error('Not implemented')
   }
 
-  get(_data?: TSignInData): Promise<XMLHttpRequest> {
+  fetchUser(_data?: TSignInData): Promise<XMLHttpRequest> {
     throw new Error('Not implemented')
   }
 

@@ -9,6 +9,7 @@ class AuthController {
     const errors = validateForm(data)
     if (!errors) {
       const response = await authApi.signIn(data)
+      await this.fetchUser()
       if (response.status === 200) {
         Router.go('/messenger')
       }
@@ -38,6 +39,18 @@ class AuthController {
       const response = await authApi.logout()
       if (response.status === 200) {
         Router.go(ROUTES.LOGIN)
+      }
+    } catch (error) {
+      alert(error)
+    }
+  }
+
+  public async fetchUser() {
+    try {
+      const response = await authApi.fetchUser()
+
+      if (response.status === 200) {
+        return response.response
       }
     } catch (error) {
       alert(error)

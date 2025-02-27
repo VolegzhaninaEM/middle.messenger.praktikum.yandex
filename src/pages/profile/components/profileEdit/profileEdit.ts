@@ -1,19 +1,18 @@
-import './profile.less'
-import { Component } from '../../services/component'
-import { default as template } from './profile.hbs?raw'
-import { TData, TProps } from '../../types/types'
-import { validateForm } from '../../utils/validators'
 import {
+  CloseButton,
   Avatar,
   AvatarLoadModal,
-  CloseButton,
+  TextInput,
   EmailInput,
-  InputErrorCapture,
   PhoneInput,
   SubmitButton,
-  TextInput
-} from '../../components'
-import { connect } from '../../utils/connect'
+  InputErrorCapture
+} from '../../../../components'
+import { Component } from '../../../../services/component'
+import { TProps, TData } from '../../../../types/types'
+import { connect } from '../../../../utils/connect'
+import { validateForm } from '../../../../utils/validators'
+import { default as template } from './profileEdit.hbs?raw'
 
 class Profile extends Component {
   constructor(tagName: string, props: TProps) {

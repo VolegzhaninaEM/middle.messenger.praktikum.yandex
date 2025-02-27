@@ -1,10 +1,12 @@
-import { METHODS } from "./enums"
+import { METHODS } from './enums'
 
 export type Options = {
   headers?: Record<string, string>
   method: METHODS
   data?: unknown
   timeout?: number
+  credentials?: string
+  mode?: string
 }
 export type HTTPMethod = (
   url: string,
