@@ -1,34 +1,43 @@
-enum METHODS {
-  GET = 'GET',
-  POST = 'POST',
-  PUT = 'PUT',
-  PATCH = 'PATCH',
-  DELETE = 'DELETE'
-}
-
-type Options = {
-  headers?: Record<string, string>
-  method: METHODS
-  data?: unknown
-  timeout?: number
-}
-type HTTPMethod = (
-  url: string,
-  options: GeneralOptions
-) => Promise<XMLHttpRequest>
-
-type HTTPRequest = (url: string, options: Options) => Promise<XMLHttpRequest>
-
-type GeneralOptions = Omit<Options, 'method'>
+import { METHODS } from './types/enums'
+import { HTTPMethod, HTTPRequest } from './types/types'
 
 export default class HttpTransport {
-  private createMethod(method: METHODS): HTTPMethod {
-    return (url, options = {}) => this.request(url, { ...options, method })
+  endpoint: string
+
+  private API_URL = 'https://ya-praktikum.tech/api/v2'
+  constructor(endpoint: string) {
+    this.endpoint = `${this.API_URL}${endpoint}`
   }
-  get = this.createMethod(METHODS.GET)
-  put = this.createMethod(METHODS.PUT)
-  post = this.createMethod(METHODS.POST)
-  delete = this.createMethod(METHODS.DELETE)
+
+  get: HTTPMethod = (url, options = {}) => {
+    return this.request(this.endpoint + url, {
+      ...options,
+      method: METHODS.GET
+    })
+  }
+
+  post: HTTPMethod = (url, options = {}) => {
+    return this.request(this.endpoint + url, {
+      ...options,
+      mode: 'cors',
+      credentials: 'include',
+      method: METHODS.POST
+    })
+  }
+
+  put: HTTPMethod = (url, options = {}) => {
+    return this.request(this.endpoint + url, {
+      ...options,
+      method: METHODS.PUT
+    })
+  }
+  
+  delete: HTTPMethod = (url, options = {}) => {
+    return this.request(this.endpoint + url, {
+      ...options,
+      method: METHODS.DELETE
+    })
+  }
 
   request: HTTPRequest = (url, options) => {
     const { headers = {}, method, data, timeout = 5000 } = options
@@ -48,6 +57,7 @@ export default class HttpTransport {
           ? `${url}${queryStringify(data as Record<string, unknown>)}`
           : url
       )
+      xhr.setRequestHeader('Content-Type', 'application/json')
 
       Object.keys(headers).forEach(key => {
         xhr.setRequestHeader(key, headers[key])
