@@ -7,6 +7,7 @@ export type Options = {
   timeout?: number
   credentials?: string
   mode?: string
+  title?: string
 }
 export type HTTPMethod = (
   url: string,

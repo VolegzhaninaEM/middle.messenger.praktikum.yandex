@@ -42,6 +42,18 @@ export type TProfile = {
   display_name: string
 }
 
+export type TChatPreview = {
+  title: string
+  avatar: string
+  unread_count: number
+  created_by: number
+  last_message: {
+    user: TUser
+    time: string
+    content: string
+  }
+}
+
 export type TData =
   | TLoginForm
   | TRegistrationForm
@@ -108,6 +120,23 @@ export type TSignUpData = {
   [USER_INFO.email]: string
   [USER_INFO.password]: string
   [USER_INFO.phone]: string
+}
+
+export type TUser = {
+  id: number
+  avatar: string
+  [USER_INFO.email]: string
+  [USER_INFO.login]: string
+  [USER_INFO.first_name]: string
+  [USER_INFO.second_name]: string
+  [USER_INFO.phone]: string
+  [USER_INFO.display_name]: string
+}
+
+export type TChatsData = {
+    offset?: number
+    limit?: number
+    title?: string
 }
 
 export type TRoute = {

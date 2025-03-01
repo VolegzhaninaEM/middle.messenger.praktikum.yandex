@@ -1,10 +1,11 @@
 import './chats.less'
 import { Component } from '../../services/component'
 import { default as template } from './chats.hbs?raw'
-import { TProps } from '../../types/types'
+import { TProps, TUser } from '../../types/types'
 import { ChatWindow } from './components/chatWindow/chatWindow'
 import { Sidebar } from './components/sidebar/sidebar'
 import { connect } from '../../utils/connect'
+import chatController from '../../controllers/chatController'
 
 export class ChatPage extends Component {
   constructor(tagName: string = 'main', props: TProps) {
@@ -24,6 +25,11 @@ export class ChatPage extends Component {
         attr: { id: 'chat__window', class: 'chat__window' }
       })
     }
+  }
+
+  async componentDidMount() {
+    const chats: Array<TUser> = await chatController.getChats({})
+    this.setProps({ chats })
   }
 
   render(): DocumentFragment {

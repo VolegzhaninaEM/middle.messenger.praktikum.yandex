@@ -5,17 +5,29 @@ import { TSignInData, TSignUpData } from '../types/types'
 import { validateForm } from '../utils/validators'
 
 class AuthController {
+  private readonly api: typeof authApi
+  constructor() {
+    this.api = authApi
+  }
   public async signIn(data: TSignInData) {
     const errors = validateForm(data)
     if (!errors) {
-      const response = await authApi.signIn(data)
-      await this.fetchUser()
-      if (response.status === 200) {
-        Router.go('/messenger')
-      }
-
-      if (response.status === 400) {
-        Router.go('*')
+      try {
+        const response = await this.api.signIn(data)
+        if (response.status === 200) {
+          Router.go(ROUTES.CHATS)
+        } else if (response.status === 500) {
+          Router.go(ROUTES.ERROR)
+        } else {
+          throw new Error(JSON.stringify(response.response))
+        }
+      } catch (error: unknown) {
+        if (
+          JSON.parse((error as Error).message).reason ===
+          'User already in system'
+        )
+          Router.go(ROUTES.CHATS)
+        else alert('Ошибка авторизации:' + error)
       }
     }
   }
@@ -23,20 +35,29 @@ class AuthController {
   public async signUp(data: TSignUpData) {
     const errors = validateForm(data)
     if (!errors) {
-      const response = await authApi.signUp(data)
-      if (response.status === 200) {
-        Router.go('/messenger')
-      }
-
-      if (response.status === 400) {
-        Router.go('*')
+      try {
+        const response = await this.api.signIn(data)
+        if (response.status === 200) {
+          Router.go(ROUTES.CHATS)
+        } else if (response.status === 500) {
+          Router.go(ROUTES.ERROR)
+        } else {
+          throw new Error(JSON.stringify(response.response))
+        }
+      } catch (error: unknown) {
+        if (
+          JSON.parse((error as Error).message).reason ===
+          'User already in system'
+        )
+          Router.go(ROUTES.CHATS)
+        else alert('Ошибка авторизации:' + error)
       }
     }
   }
 
   public async logout() {
     try {
-      const response = await authApi.logout()
+      const response = await this.api.logout()
       if (response.status === 200) {
         Router.go(ROUTES.LOGIN)
       }
@@ -47,7 +68,7 @@ class AuthController {
 
   public async fetchUser() {
     try {
-      const response = await authApi.fetchUser()
+      const response = await this.api.fetchUser()
 
       if (response.status === 200) {
         return response.response

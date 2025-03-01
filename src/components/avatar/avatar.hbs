@@ -1,5 +1,9 @@
 <div onclick='{{handleAvatarClick}}'>
-  <img src='/user-photo.png' alt='User Photo' />
+  {{#if url}}
+  <img id="avatar-img" src="{{url}}" alt="avatar"/>
+{{else}}
+  <img id="avatar-img" src='/user-photo.png' alt='User Photo' />
+{{/if}}
   <div class='overlay'>Change photo</div>
 </div>
 {{#if isUpload}}

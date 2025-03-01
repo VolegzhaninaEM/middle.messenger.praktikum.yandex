@@ -7,18 +7,14 @@ import { EventBus } from '../../services/eventBus'
 import { IEvents } from '../../constants/interface'
 import userAvatarApi from '../../api/userAvatarApi'
 import { CloseButton, SubmitButton } from '..'
-
-type TAvatarModal = TProps & {
-  fileInput?: HTMLInputElement
-}
 export class AvatarLoadModal extends Component {
-  private fileInput: HTMLInputElement
-  constructor(tagName: string, props: TAvatarModal) {
+  constructor(tagName: string, props: TProps) {
     super(tagName, {
       ...props,
       attr: { class: 'avatar__load' },
       title: 'Upload photo',
       events: {
+        ...props.events,
         change: () => this._handleFileSelect.bind(this)
       }
     })
@@ -26,13 +22,7 @@ export class AvatarLoadModal extends Component {
     if (!this.children.closeButton) {
       this.children.closeButton = new CloseButton('div', {
         events: {
-          click: () => {
-            // Логика закрытия модального окна
-            const app = document.getElementById('app')
-            if (app) {
-              app.removeChild(this.getContent() as Node)
-            }
-          }
+          click: this.close.bind(this)
         }
       })
     }
@@ -49,11 +39,6 @@ export class AvatarLoadModal extends Component {
       })
     }
 
-    this.fileInput = document.createElement('input')
-    this.fileInput.type = 'file'
-    this.fileInput.accept = 'image/*'
-    this.fileInput.style.display = 'none'
-    this.fileInput.addEventListener('change', this._handleFileSelect.bind(this))
     this.element
       ?.getElementsByClassName('upload-text')[0]
       .addEventListener('click', this.openFileDialog.bind(this))
@@ -81,6 +66,7 @@ export class AvatarLoadModal extends Component {
       const url = URL.createObjectURL(file)
       this.setProps({ url })
       const formData = new FormData()
+      this.eventBus().emit(EVENTS.FILE_SELECT, url)
       formData.append('avatar', file) // Добавляем файл в FormData
 
       const response = await userAvatarApi.changeAvatar(formData)
@@ -89,15 +75,14 @@ export class AvatarLoadModal extends Component {
         throw new Error('Ошибка при загрузке изображения')
       }
 
-      return response.json() // Обрабатываем JSON-ответ от сервера
+      return response.json().then(() => {
+        if (this.childProps.events) {
+          this.childProps.events.close()
+        }
+      })
     }
 
-    this.setProps({
-      fileLoadedName: undefined,
-      title: 'Загрузите файл'
-    })
-
-    reader.readAsDataURL(file)
+    await reader.readAsDataURL(file)
   }
 
   public open() {
@@ -107,8 +92,26 @@ export class AvatarLoadModal extends Component {
     }
   }
 
+  public close() {
+    // Логика закрытия модального окна
+    this.getContent()?.remove()
+  }
+
   public openFileDialog() {
-    this.fileInput.click()
+    const fileInput = document.createElement('input')
+    fileInput.type = 'file'
+    fileInput.accept = 'image/*'
+    fileInput.style.display = 'hidden'
+    fileInput.addEventListener('change', this._handleFileSelect.bind(this))
+
+    // Добавляем инпут в DOM (временно)
+    document.body.appendChild(fileInput)
+
+    // Открываем диалог выбора файла
+    fileInput.click()
+
+    // Удаляем инпут после использования
+    fileInput.remove()
   }
 
   private _handleFileSelect(e: Event) {

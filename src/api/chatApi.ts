@@ -1,17 +1,22 @@
+import { TChatsData } from '../types/types'
+import { BaseAPI } from './baseApi'
 
-import { BaseAPI } from './baseApi';
-import HttpTransport from './httpTransport';
-
-  const chatAPIInstance = new HttpTransport('api/v1/chats');
-
-  class ChatAPI extends BaseAPI {
-      create() {
-          // Здесь уже не нужно писать полный путь /api/v1/chats/
-          return chatAPIInstance.post('/', {title: 'string'});
-      }
-
-      request() {
-          // Здесь уже не нужно писать полный путь /api/v1/chats/
-          return chatAPIInstance.get('/full');
-      }
+class ChatAPI extends BaseAPI {
+  constructor(endpoint: string = '/chats') {
+    super(endpoint)
   }
+
+  public getChats(data: TChatsData): Promise<XMLHttpRequest> {
+    return this.http.get('', { data })
+  }
+
+  create() {
+    return this.http.post('/', { title: 'string' })
+  }
+
+  request() {
+    return this.http.get('/full')
+  }
+}
+
+export default new ChatAPI()

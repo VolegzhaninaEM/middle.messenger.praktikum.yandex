@@ -42,7 +42,11 @@ class Profile extends Component {
       })
     }
 
-    this.uploadModal = new AvatarLoadModal('main', {})
+    this.uploadModal = new AvatarLoadModal('main', {
+      events: {
+        close: () => this.close()
+      }
+    })
 
     if (!this.children.login) {
       this.children.login = new TextInput('input', {
@@ -108,6 +112,15 @@ class Profile extends Component {
         }
       })
     }
+  }
+
+  public close() {
+    // Логика закрытия модального окна
+    const app = document.getElementById('app')
+    if (app) {
+      app.removeChild(this.uploadModal.getContent() as Node)
+    }
+    this.children.profilePhoto.setProps({url: this.uploadModal.childProps.url})
   }
 
   private _handleAvatarClick() {

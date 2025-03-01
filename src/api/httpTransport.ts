@@ -57,15 +57,16 @@ export default class HttpTransport {
           ? `${url}${queryStringify(data as Record<string, unknown>)}`
           : url
       )
-      xhr.setRequestHeader('Content-Type', 'application/json')
 
       Object.keys(headers).forEach(key => {
         xhr.setRequestHeader(key, headers[key])
       })
+      xhr.withCredentials = true
 
       xhr.onload = function () {
         resolve(xhr)
       }
+      xhr.responseType = 'json'
 
       xhr.onabort = reject
       xhr.onerror = reject
@@ -74,8 +75,10 @@ export default class HttpTransport {
       xhr.ontimeout = reject
 
       if (isGet || !data) {
+        xhr.setRequestHeader('Content-Type', 'application/json')
         xhr.send()
       } else {
+        xhr.setRequestHeader('Content-Type', 'application/json')
         xhr.send(
           JSON.stringify(
             data as Document | XMLHttpRequestBodyInit | null | undefined
