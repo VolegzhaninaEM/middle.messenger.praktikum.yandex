@@ -5,8 +5,8 @@ import { default as template } from './avatarLoadModal.hbs?raw'
 import { EVENTS } from '../../constants/enums'
 import { EventBus } from '../../services/eventBus'
 import { IEvents } from '../../constants/interface'
-import userAvatarApi from '../../api/userAvatarApi'
 import { CloseButton, SubmitButton } from '..'
+import userApi from '../../api/userApi'
 export class AvatarLoadModal extends Component {
   constructor(tagName: string, props: TProps) {
     super(tagName, {
@@ -69,20 +69,12 @@ export class AvatarLoadModal extends Component {
       this.eventBus().emit(EVENTS.FILE_SELECT, url)
       formData.append('avatar', file) // Добавляем файл в FormData
 
-      const response = await userAvatarApi.changeAvatar(formData)
-
-      if (!response.ok) {
-        throw new Error('Ошибка при загрузке изображения')
+      await userApi.changeAvatar(formData)
+      if (this.childProps.events) {
+        this.childProps.events.close()
       }
-
-      return response.json().then(() => {
-        if (this.childProps.events) {
-          this.childProps.events.close()
-        }
-      })
     }
-
-    await reader.readAsDataURL(file)
+    reader.readAsDataURL(file)
   }
 
   public open() {

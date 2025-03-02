@@ -14,7 +14,8 @@ export type TEvents = Record<keyof HTMLElementEventMap | string, TCallback>
 export type TArrayChildren = Record<string, Array<Component | unknown>>
 type TChildProps = {
   class?: string
-  isOpen?: boolean
+  isOpen?: boolean,
+  data?: TUser
 }
 export type TMessage = {
   message: string

@@ -2,7 +2,7 @@ import { Profile } from '../../..'
 import { MenuBurger, MenuBurgerActions } from '../../../../components'
 import authController from '../../../../controllers/authController'
 import { Component } from '../../../../services/component'
-import { TProps } from '../../../../types/types'
+import { TProps, TUser } from '../../../../types/types'
 import { ChatList } from '../chatList/chatList'
 import { Search } from '../search/search'
 import { default as template } from './sidebar.hbs?raw'
@@ -40,11 +40,12 @@ export class Sidebar extends Component {
     this.initActions()
   }
 
-  public openModal(event: Event) {
+  public async openModal(event: Event) {
     event.preventDefault()
+    const data: TUser = await authController.fetchUser();
     const profileModal = new Profile('div', {
       href: '/profile',
-      attr: { class: 'chat__overlay' }
+      attr: { class: 'chat__overlay', data },
     })
     const app = document.getElementById('app')
     if (app) {
