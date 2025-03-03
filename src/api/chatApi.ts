@@ -10,6 +10,10 @@ class ChatAPI extends BaseAPI {
     return this.http.get('', { data })
   }
 
+  public createChat(data: TChatsData): Promise<XMLHttpRequest> {
+    return this.http.post('', { data })
+  }
+
   create() {
     return this.http.post('/', { title: 'string' })
   }

@@ -20,6 +20,21 @@ class ChatController {
     }
   }
 
+  public async createChat(data: TChatsData) {
+    try {
+      const response = await chatApi.createChat(data)
+      if (response.status === 200) {
+        return response.response
+      } else if (response.status === 500) {
+        Router.go(ROUTES.ERROR)
+      } else {
+        throw new Error(response.response.reason)
+      }
+    } catch (error) {
+      alert(error)
+    }
+  }
+
   public async fetchUser() {
     try {
       const response = await authApi.fetchUser()

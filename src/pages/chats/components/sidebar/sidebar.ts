@@ -1,5 +1,10 @@
 import { Profile } from '../../..'
-import { MenuBurger, MenuBurgerActions } from '../../../../components'
+import {
+  ChatName,
+  DropdownIcon,
+  ToggleIcon,
+  ToggleActions
+} from '../../../../components'
 import authController from '../../../../controllers/authController'
 import { Component } from '../../../../services/component'
 import { TProps, TUser } from '../../../../types/types'
@@ -11,15 +16,31 @@ export class Sidebar extends Component {
   constructor(tagName: string, props: TProps) {
     super(tagName, props)
 
-    this.children.dropdownMenu = new MenuBurgerActions('div', {})
+    const dropdownMenu: Component[] = [
+      new ToggleActions('li', {
+        href: '/profile',
+        title: 'Profile',
+        events: {
+          click: (event: unknown) => this.openModal(event as Event)
+        }
+      }),
+      new ToggleActions('li', {
+        href: '/logout',
+        title: 'Log Out',
+        events: {
+          click: (event: unknown) => this.logout(event as Event)
+        }
+      })
+    ]
 
     if (!this.children.menuButton) {
-      const dropdown = new MenuBurger('div', {
+      const dropdown = new ToggleIcon('div', {
         attr: { class: 'menu' },
+        src: '/burger-icon.png',
         events: {
           click: (event: unknown) => this.toggleMenu(event as ToggleEvent, this)
         },
-        actions: [this.children.dropdownMenu]
+        actions: [...dropdownMenu]
       })
 
       this.children.menuButton = dropdown
@@ -37,15 +58,22 @@ export class Sidebar extends Component {
       })
     }
 
-    this.initActions()
+    if (!this.children.buttonIcon) {
+      this.children.buttonIcon = new DropdownIcon('button', {
+        url: './plus-icon.png',
+        events: {
+          click: (event: unknown) => this.createChat(event as Event)
+        }
+      })
+    }
   }
 
   public async openModal(event: Event) {
     event.preventDefault()
-    const data: TUser = await authController.fetchUser();
+    const data: TUser = await authController.fetchUser()
     const profileModal = new Profile('div', {
       href: '/profile',
-      attr: { class: 'chat__overlay', data },
+      attr: { class: 'chat__overlay', data }
     })
     const app = document.getElementById('app')
     if (app) {
@@ -53,8 +81,24 @@ export class Sidebar extends Component {
     }
   }
 
+  public async createChat(event: Event) {
+    event.preventDefault()
+    const createChatModal = new ChatName('div', {
+      title: 'Create Chat',
+      attr: { class: 'chat__overlay' }
+    })
+    this.open(createChatModal)
+  }
+
+  public open(content: Component) {
+    const app = document.getElementById('app')
+    if (app) {
+      app.appendChild(content.getContent() as Node)
+    }
+  }
+
   initActions() {
-    const dropdownMenu = this.children.dropdownMenu as MenuBurgerActions
+    const dropdownMenu = this.children.dropdownMenu as ToggleActions
 
     const logout = dropdownMenu.logout()
     const openProfile = dropdownMenu.openProfile()

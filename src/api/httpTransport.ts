@@ -17,7 +17,8 @@ export default class HttpTransport {
   }
 
   post: HTTPMethod = (url, options = {}) => {
-    return this.request(this.endpoint + url, {
+    const requestURL = url.length ? this.endpoint + url : this.endpoint
+    return this.request(requestURL, {
       ...options,
       mode: 'cors',
       credentials: 'include',
