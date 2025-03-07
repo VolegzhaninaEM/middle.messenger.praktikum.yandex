@@ -1,0 +1,25 @@
+{{avatar}}
+<div class='chat-content'>
+  <div class='chat-content-top'>
+     <h2 class='chat-content__chatName'>{{title}}</h2>
+    {{#if last_message}}
+      <h2 class='chat-content__sender'>{{last_message.user.firstName}}
+        {{#if
+          last_message.user.lastName
+        }}&nbsp{{last_message.user.lastName}}{{/if}}</h2>
+      <h3 class='chat-content__time'>{{last_message.time}}</h3>
+    {{/if}}
+  </div>
+
+  {{#if message}}
+    <div class='chat-content-bottom'>
+      {{#compare message.type '===' 'incoming'}}<h3
+          class='chat-content__last-sender'
+        >You:</h3>{{/compare}}
+      <h3 class='chat-content__message'>{{last_message.content}}</h3>
+    </div>
+  {{/if}}
+  {{#if unread_count}}
+    <div class='chat-content__amount'>{{unread_count}}</div>
+  {{/if}}
+</div>

@@ -1,9 +1,11 @@
-import './chatMessage.less'
+import './chatMessageInput.less'
 import { Component } from '../../services/component'
 import { TElementForm, TProps } from '../../types/types'
 
 type TMessage = TProps & TElementForm
-export class ChatMessage extends Component {
+
+// Компонент строки отправки сообщения
+export class ChatMessageInput extends Component {
   constructor(tagName: string, props: TMessage) {
     const { attr } = props
     super(tagName, {

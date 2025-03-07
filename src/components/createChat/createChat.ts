@@ -11,9 +11,15 @@ import {
 } from '../../components'
 import chatController from '../../controllers/chatController'
 
+type TModal = TProps & {
+  events: {
+    onClick: (e: unknown) => void
+  }
+}
 export class ChatName extends Component {
-  constructor(tagName: string, props: TProps) {
+  constructor(tagName: string, props: TModal) {
     super(tagName, { ...props, hasErrors: false, error: '' })
+    const { onClick } = props.events
 
     if (!this.children.closeButton) {
       this.children.closeButton = new CloseButton('div', {
@@ -32,7 +38,7 @@ export class ChatName extends Component {
     if (!this.children.chatName) {
       this.children.chatName = new TextInput('input', {
         attr: {
-          placeholder: 'Chat Name',
+          placeholder: this.childProps.placeholder as string,
           name: 'chat-name',
           type: 'text',
           value: ''
@@ -46,12 +52,11 @@ export class ChatName extends Component {
     if (!this.children.saveButton) {
       this.children.saveButton = new SubmitButton('input', {
         attr: {
-          value: String('Save changes'),
+          value:
+            (this.childProps.buttonName as string) || String('Save changes'),
           class: 'save-btn'
         },
-        events: {
-          click: (event: unknown) => this.handleSubmit(event as Event)
-        }
+        events: { click: onClick }
       })
     }
 
@@ -67,9 +72,7 @@ export class ChatName extends Component {
   getValues(context: Component) {
     const values = []
     const fieldsValues = {}
-    values.push(
-      { 'name': context.children.chatName.getValue() },
-    )
+    values.push({ name: context.children.chatName.getValue() })
 
     values.forEach(item => {
       Object.assign(fieldsValues, item)
@@ -98,7 +101,8 @@ export class ChatName extends Component {
   async handleSubmit(event: Event) {
     event.preventDefault()
     const title = this.children.chatName.getValue()
-    await chatController.createChat({title}).then(response => {
+    const controller = chatController.createChat({ title })
+    await controller.then(response => {
       if (response.id) {
         this.getContent()?.remove()
         chatController.getChats({})

@@ -25,6 +25,8 @@ export function merge(lhs: Indexed, rhs: Indexed): Indexed {
       // Если значение свойства является объектом, добавляем его в стек
       if (isObject(right[key])) {
         stack.push([getOrCreate(left, key), right[key]])
+      } else if (Array.isArray(right[key])) {
+        left[key] = [...right[key]]; // Клонируем массив, чтобы избежать мутации
       } else {
         left[key] = right[key] // Просто копируем значение
       }
@@ -36,7 +38,7 @@ export function merge(lhs: Indexed, rhs: Indexed): Indexed {
 
 // Вспомогательная функция для проверки, является ли значение объектом
 function isObject(value: any): boolean {
-  return value !== null && typeof value === 'object'
+  return value !== null && typeof value === 'object' && !Array.isArray(value)
 }
 
 // Вспомогательная функция для создания нового объекта, если его еще нет

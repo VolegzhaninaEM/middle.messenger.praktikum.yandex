@@ -1,10 +1,13 @@
 <div onclick='{{handleAvatarClick}}'>
   {{#if url}}
-  <img id="avatar-img" src="{{url}}" alt="avatar"/>
-{{else}}
-  <img id="avatar-img" src='/user-photo.png' alt='User Photo' />
-{{/if}}
-  <div class='overlay'>Change photo</div>
+    <img id='avatar-img' src='{{url}}' alt='avatar' />
+  {{else}}
+    <img id='avatar-img' src='/user-photo.png' alt='User Photo' />
+  {{/if}}
+
+  {{#if needOverlay}}
+    <div class='overlay'>Change photo</div>
+  {{/if}}
 </div>
 {{#if isUpload}}
   {{uploadModal}}

@@ -20,3 +20,12 @@ export type HTTPRequest = (
 ) => Promise<XMLHttpRequest>
 
 export type GeneralOptions = Omit<Options, 'method'>
+
+export type TAddUser = {
+  users: Array<number>
+  chatId: number
+}
+export type TRemoveUser = {
+  users: Array<number>
+  chatId: number
+}

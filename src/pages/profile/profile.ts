@@ -41,6 +41,7 @@ class Profile extends Component {
       this.children.profilePhoto = new Avatar('div', {
         attr: { class: 'profile-photo'},
         url: data?.avatar || '' ,
+        needOverlay: true,
         events: {
           click: this._handleAvatarClick.bind(this)
         }

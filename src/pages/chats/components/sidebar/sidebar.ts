@@ -1,4 +1,4 @@
-import { Profile } from '../../..'
+import { PasswordChagePage, Profile } from '../../..'
 import {
   ChatName,
   DropdownIcon,
@@ -6,9 +6,12 @@ import {
   ToggleActions
 } from '../../../../components'
 import authController from '../../../../controllers/authController'
+import chatController from '../../../../controllers/chatController'
+import userController from '../../../../controllers/userController'
 import { Component } from '../../../../services/component'
 import { TProps, TUser } from '../../../../types/types'
-import { ChatList } from '../chatList/chatList'
+import store from '../../../../utils/store'
+import { default as ChatList } from '../chatList/chatList'
 import { Search } from '../search/search'
 import { default as template } from './sidebar.hbs?raw'
 
@@ -16,12 +19,22 @@ export class Sidebar extends Component {
   constructor(tagName: string, props: TProps) {
     super(tagName, props)
 
+    this.setProps({ data: store.getState().user as TUser })
+
     const dropdownMenu: Component[] = [
       new ToggleActions('li', {
         href: '/profile',
         title: 'Profile',
         events: {
           click: (event: unknown) => this.openModal(event as Event)
+        }
+      }),
+
+      new ToggleActions('li', {
+        href: '/password',
+        title: 'Change password',
+        events: {
+          click: (event: unknown) => this.openPasswordModal(event as Event)
         }
       }),
       new ToggleActions('li', {
@@ -50,12 +63,30 @@ export class Sidebar extends Component {
       this.children.searchForm = new Search('form', {
         attr: { class: 'search' }
       })
+
+      this.children.searchForm
+        .getContent()
+        ?.addEventListener('submit', event => {
+          event.preventDefault() // Отменяем стандартное поведение формы
+
+          const inputElement = this.children.searchForm
+            .getContent()
+            ?.getElementsByClassName('search__input')[0] as HTMLInputElement | null;
+          if (inputElement) {
+            const value = inputElement.value.trim()
+            if (value) {
+              this.performSearch({
+                login: value
+              }) // Вызываем функцию поиска
+            } else {
+              alert('Введите текст для поиска')
+            }
+          }
+        })
     }
 
     if (!this.children.chatList) {
-      this.children.chatList = new ChatList('div', {
-        attr: { class: 'chat__list' }
-      })
+      this.children.chatList = new ChatList('div', {})
     }
 
     if (!this.children.buttonIcon) {
@@ -66,48 +97,68 @@ export class Sidebar extends Component {
         }
       })
     }
+
+    this.children.newChatModal = new ChatName('div', {
+      title: 'Create Chat',
+      placeholder: 'Chat Name',
+      buttonName: 'Create chat',
+      attr: { class: 'chat__overlay' },
+      events: {
+        onClick: (event: unknown) => this.handleSubmitNewChat(event as Event)
+      }
+    })
   }
 
   public async openModal(event: Event) {
     event.preventDefault()
-    const data: TUser = await authController.fetchUser()
     const profileModal = new Profile('div', {
       href: '/profile',
-      attr: { class: 'chat__overlay', data }
+      attr: { class: 'chat__overlay', data: this.childProps.data }
     })
-    const app = document.getElementById('app')
-    if (app) {
-      app.appendChild(profileModal.getContent() as Node)
+    this.open(profileModal)
+  }
+
+  public async openPasswordModal(event: Event) {
+    event.preventDefault()
+    const passwordModal = new PasswordChagePage('div', {
+      href: '/password',
+      attr: { class: 'chat__overlay', data: this.childProps.data as TUser }
+    })
+    this.open(passwordModal)
+  }
+
+  public async performSearch(data: { login: string }): Promise<void> {
+    try {
+      const results = await userController.searchUserByLogin(data) // Вызов контроллера
+      console.log('Результаты поиска:', results)
+      displayResults(results) // Отображаем результаты
+    } catch (error) {
+      console.error('Ошибка при поиске:', error)
+      alert('Произошла ошибка при поиске')
     }
   }
 
   public async createChat(event: Event) {
     event.preventDefault()
-    const createChatModal = new ChatName('div', {
-      title: 'Create Chat',
-      attr: { class: 'chat__overlay' }
+    this.open(this.children.newChatModal)
+  }
+
+  async handleSubmitNewChat(event: Event) {
+    event.preventDefault()
+    const title = this.children.newChatModal.children.chatName.getValue()
+    await chatController.createChat({ title }).then(async response => {
+      if (response.id) {
+        this.children.newChatModal.getContent()?.remove()
+        const chatsData = await chatController.getChats({})
+        store.set('chats', chatsData)
+      }
     })
-    this.open(createChatModal)
   }
 
   public open(content: Component) {
     const app = document.getElementById('app')
     if (app) {
       app.appendChild(content.getContent() as Node)
-    }
-  }
-
-  initActions() {
-    const dropdownMenu = this.children.dropdownMenu as ToggleActions
-
-    const logout = dropdownMenu.logout()
-    const openProfile = dropdownMenu.openProfile()
-    if (logout) {
-      logout.addEventListener('click', this.logout)
-    }
-
-    if (openProfile) {
-      openProfile.addEventListener('click', this.openModal)
     }
   }
 
@@ -124,4 +175,19 @@ export class Sidebar extends Component {
   render(): DocumentFragment {
     return this.compile(template, this.childProps)
   }
+}
+
+function displayResults(results: any[]): void {
+  const resultsContainer = document.getElementById('search-results');
+  if (!resultsContainer) return;
+
+  // Очищаем предыдущие результаты
+  resultsContainer.innerHTML = '';
+
+  // Добавляем новые результаты
+  results.forEach((result) => {
+    const resultItem = document.createElement('div');
+    resultItem.textContent = result.name || result.title || JSON.stringify(result);
+    resultsContainer.appendChild(resultItem);
+  });
 }

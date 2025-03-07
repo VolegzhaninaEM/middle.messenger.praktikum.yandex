@@ -1,10 +1,10 @@
 import './chatFooter.less'
 import { Component } from '../../../../services/component'
-import { TMessage, TProps } from '../../../../types/types'
+import { TInputMessage, TProps } from '../../../../types/types'
 import { validateForm } from '../../../../utils/validators'
 import { default as template } from './chatFooter.hbs?raw'
 import {
-  ChatMessage,
+  ChatMessageInput,
   InputErrorCapture,
   SendIcon
 } from '../../../../components'
@@ -25,7 +25,7 @@ export class ChatFooter extends Component implements IFooter {
     })
 
     if (!this.children.inputMessage) {
-      this.children.inputMessage = new ChatMessage('input', {
+      this.children.inputMessage = new ChatMessageInput('input', {
         name: 'message',
         placeholder: 'Сообщение',
         attr: {
@@ -60,7 +60,7 @@ export class ChatFooter extends Component implements IFooter {
 
   getMessage(context: Component) {
     return {
-      message: (context.children.inputMessage as ChatMessage).getValue()
+      message: (context.children.inputMessage as ChatMessageInput).getValue()
     }
   }
 
@@ -71,7 +71,7 @@ export class ChatFooter extends Component implements IFooter {
 
   private _handleError(context: Component) {
     const data = this.getMessage(context)
-    const errors = validateForm(data as TMessage)
+    const errors = validateForm(data as TInputMessage)
     if (errors) {
       this.hasErrors = true
       this.setProps({

@@ -3,6 +3,7 @@ import chatApi from '../api/chatApi'
 import { ROUTES } from '../constants/enums'
 import Router from '../router/router'
 import { TChatsData } from '../types/types'
+import userController from './userController'
 
 class ChatController {
   public async getChats({ offset = 0, limit = 5 }: TChatsData) {
@@ -41,6 +42,52 @@ class ChatController {
 
       if (response.status === 200) {
         return response.response
+      }
+    } catch (error) {
+      alert(error)
+    }
+  }
+
+  async addUser(data: { login: string; chatId: number }) {
+    try {
+      const { login, chatId } = data
+      const userData = await userController.searchUserByLogin({ login })
+      if (userData.length > 0) {
+        const response = await chatApi.addUsers({
+          users: [userData[0].id],
+          chatId
+        })
+
+        if (response.status === 500) {
+          Router.go(ROUTES.ERROR)
+        } else if (response.status !== 200) {
+          throw new Error(response.responseText)
+        }
+      } else {
+        throw new Error('User not found')
+      }
+    } catch (error) {
+      alert(error)
+    }
+  }
+
+  async removeUser(data: { login: string; chatId: number }) {
+    try {
+      const { login, chatId } = data
+      const userData = await userController.searchUserByLogin({ login })
+      if (userData.length > 0) {
+        const response = await chatApi.removeUsers({
+          users: [userData[0].id],
+          chatId
+        })
+
+        if (response.status === 500) {
+          Router.go(ROUTES.ERROR)
+        } else if (response.status !== 200) {
+          throw new Error(response.responseText)
+        }
+      } else {
+        throw new Error('User not found')
       }
     } catch (error) {
       alert(error)

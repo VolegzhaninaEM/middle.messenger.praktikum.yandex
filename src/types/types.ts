@@ -1,11 +1,11 @@
-import { USER_INFO } from '../constants/enums'
+import { PASSWORD, USER_INFO } from '../constants/enums'
 import { Component } from '../services/component'
 
 export type TProps = Record<string, unknown> & {
   events?: TEvents
   __id?: string | null
   withInternalID?: boolean
-  attr?: Record<string, string | Array<string>> & TChildProps
+  attr?: Record<string, unknown> & TChildProps
   rootQuery?: string
 }
 export type TChildren = Record<string, Component>
@@ -14,10 +14,21 @@ export type TEvents = Record<keyof HTMLElementEventMap | string, TCallback>
 export type TArrayChildren = Record<string, Array<Component | unknown>>
 type TChildProps = {
   class?: string
-  isOpen?: boolean,
+  isOpen?: boolean
   data?: TUser
 }
 export type TMessage = {
+  text: string
+  type: string
+  time: string
+  status?: string
+  sender: {
+    firstName: string
+    lastName: string
+  }
+}
+
+export type TInputMessage = TData & {
   message: string
 }
 
@@ -44,11 +55,11 @@ export type TProfile = {
 }
 
 export type TChatPreview = {
-  title: string
-  avatar: string
-  unread_count: number
-  created_by: number
-  last_message: {
+  title?: string
+  avatar?: string
+  unread_count?: number
+  created_by?: number
+  last_message?: {
     user: TUser
     time: string
     content: string
@@ -134,10 +145,15 @@ export type TUser = {
   [USER_INFO.display_name]: string
 }
 
+export type TPassword = {
+  [PASSWORD.newPassword]: string
+  [PASSWORD.oldPassword]: string
+}
+
 export type TChatsData = {
-    offset?: number
-    limit?: number
-    title?: string
+  offset?: number
+  limit?: number
+  title?: string
 }
 
 export type TRoute = {

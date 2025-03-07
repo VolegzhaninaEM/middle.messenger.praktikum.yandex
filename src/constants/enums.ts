@@ -24,6 +24,11 @@ export enum USER_INFO {
   email = 'email'
 }
 
+export enum PASSWORD {
+  newPassword = 'newPassword',
+  oldPassword = 'oldPassword'
+}
+
 export enum ROUTES {
   LOGIN = '/',
   CHATS = '/messenger' ,
