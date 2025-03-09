@@ -16,7 +16,7 @@ export function merge(lhs: Indexed, rhs: Indexed): Indexed {
   while (stack.length > 0) {
     // Извлекаем последнюю пару объектов из стека
     const [left, right] = stack.pop()!
-
+ 
     for (let key in right) {
       if (!right.hasOwnProperty(key)) {
         continue
@@ -37,7 +37,7 @@ export function merge(lhs: Indexed, rhs: Indexed): Indexed {
 }
 
 // Вспомогательная функция для проверки, является ли значение объектом
-function isObject(value: any): boolean {
+function isObject(value: unknown): boolean {
   return value !== null && typeof value === 'object' && !Array.isArray(value)
 }
 
@@ -64,7 +64,7 @@ export function set(
     (acc, key) => ({
       [key]: acc
     }),
-    value as any
+    value as Indexed
   )
   return merge(object as Indexed, result)
 }

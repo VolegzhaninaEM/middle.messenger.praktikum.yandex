@@ -9,7 +9,7 @@ import { EmptyChat } from '../chatWindowEmpty/chatWindowEmpty'
 import { default as template } from './chatWindow.hbs?raw'
 
 export class ChatWindow extends Component {
-  private storeInfo: any;
+  private storeInfo;
   constructor(tagName: string, props: TProps) {
     super(tagName, props)
     const { chatId, token } = props

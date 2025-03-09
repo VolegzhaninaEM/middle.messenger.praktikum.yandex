@@ -7,7 +7,7 @@ export class Route {
   private _block: Component | null;
   private _props: TProps;
   private _pathname: string;
-  private _blockClass: any;
+  private _blockClass: Component;
   
   constructor(pathname: string, view: Component, props: TProps) {
       this._pathname = pathname;

@@ -201,7 +201,7 @@ export class Sidebar extends Component {
   }
 }
 
-function displayResults(results: any[]): void {
+function displayResults(results: TUser[]): void {
   const resultsContainer = document.getElementById('search-results')
   if (!resultsContainer) return
 
@@ -212,7 +212,7 @@ function displayResults(results: any[]): void {
   results.forEach(result => {
     const resultItem = document.createElement('div')
     resultItem.textContent =
-      result.name || result.title || JSON.stringify(result)
+      result.display_name || result.first_name || JSON.stringify(result)
     resultsContainer.appendChild(resultItem)
   })
 }
