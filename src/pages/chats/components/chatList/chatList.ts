@@ -12,11 +12,30 @@ class ChatList extends Component {
     const chatsData = store.getState().chats
 
     if (!this.arrayChildren.chatList) {
-      this.arrayChildren.chatList = chatsData.map(
-        (chat: TChatsData) => {
-          return new ChatPreview('div', {...chat, attr: { class: 'chat__list' }})
-        }
-      )
+      this.arrayChildren.chatList = chatsData.map((chat: TChatsData) => {
+        return new ChatPreview('div', {
+          ...chat,
+          attr: { class: 'chat__list' },
+          events: {
+            click: (event: unknown) => this.selectChat(event as Event, chat.id as number)
+          }
+        })
+      })
+    }
+  }
+
+  selectChat(event: Event, chatId: number): void {
+    event.preventDefault()
+    this.selectedChatId = chatId
+    store.set('selectedChatId', chatId);
+    console.log('Выбранный чат:', chatId)
+
+    // Уведомляем родительский компонент о выборе чата
+    if (
+      this.childProps.events &&
+      typeof this.childProps.events.onChatSelect === 'function'
+    ) {
+      (this.childProps.events.onChatSelect as (chatId: number) => void)(chatId)
     }
   }
 

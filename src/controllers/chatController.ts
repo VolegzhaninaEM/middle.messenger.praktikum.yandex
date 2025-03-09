@@ -36,6 +36,22 @@ class ChatController {
     }
   }
 
+  public async getChatToken(id: number) {
+    try {
+      const response = await chatApi.getChatToken(id)
+
+      if (response.status === 200) {
+        return response.json()
+      }
+
+      if (!response.ok) {
+        throw new Error('Ошибка при получении токена чата');
+      }
+    } catch (error) {
+      alert(error)
+    }
+  }
+
   public async fetchUser() {
     try {
       const response = await authApi.fetchUser()

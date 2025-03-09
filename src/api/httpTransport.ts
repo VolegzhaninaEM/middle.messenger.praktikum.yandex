@@ -1,5 +1,5 @@
 import { METHODS } from './types/enums'
-import { HTTPMethod, HTTPRequest } from './types/types'
+import { HTTPMethod, HTTPRequest, TFetch } from './types/types'
 
 export default class HttpTransport {
   endpoint: string
@@ -37,6 +37,13 @@ export default class HttpTransport {
     return this.request(this.endpoint + url, {
       ...options,
       method: METHODS.DELETE
+    })
+  }
+
+  fetch: TFetch = (url, id) => {
+    return fetch(this.endpoint + url + id, {
+      method: METHODS.POST,
+      credentials: 'include'
     })
   }
 

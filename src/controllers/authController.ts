@@ -36,7 +36,7 @@ class AuthController {
     const errors = validateForm(data)
     if (!errors) {
       try {
-        const response = await this.api.signIn(data)
+        const response = await this.api.signUp(data)
         if (response.status === 200) {
           Router.go(ROUTES.CHATS)
         } else if (response.status === 500) {

@@ -154,6 +154,21 @@ export type TChatsData = {
   offset?: number
   limit?: number
   title?: string
+  id?: number
+}
+
+export type TChatData = {
+  avatar?: string
+  id?: number
+  created_by?: number
+  last_message?: TLastMessage
+}
+
+type TLastMessage = {
+  content: string
+  id: number
+  time: string
+  user: TUser
 }
 
 export type TRoute = {

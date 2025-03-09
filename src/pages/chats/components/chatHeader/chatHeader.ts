@@ -89,10 +89,9 @@ export class ChatHeader extends Component {
 
   async handleSubmitAdd(event: Event) {
     event.preventDefault()
-    const chatId = store.getState().user.id
     const login = this.children.addUserModal.children.chatName.getValue()
-    console.log('handleSubmitAdd', { login, chatId })
-    await chatController.addUser({ login, chatId })
+    console.log('handleSubmitAdd', { login, chatId: this.childProps.chatId })
+    await chatController.addUser({ login, chatId: this.childProps.chatId as number})
     this.children.addUserModal.getContent()?.remove()
   }
 

@@ -29,12 +29,47 @@ export class ChatPage extends Component {
 
   initData() {
     if (!this.children.sidebar) {
-      this.children.sidebar = new Sidebar('div', {})
+      this.children.sidebar = new Sidebar('div', {
+        events: {
+          onChatSelect: (chatId: unknown) => this.openChat(chatId as number)
+        }
+      })
     }
     if (!this.children.chatWindow) {
       this.children.chatWindow = new ChatWindow('div', {
         attr: { id: 'chat__window', class: 'chat__window' }
       })
+    }
+  }
+
+  public async openChat(chatId: number): Promise<void> {
+    this.selectedChatId = chatId
+
+    try {
+      // Получаем токен для чата
+      this.token = await chatController.getChatToken(chatId)
+
+      if (this.children.chatWindow) {
+        this.destroy(this.children.chatWindow)
+      }
+
+      this.children.chatWindow = new ChatWindow('div', {
+        attr: { id: 'chat__window', class: 'chat__window' },
+        chatId,
+        token: this.token.token,
+        title: 'Start messaging'
+      })
+
+      console.log('Чат открыт:', chatId)
+    } catch (error) {
+      console.error('Ошибка при открытии чата:', error)
+      alert('Не удалось открыть чат')
+    }
+  }
+
+  destroy(element: Component): void {
+    if (element) {
+      element.getContent()?.remove() // Удаляем элемент из DOM
     }
   }
 

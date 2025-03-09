@@ -8,11 +8,17 @@ export type Options = {
   credentials?: string
   mode?: string
   title?: string
+  id?: number
 }
 export type HTTPMethod = (
   url: string,
   options?: GeneralOptions
 ) => Promise<XMLHttpRequest>
+
+export type TFetch = (
+  url: string,
+  id?: number
+) => Promise<Response>
 
 export type HTTPRequest = (
   url: string,

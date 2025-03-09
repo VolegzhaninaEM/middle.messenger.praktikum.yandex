@@ -11,6 +11,10 @@ class ChatAPI extends BaseAPI {
     return this.http.get('', { data })
   }
 
+  public getChatToken(id: number): Promise<Response> {
+    return this.http.fetch('/token/', id)
+  }
+
   public createChat(data: TChatsData): Promise<XMLHttpRequest> {
     return this.http.post('', { data })
   }

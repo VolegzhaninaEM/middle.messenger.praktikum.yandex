@@ -71,7 +71,9 @@ export class Sidebar extends Component {
 
           const inputElement = this.children.searchForm
             .getContent()
-            ?.getElementsByClassName('search__input')[0] as HTMLInputElement | null;
+            ?.getElementsByClassName(
+              'search__input'
+            )[0] as HTMLInputElement | null
           if (inputElement) {
             const value = inputElement.value.trim()
             if (value) {
@@ -86,7 +88,12 @@ export class Sidebar extends Component {
     }
 
     if (!this.children.chatList) {
-      this.children.chatList = new ChatList('div', {})
+      this.children.chatList = new ChatList('div', {
+        chats: [],
+        events: {
+          onChatSelect: (chatId: number) => this.openChat(chatId)
+        }
+      })
     }
 
     if (!this.children.buttonIcon) {
@@ -143,6 +150,17 @@ export class Sidebar extends Component {
     this.open(this.children.newChatModal)
   }
 
+
+  public openChat(chatId: number): void {
+    // передаем дальше по цепочке родителю
+    if (
+      this.childProps.events &&
+      typeof this.childProps.events.onChatSelect === 'function'
+    ) {
+      (this.childProps.events.onChatSelect as (chatId: number) => void)(chatId)
+    }
+  }
+
   async handleSubmitNewChat(event: Event) {
     event.preventDefault()
     const title = this.children.newChatModal.children.chatName.getValue()
@@ -172,22 +190,29 @@ export class Sidebar extends Component {
     authController.logout()
   }
 
+  destroy(): void {
+    if (this.element) {
+      this.element.remove(); // Удаляем элемент из DOM
+    }
+  }
+
   render(): DocumentFragment {
     return this.compile(template, this.childProps)
   }
 }
 
 function displayResults(results: any[]): void {
-  const resultsContainer = document.getElementById('search-results');
-  if (!resultsContainer) return;
+  const resultsContainer = document.getElementById('search-results')
+  if (!resultsContainer) return
 
   // Очищаем предыдущие результаты
-  resultsContainer.innerHTML = '';
+  resultsContainer.innerHTML = ''
 
   // Добавляем новые результаты
-  results.forEach((result) => {
-    const resultItem = document.createElement('div');
-    resultItem.textContent = result.name || result.title || JSON.stringify(result);
-    resultsContainer.appendChild(resultItem);
-  });
+  results.forEach(result => {
+    const resultItem = document.createElement('div')
+    resultItem.textContent =
+      result.name || result.title || JSON.stringify(result)
+    resultsContainer.appendChild(resultItem)
+  })
 }

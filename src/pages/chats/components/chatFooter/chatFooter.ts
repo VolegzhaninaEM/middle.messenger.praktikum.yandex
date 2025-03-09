@@ -8,6 +8,7 @@ import {
   InputErrorCapture,
   SendIcon
 } from '../../../../components'
+import { ChatWebSocket } from '../../../../webSocket/webSocket'
 
 interface IFooter {
   hasErrors: boolean
@@ -64,9 +65,28 @@ export class ChatFooter extends Component implements IFooter {
     }
   }
 
-  handleClick(event: SubmitEvent, context: Component) {
+  async handleClick(event: SubmitEvent, context: Component) {
     event.preventDefault()
     this._handleError(context)
+    try {
+      const message = this.childProps.message as string
+      (this.childProps.socket as ChatWebSocket).sendMessage(JSON.stringify({
+        content: message,
+        type: 'message',
+        })
+      )
+
+      console.log('Сообщение отправлено:', message);
+
+      // Очищаем поле ввода после успешной отправки
+      const input = this.element?.querySelector('.message-input') as HTMLInputElement | null;
+      if (input) {
+        input.value = '';
+      }
+    } catch (error) {
+      console.error('Ошибка при отправке сообщения:', error);
+      alert('Не удалось отправить сообщение');
+    }
   }
 
   private _handleError(context: Component) {
@@ -84,7 +104,8 @@ export class ChatFooter extends Component implements IFooter {
     } else {
       this.hasErrors = false
       this.setProps({
-        hasErrors: false
+        hasErrors: false,
+        message: data
       })
       console.log(data)
     }

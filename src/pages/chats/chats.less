@@ -84,7 +84,33 @@ body {
     &__message {
         height: 100%;
         display: flex;
-        align-items: center;
+        width: 90%;
+        justify-content: center;
+
+        &-empty {
+            align-self: center;
+        }
+
+        &-list {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+        }
+
+        &-container {
+            max-height: 400px;
+            width: 100%;
+            /* Ограничение высоты */
+            overflow-y: auto;
+            /* Включение вертикальной прокрутки */
+            display: flex;
+            /* Используем flexbox для управления потоком сообщений */
+            flex-direction: column-reverse;
+            /* Сообщения отображаются снизу вверх */
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+
     }
 
     &__window {
