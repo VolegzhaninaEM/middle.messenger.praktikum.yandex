@@ -145,14 +145,14 @@ class Profile extends Component {
 
   public closeUploadModal() {
     // Логика закрытия модального окна
-    this.uploadModal.getContent().remove()
+    (this.uploadModal as AvatarLoadModal).getContent()?.remove()
     this.children.profilePhoto.setProps({
-      url: this.uploadModal.childProps.url
+      url: (this.uploadModal as AvatarLoadModal).childProps.url
     })
   }
 
   private _handleAvatarClick() {
-    this.uploadModal.open()
+    (this.uploadModal as AvatarLoadModal).open()
   }
 
   getValues(context: Component) {

@@ -1,7 +1,7 @@
 import './chats.less'
 import { Component } from '../../services/component'
 import { default as template } from './chats.hbs?raw'
-import { TProps, TUser } from '../../types/types'
+import { TProps, TToken, TUser } from '../../types/types'
 import { ChatWindow } from './components/chatWindow/chatWindow'
 import { Sidebar } from './components/sidebar/sidebar'
 import { connect } from '../../utils/connect'
@@ -56,7 +56,7 @@ export class ChatPage extends Component {
       this.children.chatWindow = new ChatWindow('div', {
         attr: { id: 'chat__window', class: 'chat__window' },
         chatId,
-        token: this.token.token,
+        token: (this.token as TToken).token,
         title: 'Start messaging'
       })
 

@@ -1,4 +1,4 @@
-export { Modal } from './modalWindow/modalWindow'
+
 export { Avatar } from './avatar/avatar'
 export { CloseButton } from './closeButton/closeButton'
 export { EmailInput } from './emailInput/emailInput'

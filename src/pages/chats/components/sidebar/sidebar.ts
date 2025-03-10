@@ -162,7 +162,7 @@ export class Sidebar extends Component {
 
   async handleSubmitNewChat(event: Event) {
     event.preventDefault()
-    const title = this.children.newChatModal.children.chatName.getValue()
+    const title = this.children.newChatModal.children.chatName.getValue() as string
     await chatController.createChat({ title }).then(async response => {
       if (response.id) {
         this.children.newChatModal.getContent()?.remove()
@@ -179,9 +179,8 @@ export class Sidebar extends Component {
     }
   }
 
-  public toggleMenu(event: ToggleEvent, context: Component) {
-    event.preventDefault()
-    context.children.menuButton.toggleMenu()
+  public toggleMenu(_event: ToggleEvent, context: Component) {
+    (context.children.menuButton as ToggleIcon).toggleMenu()
   }
 
   public logout(event: Event) {

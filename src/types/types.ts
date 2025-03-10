@@ -136,6 +136,10 @@ export type TSignUpData = {
   [USER_INFO.phone]: string
 }
 
+export type TToken = {
+  token: string
+}
+
 export type TUser = {
   id: number
   avatar: string
