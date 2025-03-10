@@ -32,7 +32,7 @@ export default class HttpTransport {
       method: METHODS.PUT
     })
   }
-  
+
   delete: HTTPMethod = (url, options = {}) => {
     return this.request(this.endpoint + url, {
       ...options,
@@ -86,12 +86,16 @@ export default class HttpTransport {
         xhr.setRequestHeader('Content-Type', 'application/json')
         xhr.send()
       } else {
-        xhr.setRequestHeader('Content-Type', 'application/json')
-        xhr.send(
-          JSON.stringify(
-            data as Document | XMLHttpRequestBodyInit | null | undefined
+        if (data instanceof FormData) {
+          xhr.send(data)
+        } else {
+          xhr.setRequestHeader('Content-Type', 'application/json')
+          xhr.send(
+            JSON.stringify(
+              data as Document | XMLHttpRequestBodyInit | null | undefined
+            )
           )
-        )
+        }
       }
     })
   }

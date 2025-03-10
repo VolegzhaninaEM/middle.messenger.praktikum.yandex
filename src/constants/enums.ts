@@ -9,7 +9,7 @@ export enum EVENTS {
 }
 
 export enum StoreEvents {
-  Updated = 'updated',
+  Updated = 'updated'
 }
 
 export enum USER_INFO {
@@ -31,7 +31,7 @@ export enum PASSWORD {
 
 export enum ROUTES {
   LOGIN = '/',
-  CHATS = '/messenger' ,
+  CHATS = '/messenger',
   PROFILE_SETTINGS = '/settings',
   SIGN_UP = '/signup',
   PASSWORD_CONTROLS = '/password-control',

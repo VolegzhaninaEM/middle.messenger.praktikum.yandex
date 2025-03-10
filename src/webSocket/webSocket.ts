@@ -1,3 +1,5 @@
+import { TMessageInfo } from '../types/types'
+
 export class ChatWebSocket {
   protected socket: WebSocket | null = null
 
@@ -5,7 +7,7 @@ export class ChatWebSocket {
     chatId: number,
     userId: number,
     token: string,
-    onMessage: (message: unknown[]) => void
+    onMessage: (message: TMessageInfo) => void
   ): void {
     if (this.socket) {
       this.disconnect() // Закрываем предыдущее соединение, если оно существует

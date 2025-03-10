@@ -91,7 +91,10 @@ export class ChatHeader extends Component {
     event.preventDefault()
     const login = this.children.addUserModal.children.chatName.getValue()
     console.log('handleSubmitAdd', { login, chatId: this.childProps.chatId })
-    await chatController.addUser({ login, chatId: this.childProps.chatId as number})
+    await chatController.addUser({
+      login,
+      chatId: this.childProps.chatId as number
+    })
     this.children.addUserModal.getContent()?.remove()
   }
 

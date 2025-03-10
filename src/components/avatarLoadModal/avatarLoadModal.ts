@@ -53,13 +53,19 @@ export class AvatarLoadModal extends Component {
 
   handleFile() {
     const reader = new FileReader()
-    const file = this.childProps.file as any
+    const file = this.childProps.file as File
     this.setProps({ reader })
-    reader.readAsDataURL(file.name)
+    reader.readAsDataURL(file)
   }
 
   async handleSubmit() {
     const file: File = this.childProps.file as File
+
+    if (!(file instanceof File)) {
+      console.error('Переданный объект не является экземпляром File')
+      return
+    }
+
     const reader: FileReader = this.childProps.reader as FileReader
 
     reader.onload = async () => {

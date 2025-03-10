@@ -17,7 +17,8 @@ class ChatList extends Component {
           ...chat,
           attr: { class: 'chat__list' },
           events: {
-            click: (event: unknown) => this.selectChat(event as Event, chat.id as number)
+            click: (event: unknown) =>
+              this.selectChat(event as Event, chat.id as number)
           }
         })
       })
@@ -27,7 +28,7 @@ class ChatList extends Component {
   selectChat(event: Event, chatId: number): void {
     event.preventDefault()
     this.selectedChatId = chatId
-    store.set('selectedChatId', chatId);
+    store.set('selectedChatId', chatId)
     console.log('Выбранный чат:', chatId)
 
     // Уведомляем родительский компонент о выборе чата
@@ -35,7 +36,7 @@ class ChatList extends Component {
       this.childProps.events &&
       typeof this.childProps.events.onChatSelect === 'function'
     ) {
-      (this.childProps.events.onChatSelect as (chatId: number) => void)(chatId)
+      ;(this.childProps.events.onChatSelect as (chatId: number) => void)(chatId)
     }
   }
 

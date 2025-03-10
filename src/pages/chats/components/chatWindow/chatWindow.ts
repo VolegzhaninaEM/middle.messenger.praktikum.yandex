@@ -1,6 +1,13 @@
 import { ChatMessage } from '../../../../components'
 import { Component } from '../../../../services/component'
-import { TChatData, TChatsData, TProps } from '../../../../types/types'
+import {
+  Indexed,
+  TChatData,
+  TChatsData,
+  TMessageInfo,
+  TProps,
+  TUser
+} from '../../../../types/types'
 import store from '../../../../utils/store'
 import { ChatWebSocket } from '../../../../webSocket/webSocket'
 import { ChatFooter } from '../chatFooter/chatFooter'
@@ -9,7 +16,11 @@ import { EmptyChat } from '../chatWindowEmpty/chatWindowEmpty'
 import { default as template } from './chatWindow.hbs?raw'
 
 export class ChatWindow extends Component {
-  private storeInfo;
+  private storeInfo: Indexed<{
+    id: number
+    find(arg0: (chat: TChatsData) => boolean): TChatData
+    user: TUser
+  }>
   constructor(tagName: string, props: TProps) {
     super(tagName, props)
     const { chatId, token } = props
@@ -19,12 +30,14 @@ export class ChatWindow extends Component {
       this.webSocket.disconnect()
     }
     if (token) {
-      this.webSocket = new ChatWebSocket()
+      if (!this.webSocket) {
+        this.webSocket = new ChatWebSocket()
+      }
       this.webSocket.connect(
         chatId as number,
         this.storeInfo.user.id as number,
         token as string,
-        (message: string) => this.displayMessage(message)
+        (message: TMessageInfo) => this.displayMessage(message)
       )
 
       if (!this.arrayChildren.messageHistory) {
@@ -58,9 +71,9 @@ export class ChatWindow extends Component {
       })
     }
 
-    const container = this.element?.querySelector('.chat__message');
+    const container = this.element?.querySelector('.chat__message')
     if (container) {
-      container.scrollTop = container.scrollHeight;
+      container.scrollTop = container.scrollHeight
     }
   }
 
@@ -74,33 +87,36 @@ export class ChatWindow extends Component {
     }
   }
 
-  displayMessage(message: any): void {
+  displayMessage(message: TMessageInfo): void {
     let currentMessages = (this.childProps.messages as []) || []
     if (Array.isArray(message)) {
       // Если массив сообщений — это история чата
       this.setProps({ messages: message }) // Обновляем состояние компонента
     } else if (message.content) {
-      this.setProps({ messages: [message, ...currentMessages,] })
+      this.setProps({ messages: [message, ...currentMessages] })
     }
 
     if (this.arrayChildren.messageHistory.length) {
-      this.arrayChildren.messageHistory = [];
+      this.arrayChildren.messageHistory = []
     }
 
     if (!this.arrayChildren.messageHistory.length) {
-      const messagesList = (this.childProps.messages as []);
-      const components = messagesList?.map(
-        (messageInfo: any) => {
-          const senderClass = this.storeInfo.user.id !== messageInfo.user_id ? 'message__outcoming' : 'message__inpcoming'
-          return new ChatMessage('div', {
-            attr: { class: `message ${senderClass}` },
-            message: {
-              text: JSON.parse(messageInfo.content).content?.message || JSON.parse(messageInfo.content)?.message,
-              time: messageInfo.time
-            }
-          })
-        }
-      )
+      const messagesList = this.childProps.messages as []
+      const components = messagesList?.map((messageInfo: TMessageInfo) => {
+        const senderClass =
+          this.storeInfo.user.id !== messageInfo.user_id
+            ? 'message__outcoming'
+            : 'message__inpcoming'
+        return new ChatMessage('div', {
+          attr: { class: `message ${senderClass}` },
+          message: {
+            text:
+              JSON.parse(messageInfo.content).content?.message ||
+              JSON.parse(messageInfo.content)?.message,
+            time: messageInfo.time
+          }
+        })
+      })
       this.arrayChildren.messageHistory = components.map(component => {
         return component
       })

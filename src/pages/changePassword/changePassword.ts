@@ -44,8 +44,6 @@ export class PasswordChagePage extends Component {
       }
     })
 
-    
-
     if (!this.children.saveButton) {
       this.children.saveButton = new SubmitButton('input', {
         attr: {
@@ -72,7 +70,7 @@ export class PasswordChagePage extends Component {
     const fieldsValues = {}
     values.push(
       { oldPassword: context.children.oldPassword.getValue() },
-      { newPassword: context.children.newPassword.getValue() },
+      { newPassword: context.children.newPassword.getValue() }
     )
 
     values.forEach(item => {
@@ -105,11 +103,10 @@ export class PasswordChagePage extends Component {
     this.validatePassword(context)
     await userController.changePassword(data)
     this.close()
-    
   }
 
   close() {
-      this.getContent()?.remove()
+    this.getContent()?.remove()
   }
 
   render(): DocumentFragment {

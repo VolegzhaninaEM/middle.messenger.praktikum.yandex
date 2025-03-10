@@ -4,7 +4,7 @@ import { Component } from '../services/component'
 class Router {
   routes: Route[] = []
   history
-  private _currentRoute!: { leave: () => void}  | null
+  private _currentRoute!: { leave: () => void } | null
   static __instance: Router
   private _rootQuery
   constructor(rootQuery: string) {
@@ -66,4 +66,4 @@ class Router {
   }
 }
 
-export default new Router('app');
+export default new Router('app')

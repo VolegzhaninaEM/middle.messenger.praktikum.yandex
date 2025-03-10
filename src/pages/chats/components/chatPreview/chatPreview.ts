@@ -18,7 +18,7 @@ export default class ChatPreview extends Component {
     if (!this.children.avatar) {
       this.children.avatar = new Avatar('div', {
         attr: { class: 'profile-photo_m' },
-        url: props.avatar || '' ,
+        url: props.avatar || ''
       })
     }
   }

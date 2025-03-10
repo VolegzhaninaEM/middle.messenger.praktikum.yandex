@@ -45,7 +45,7 @@ class ChatController {
       }
 
       if (!response.ok) {
-        throw new Error('Ошибка при получении токена чата');
+        throw new Error('Ошибка при получении токена чата')
       }
     } catch (error) {
       alert(error)

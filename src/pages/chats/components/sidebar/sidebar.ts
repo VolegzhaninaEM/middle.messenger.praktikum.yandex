@@ -150,14 +150,13 @@ export class Sidebar extends Component {
     this.open(this.children.newChatModal)
   }
 
-
   public openChat(chatId: number): void {
     // передаем дальше по цепочке родителю
     if (
       this.childProps.events &&
       typeof this.childProps.events.onChatSelect === 'function'
     ) {
-      (this.childProps.events.onChatSelect as (chatId: number) => void)(chatId)
+      ;(this.childProps.events.onChatSelect as (chatId: number) => void)(chatId)
     }
   }
 
@@ -192,7 +191,7 @@ export class Sidebar extends Component {
 
   destroy(): void {
     if (this.element) {
-      this.element.remove(); // Удаляем элемент из DOM
+      this.element.remove() // Удаляем элемент из DOM
     }
   }
 

@@ -17,7 +17,13 @@ export type HTTPMethod = (
 
 export type TFetch = (
   url: string,
-  id?: number
+  id?: number,
+  options?: RequestInit
+) => Promise<Response>
+
+export type TFetchAvatar = (
+  url: string,
+  options?: GeneralOptions
 ) => Promise<Response>
 
 export type HTTPRequest = (

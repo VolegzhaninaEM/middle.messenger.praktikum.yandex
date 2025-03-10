@@ -21,17 +21,17 @@ export class Modal extends Component {
     this.hide()
 
     if (!this.children.closeButton) {
-        this.children.closeButton = new CloseButton('div', {
-            events: {
-              click: () => {
-                // Логика закрытия модального окна
-                const app = document.getElementById('app')
-                if (app) {
-                  app.removeChild(this.getContent() as Node)
-                }
-              }
+      this.children.closeButton = new CloseButton('div', {
+        events: {
+          click: () => {
+            // Логика закрытия модального окна
+            const app = document.getElementById('app')
+            if (app) {
+              app.removeChild(this.getContent() as Node)
             }
-          })
+          }
+        }
+      })
     }
 
     if (!this.lists.content) {
@@ -49,16 +49,16 @@ export class Modal extends Component {
     }
 
     if (!this.children.saveButton) {
-          this.children.saveButton = new SubmitButton('input', {
-            attr: {
-              value: String('Save changes'),
-              class: 'save-btn'
-            },
-            events: {
-              click: (event: unknown) => this.handleSubmit(event as Event, this)
-            }
-          })
+      this.children.saveButton = new SubmitButton('input', {
+        attr: {
+          value: String('Save changes'),
+          class: 'save-btn'
+        },
+        events: {
+          click: (event: unknown) => this.handleSubmit(event as Event, this)
         }
+      })
+    }
   }
 
   toggle() {

@@ -116,7 +116,9 @@ export interface TButton {
   value: string
 }
 
-export type Indexed<T = any> = {
+export type Indexed<
+  T extends string | number | boolean | null | undefined | object | unknown
+> = {
   [key in string]: T
 }
 
@@ -169,6 +171,17 @@ type TLastMessage = {
   id: number
   time: string
   user: TUser
+}
+
+export type TMessageInfo = {
+  id: number
+  user_id: number
+  chat_id: number
+  type: string
+  time: string
+  content: string
+  is_read: boolean
+  file: File
 }
 
 export type TRoute = {

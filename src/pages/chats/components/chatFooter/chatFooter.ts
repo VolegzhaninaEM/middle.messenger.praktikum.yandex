@@ -70,22 +70,25 @@ export class ChatFooter extends Component implements IFooter {
     this._handleError(context)
     try {
       const message = this.childProps.message as string
-      (this.childProps.socket as ChatWebSocket).sendMessage(JSON.stringify({
-        content: message,
-        type: 'message',
+      ;(this.childProps.socket as ChatWebSocket).sendMessage(
+        JSON.stringify({
+          content: message,
+          type: 'message'
         })
       )
 
-      console.log('Сообщение отправлено:', message);
+      console.log('Сообщение отправлено:', message)
 
       // Очищаем поле ввода после успешной отправки
-      const input = this.element?.querySelector('.message-input') as HTMLInputElement | null;
+      const input = this.element?.querySelector(
+        '.message-input'
+      ) as HTMLInputElement | null
       if (input) {
-        input.value = '';
+        input.value = ''
       }
     } catch (error) {
-      console.error('Ошибка при отправке сообщения:', error);
-      alert('Не удалось отправить сообщение');
+      console.error('Ошибка при отправке сообщения:', error)
+      alert('Не удалось отправить сообщение')
     }
   }
 
