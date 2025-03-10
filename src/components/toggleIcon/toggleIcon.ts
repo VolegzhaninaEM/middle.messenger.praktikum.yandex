@@ -1,7 +1,7 @@
-import './menuBurger.less'
+import './toggleIcon.less'
 import { TProps } from '../../types/types'
 import { Component } from '../../services/component'
-import { default as template } from './menuBurger.hbs?raw'
+import { default as template } from './toggleIcon.hbs?raw'
 
 interface IDropdownMenu {
   toggleMenu: () => void
@@ -11,7 +11,7 @@ interface IDropdownMenu {
 type TDropdownMenu = TProps & {
   actions: Array<Component>
 }
-export class MenuBurger extends Component implements IDropdownMenu {
+export class ToggleIcon extends Component implements IDropdownMenu {
   isOpen: boolean = false
   constructor(tagName: string, props: TDropdownMenu) {
     const { actions } = props

@@ -4,6 +4,7 @@ import { TProps, TChildren, TArrayChildren } from '../types/types'
 import Handlebars from 'handlebars'
 import { EVENTS } from '../constants/enums'
 import { IEvents } from '../constants/interface'
+import { ChatWebSocket } from '../webSocket/webSocket'
 
 type TEvents = {
   on: Function
@@ -11,13 +12,14 @@ type TEvents = {
   emit: Function
 }
 export abstract class Component {
-  [x: string]: any
+  [x: string]: unknown
   protected _element: HTMLElement | null = null
   protected _meta: { tagName: string; props: TProps }
   private _id: string | null = null
   public children: TChildren
   public arrayChildren: TArrayChildren
   public childProps: TProps & Partial<TEvents>
+  public webSocket: ChatWebSocket
   eventBus: () => EventBus<IEvents>
 
   /** JSDoc
@@ -35,6 +37,7 @@ export abstract class Component {
       props
     }
 
+    this.webSocket = new ChatWebSocket()
     this.children = this._makePropsProxy(children) as TChildren
     this.childProps = this._makePropsProxy(childProps)
     this.arrayChildren = this._makePropsProxy(arrayChildren) as TArrayChildren
@@ -109,6 +112,8 @@ export abstract class Component {
   public componentDidUpdate(_oldProps: TProps, _newProps: TProps): boolean {
     return true
   }
+
+  public getValue(): string | void {}
 
   public setProps = (nextProps: TProps): void => {
     if (!nextProps) {

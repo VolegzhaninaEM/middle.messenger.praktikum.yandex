@@ -1,0 +1,102 @@
+@import url('../../../../styles/variables.less');
+
+.chat {
+  position: relative;
+  display: grid;
+  grid-template-columns: 47px 1fr;
+  grid-column-gap: 10px;
+  align-items: center;
+  width: 100%;
+  max-width: 290px;
+  padding: 10px 0;
+  background: transparent;
+
+  &-content {
+    position: relative;
+    height: 47px;
+
+    &-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+
+    &__sender {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-primary-color);
+    }
+
+    &__time {
+      font-size: 9px;
+      font-weight: 500;
+      color: var(--text-secondary-color);
+    }
+
+    &-bottom {
+      display: flex;
+      column-gap: 3px;
+    }
+
+    &__last-sender,
+    &__message {
+      margin: 0;
+      font-size: 12px;
+      font-weight: 500;
+    }
+
+    &__last-sender {
+      color: @dark-beige
+    }
+
+    &__sender,
+    &__message {
+      text-overflow: ellipsis;
+      max-width: 160px;
+      overflow: hidden;
+      white-space: nowrap;
+    }
+
+    &__message {
+      color: @dark-grey;
+    }
+
+    &__amount {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      width: 20px;
+      height: 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border-radius: 50%;
+      font-size: 11px;
+      font-weight: 500;
+      line-height: 12px;
+      color: white;
+      background: @dark-beige;
+    }
+  }
+
+}
+
+.profile-photo {
+  &_m {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    overflow: hidden;
+    position: relative;
+    margin: 0 auto 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    img {
+      width: 40px;
+      height: 40px;
+    }
+  }
+}

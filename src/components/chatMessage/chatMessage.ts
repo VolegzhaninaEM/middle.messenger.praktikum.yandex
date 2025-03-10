@@ -1,26 +1,15 @@
 import './chatMessage.less'
 import { Component } from '../../services/component'
-import { TElementForm, TProps } from '../../types/types'
+import { TProps } from '../../types/types'
+import { default as template } from './chatMessage.hbs?raw'
 
-type TMessage = TProps & TElementForm
+// Компонент строки отправки сообщения
 export class ChatMessage extends Component {
-  constructor(tagName: string, props: TMessage) {
-    const { attr } = props
-    super(tagName, {
-      ...props,
-      attr: {
-        ...attr,
-        class: 'message__input',
-        type: 'text'
-      }
-    })
-  }
-
-  getValue() {
-    return (this.element as HTMLInputElement).value
+  constructor(tagName: string, props: TProps) {
+    super(tagName, props)
   }
 
   render() {
-    return this.compile('', this.childProps)
+    return this.compile(template, this.childProps)
   }
 }

@@ -1,17 +1,38 @@
+import { TChatsData } from '../types/types'
+import { BaseAPI } from './baseApi'
+import { TAddUser, TRemoveUser } from './types/types'
 
-import { BaseAPI } from './baseApi';
-import HttpTransport from './httpTransport';
-
-  const chatAPIInstance = new HttpTransport('api/v1/chats');
-
-  class ChatAPI extends BaseAPI {
-      create() {
-          // Здесь уже не нужно писать полный путь /api/v1/chats/
-          return chatAPIInstance.post('/', {title: 'string'});
-      }
-
-      request() {
-          // Здесь уже не нужно писать полный путь /api/v1/chats/
-          return chatAPIInstance.get('/full');
-      }
+class ChatAPI extends BaseAPI {
+  constructor(endpoint: string = '/chats') {
+    super(endpoint)
   }
+
+  public getChats(data: TChatsData): Promise<XMLHttpRequest> {
+    return this.http.get('', { data })
+  }
+
+  public getChatToken(id: number): Promise<Response> {
+    return this.http.fetch('/token/', id)
+  }
+
+  public createChat(data: TChatsData): Promise<XMLHttpRequest> {
+    return this.http.post('', { data })
+  }
+
+  create() {
+    return this.http.post('/', { title: 'string' })
+  }
+
+  public addUsers(data: TAddUser): Promise<XMLHttpRequest> {
+    return this.http.put('/users', { data })
+  }
+  public removeUsers(data: TRemoveUser): Promise<XMLHttpRequest> {
+    return this.http.delete('/users', { data })
+  }
+
+  request() {
+    return this.http.get('/full')
+  }
+}
+
+export default new ChatAPI()

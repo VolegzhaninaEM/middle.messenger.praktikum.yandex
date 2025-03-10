@@ -93,7 +93,7 @@ class LoginPage extends Component {
     }
   }
 
-  handleSubmit(event: Event, context: Component) {
+  async handleSubmit(event: Event, context: Component) {
     event.preventDefault()
     this.validateLogin(context)
     const data = this.getValues(context)

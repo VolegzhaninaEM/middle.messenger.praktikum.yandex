@@ -1,4 +1,4 @@
-import { Indexed } from "../types/types"
+import { Indexed } from '../types/types'
 
 export function trim(value: string, symbol?: string) {
   if (symbol) {
@@ -9,9 +9,12 @@ export function trim(value: string, symbol?: string) {
   return value.trim()
 }
 
-export function merge(lhs: Indexed, rhs: Indexed): Indexed {
+export function merge(
+  lhs: Indexed<unknown>,
+  rhs: Indexed<unknown>
+): Indexed<unknown> {
   // Создаем стек для хранения пар объектов
-  const stack: Array<[Indexed, Indexed]> = [[lhs, rhs]]
+  const stack: Array<[Indexed<unknown>, Indexed<unknown>]> = [[lhs, rhs]]
 
   while (stack.length > 0) {
     // Извлекаем последнюю пару объектов из стека
@@ -24,7 +27,10 @@ export function merge(lhs: Indexed, rhs: Indexed): Indexed {
 
       // Если значение свойства является объектом, добавляем его в стек
       if (isObject(right[key])) {
-        stack.push([getOrCreate(left, key), right[key]])
+        const rightValue = right[key] as Indexed<unknown>
+        stack.push([getOrCreate(left, key), rightValue])
+      } else if (Array.isArray(right[key])) {
+        left[key] = [...right[key]] // Клонируем массив, чтобы избежать мутации
       } else {
         left[key] = right[key] // Просто копируем значение
       }
@@ -35,20 +41,20 @@ export function merge(lhs: Indexed, rhs: Indexed): Indexed {
 }
 
 // Вспомогательная функция для проверки, является ли значение объектом
-function isObject(value: any): boolean {
-  return value !== null && typeof value === 'object'
+function isObject(value: unknown): boolean {
+  return value !== null && typeof value === 'object' && !Array.isArray(value)
 }
 
 // Вспомогательная функция для создания нового объекта, если его еще нет
-function getOrCreate(obj: Indexed, key: string): Indexed {
-  return (obj[key] = obj[key] || ({} as Indexed))
+function getOrCreate(obj: Indexed<unknown>, key: string): Indexed<unknown> {
+  return (obj[key] = (obj[key] as Indexed<unknown>) || ({} as Indexed<unknown>))
 }
 
 export function set(
-  object: Indexed | unknown,
+  object: Indexed<unknown> | unknown,
   path: string,
   value: unknown
-): Indexed | unknown {
+): Indexed<unknown> | unknown {
   // Код
   if (typeof path !== 'string') {
     throw new Error('path must be string')
@@ -58,13 +64,13 @@ export function set(
     return object
   }
 
-  const result = path.split('.').reduceRight<Indexed>(
+  const result = path.split('.').reduceRight<Indexed<object>>(
     (acc, key) => ({
       [key]: acc
     }),
-    value as any
+    value as Indexed<object>
   )
-  return merge(object as Indexed, result)
+  return merge(object as Indexed<object>, result)
 }
 
 // Вспомогательные типы

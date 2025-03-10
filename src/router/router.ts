@@ -2,11 +2,11 @@ import { Route } from '../config/route'
 import { Component } from '../services/component'
 
 class Router {
-  routes: any
-  history: any
-  private _currentRoute: any
-  static __instance: any | null
-  private _rootQuery: any
+  routes: Route[] = []
+  history
+  private _currentRoute!: { leave: () => void } | null
+  static __instance: Router
+  private _rootQuery
   constructor(rootQuery: string) {
     if (Router.__instance) {
       return Router.__instance
@@ -44,8 +44,8 @@ class Router {
       this._currentRoute.leave()
     }
 
-    this._currentRoute = route
-    route.render()
+    this._currentRoute = route as Route
+    route?.render()
   }
 
   go(pathname: string) {
@@ -62,8 +62,8 @@ class Router {
   }
 
   getRoute(pathname: string) {
-    return this.routes.find((route: string) => route.match(pathname))
+    return this.routes.find((route: Route) => route?.match(pathname))
   }
 }
 
-export default new Router('app');
+export default new Router('app')

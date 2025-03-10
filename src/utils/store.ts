@@ -1,10 +1,10 @@
-import { StoreEvents } from "../constants/enums";
-import { EventBus } from "../services/eventBus";
-import { Indexed } from "../types/types";
-import { set } from "./helpers";
+import { StoreEvents } from '../constants/enums'
+import { EventBus } from '../services/eventBus'
+import { Indexed } from '../types/types'
+import { set } from './helpers'
 
-class Store extends EventBus<Record<string, (...args: unknown[]) => void>>{
-  private state: Indexed = {}
+class Store extends EventBus<Record<string, (...args: unknown[]) => void>> {
+  private state: Indexed<unknown> = {}
 
   public getState() {
     return this.state
@@ -17,4 +17,4 @@ class Store extends EventBus<Record<string, (...args: unknown[]) => void>>{
   }
 }
 
-export default new Store(); 
+export default new Store()

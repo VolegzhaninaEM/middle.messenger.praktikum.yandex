@@ -7,11 +7,24 @@ export type Options = {
   timeout?: number
   credentials?: string
   mode?: string
+  title?: string
+  id?: number
 }
 export type HTTPMethod = (
   url: string,
   options?: GeneralOptions
 ) => Promise<XMLHttpRequest>
+
+export type TFetch = (
+  url: string,
+  id?: number,
+  options?: RequestInit
+) => Promise<Response>
+
+export type TFetchAvatar = (
+  url: string,
+  options?: GeneralOptions
+) => Promise<Response>
 
 export type HTTPRequest = (
   url: string,
@@ -19,3 +32,12 @@ export type HTTPRequest = (
 ) => Promise<XMLHttpRequest>
 
 export type GeneralOptions = Omit<Options, 'method'>
+
+export type TAddUser = {
+  users: Array<number>
+  chatId: number
+}
+export type TRemoveUser = {
+  users: Array<number>
+  chatId: number
+}

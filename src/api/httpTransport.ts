@@ -1,5 +1,5 @@
 import { METHODS } from './types/enums'
-import { HTTPMethod, HTTPRequest } from './types/types'
+import { HTTPMethod, HTTPRequest, TFetch } from './types/types'
 
 export default class HttpTransport {
   endpoint: string
@@ -17,7 +17,8 @@ export default class HttpTransport {
   }
 
   post: HTTPMethod = (url, options = {}) => {
-    return this.request(this.endpoint + url, {
+    const requestURL = url.length ? this.endpoint + url : this.endpoint
+    return this.request(requestURL, {
       ...options,
       mode: 'cors',
       credentials: 'include',
@@ -31,11 +32,18 @@ export default class HttpTransport {
       method: METHODS.PUT
     })
   }
-  
+
   delete: HTTPMethod = (url, options = {}) => {
     return this.request(this.endpoint + url, {
       ...options,
       method: METHODS.DELETE
+    })
+  }
+
+  fetch: TFetch = (url, id) => {
+    return fetch(this.endpoint + url + id, {
+      method: METHODS.POST,
+      credentials: 'include'
     })
   }
 
@@ -57,15 +65,16 @@ export default class HttpTransport {
           ? `${url}${queryStringify(data as Record<string, unknown>)}`
           : url
       )
-      xhr.setRequestHeader('Content-Type', 'application/json')
 
       Object.keys(headers).forEach(key => {
         xhr.setRequestHeader(key, headers[key])
       })
+      xhr.withCredentials = true
 
       xhr.onload = function () {
         resolve(xhr)
       }
+      xhr.responseType = 'json'
 
       xhr.onabort = reject
       xhr.onerror = reject
@@ -74,13 +83,19 @@ export default class HttpTransport {
       xhr.ontimeout = reject
 
       if (isGet || !data) {
+        xhr.setRequestHeader('Content-Type', 'application/json')
         xhr.send()
       } else {
-        xhr.send(
-          JSON.stringify(
-            data as Document | XMLHttpRequestBodyInit | null | undefined
+        if (data instanceof FormData) {
+          xhr.send(data)
+        } else {
+          xhr.setRequestHeader('Content-Type', 'application/json')
+          xhr.send(
+            JSON.stringify(
+              data as Document | XMLHttpRequestBodyInit | null | undefined
+            )
           )
-        )
+        }
       }
     })
   }
