@@ -12,7 +12,7 @@ class ChatList extends Component {
     const chatsData = store.getState().chats
 
     if (!this.arrayChildren.chatList) {
-      this.arrayChildren.chatList = chatsData.map((chat: TChatsData) => {
+      this.arrayChildren.chatList = (chatsData as TChatsData[]).map((chat: TChatsData) => {
         return new ChatPreview('div', {
           ...chat,
           attr: { class: 'chat__list' },

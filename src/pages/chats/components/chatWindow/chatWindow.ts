@@ -16,11 +16,7 @@ import { EmptyChat } from '../chatWindowEmpty/chatWindowEmpty'
 import { default as template } from './chatWindow.hbs?raw'
 
 export class ChatWindow extends Component {
-  private storeInfo: Indexed<{
-    id: number
-    find(arg0: (chat: TChatsData) => boolean): TChatData
-    user: TUser
-  }>
+  private storeInfo: Indexed<unknown>
   constructor(tagName: string, props: TProps) {
     super(tagName, props)
     const { chatId, token } = props
@@ -35,7 +31,7 @@ export class ChatWindow extends Component {
       }
       this.webSocket.connect(
         chatId as number,
-        this.storeInfo.user.id as number,
+        (this.storeInfo.user as TUser).id as number,
         token as string,
         (message: TMessageInfo) => this.displayMessage(message)
       )
@@ -52,7 +48,7 @@ export class ChatWindow extends Component {
       })
     }
 
-    const chatInfo: TChatData = this.storeInfo.chats.find(
+    const chatInfo = (this.storeInfo.chats as TChatData[]).find(
       (chat: TChatsData) => chat.id === chatId
     )
     if ((!this.children.isEmpty && !token) || !chatInfo?.last_message) {
@@ -113,7 +109,7 @@ export class ChatWindow extends Component {
       const messagesList = this.childProps.messages as []
       const components = messagesList?.map((messageInfo: TMessageInfo) => {
         const senderClass =
-          this.storeInfo.user.id !== messageInfo.user_id
+          (this.storeInfo.user as TUser).id !== messageInfo.user_id
             ? 'message__outcoming'
             : 'message__inpcoming'
         return new ChatMessage('div', {

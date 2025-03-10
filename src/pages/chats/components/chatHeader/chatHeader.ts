@@ -6,7 +6,7 @@ import {
 } from '../../../../components'
 import chatController from '../../../../controllers/chatController'
 import { Component } from '../../../../services/component'
-import { TProps } from '../../../../types/types'
+import { TProps, TUser } from '../../../../types/types'
 import store from '../../../../utils/store'
 import { default as template } from './chatHeader.hbs?raw'
 import './chatHeader.less'
@@ -101,7 +101,7 @@ export class ChatHeader extends Component {
 
   async handleSubmitRemove(event: Event) {
     event.preventDefault()
-    const chatId = store.getState().user.id
+    const chatId = (store.getState().user as TUser ).id
     const login =
       this.children.addUserModal.children.chatName.getValue() as string
     console.log('handleSubmitAdd', { login, chatId })
