@@ -100,7 +100,7 @@ export class ChatName extends Component {
 
   async handleSubmit(event: Event) {
     event.preventDefault()
-    const title = this.children.chatName.getValue()
+    const title = this.children.chatName.getValue() as string
     const controller = chatController.createChat({ title })
     await controller.then(response => {
       if (response.id) {

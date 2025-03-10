@@ -22,7 +22,7 @@ export class ChatHeader extends Component {
     }
 
     if (!this.children.buttonIcon) {
-      const dropdownMenu: Component[] = [
+      const dropdownMenu: ToggleActions[] = [
         new ToggleActions('li', {
           href: '/profile',
           title: 'Add user',
@@ -89,7 +89,8 @@ export class ChatHeader extends Component {
 
   async handleSubmitAdd(event: Event) {
     event.preventDefault()
-    const login = this.children.addUserModal.children.chatName.getValue()
+    const component: Component = this.children.addUserModal.children.chatName
+    const login = component.getValue() as string
     console.log('handleSubmitAdd', { login, chatId: this.childProps.chatId })
     await chatController.addUser({
       login,
@@ -101,7 +102,8 @@ export class ChatHeader extends Component {
   async handleSubmitRemove(event: Event) {
     event.preventDefault()
     const chatId = store.getState().user.id
-    const login = this.children.addUserModal.children.chatName.getValue()
+    const login =
+      this.children.addUserModal.children.chatName.getValue() as string
     console.log('handleSubmitAdd', { login, chatId })
     await chatController.removeUser({ login, chatId })
     this.children.addUserModal.getContent()?.remove()
@@ -114,9 +116,8 @@ export class ChatHeader extends Component {
     }
   }
 
-  public toggleMenu(event: ToggleEvent, context: Component) {
-    event.preventDefault()
-    context.children.buttonIcon.toggleMenu()
+  public toggleMenu(_event: ToggleEvent, context: Component) {
+    ;(context.children.buttonIcon as ToggleIcon).toggleMenu()
   }
 
   render(): DocumentFragment {

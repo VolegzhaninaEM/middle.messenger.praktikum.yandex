@@ -113,6 +113,8 @@ export abstract class Component {
     return true
   }
 
+  public getValue(): string | void {}
+
   public setProps = (nextProps: TProps): void => {
     if (!nextProps) {
       return

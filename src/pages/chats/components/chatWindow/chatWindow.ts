@@ -88,13 +88,22 @@ export class ChatWindow extends Component {
   }
 
   displayMessage(message: TMessageInfo): void {
-    let currentMessages = (this.childProps.messages as []) || []
+    let currentMessages = (this.childProps.messages as TMessageInfo[]) || []
+    // Если это массив сообщений (история)
     if (Array.isArray(message)) {
-      // Если массив сообщений — это история чата
-      this.setProps({ messages: message }) // Обновляем состояние компонента
-    } else if (message.content) {
-      this.setProps({ messages: [message, ...currentMessages] })
+      currentMessages = [...message] // Заменяем старые сообщения новыми
     }
+    // Если это одно сообщение
+    else if (message.content && message.time) {
+      currentMessages = [...currentMessages, message] // Добавляем новое сообщение
+    }
+
+    // Сортируем сообщения по времени
+    currentMessages
+      .sort((a, b) => new Date(a.time).getTime() - new Date(b.time).getTime())
+      .reverse()
+
+    this.setProps({ messages: currentMessages })
 
     if (this.arrayChildren.messageHistory.length) {
       this.arrayChildren.messageHistory = []

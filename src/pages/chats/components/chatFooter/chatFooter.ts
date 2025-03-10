@@ -81,7 +81,7 @@ export class ChatFooter extends Component implements IFooter {
 
       // Очищаем поле ввода после успешной отправки
       const input = this.element?.querySelector(
-        '.message-input'
+        '.message__input'
       ) as HTMLInputElement | null
       if (input) {
         input.value = ''
