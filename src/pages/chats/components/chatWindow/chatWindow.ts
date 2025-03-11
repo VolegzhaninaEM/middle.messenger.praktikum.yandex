@@ -1,4 +1,5 @@
 import { ChatMessage } from '../../../../components'
+import { StoreEvents } from '../../../../constants/enums'
 import { Component } from '../../../../services/component'
 import {
   Indexed,
@@ -15,33 +16,28 @@ import { ChatHeader } from '../chatHeader/chatHeader'
 import { EmptyChat } from '../chatWindowEmpty/chatWindowEmpty'
 import { default as template } from './chatWindow.hbs?raw'
 
+type TChatWindowProps = TProps & {
+  socket?: ChatWebSocket; // Указываем тип для socket
+}
 export class ChatWindow extends Component {
   private storeInfo: Indexed<unknown>
-  constructor(tagName: string, props: TProps) {
+  constructor(tagName: string, props: TChatWindowProps) {
     super(tagName, props)
-    const { chatId, token } = props
     this.storeInfo = store.getState()
+    const token = this.storeInfo.token
+    const chatId = this.storeInfo.selectedChatId
 
-    if (this.webSocket) {
-      this.webSocket.disconnect()
-    }
-    if (token) {
-      if (!this.webSocket) {
-        this.webSocket = new ChatWebSocket()
-      }
-      this.webSocket.connect(
-        chatId as number,
-        (this.storeInfo.user as TUser).id as number,
-        token as string,
-        (message: TMessageInfo) => this.displayMessage(message)
-      )
+    // Подписываемся на изменения в store
+    store.on(StoreEvents.Updated, () => {
+      this.updateMessages(); // Перерисовываем компонент при изменении сообщений
+    });
 
       if (!this.arrayChildren.messageHistory) {
         this.arrayChildren.messageHistory = []
       }
-    }
+    
 
-    if (!this.children.header && this.childProps.token) {
+    if (!this.children.header && token) {
       this.children.header = new ChatHeader('div', {
         attr: { class: 'chat__header' },
         chatId
@@ -60,10 +56,10 @@ export class ChatWindow extends Component {
       })
     }
 
-    if (!this.children.footer && this.childProps.token) {
+    if (!this.children.footer && token) {
       this.children.footer = new ChatFooter('div', {
         chatId,
-        socket: this.webSocket as ChatWebSocket
+        socket: this.childProps.socket as ChatWebSocket
       })
     }
 
@@ -73,8 +69,10 @@ export class ChatWindow extends Component {
     }
   }
 
-  componentDidUpdate(oldProps: TProps, newProps: TProps) {
-    return oldProps !== newProps
+  updateMessages(): void {
+    const messages = store.getState().messages || [];
+    this.setProps({ messages }); // Обновляем свойства компонента
+    this.displayMessage(messages as TMessageInfo)
   }
 
   destroy(): void {

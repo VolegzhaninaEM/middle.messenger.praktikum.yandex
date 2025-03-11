@@ -8,7 +8,6 @@ import { default as template } from './chatList.hbs?raw'
 class ChatList extends Component {
   constructor(tagName: string, props: TProps) {
     super(tagName, props)
-
     const chatsData = store.getState().chats
 
     if (!this.arrayChildren.chatList) {
@@ -29,6 +28,7 @@ class ChatList extends Component {
     event.preventDefault()
     this.selectedChatId = chatId
     store.set('selectedChatId', chatId)
+    
     console.log('Выбранный чат:', chatId)
 
     // Уведомляем родительский компонент о выборе чата

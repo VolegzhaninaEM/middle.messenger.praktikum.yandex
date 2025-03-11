@@ -7,6 +7,7 @@ import { EventBus } from '../../services/eventBus'
 import { IEvents } from '../../constants/interface'
 import { CloseButton, SubmitButton } from '..'
 import userApi from '../../api/userApi'
+import store from '../../utils/store'
 export class AvatarLoadModal extends Component {
   constructor(tagName: string, props: TProps) {
     super(tagName, {
@@ -72,10 +73,10 @@ export class AvatarLoadModal extends Component {
       const url = URL.createObjectURL(file)
       this.setProps({ url })
       const formData = new FormData()
-      this.eventBus().emit(EVENTS.FILE_SELECT, url)
       formData.append('avatar', file) // Добавляем файл в FormData
 
-      await userApi.changeAvatar(formData)
+      const profileResponse = await userApi.changeAvatar(formData)
+      store.set('profile', profileResponse.response)
       if (this.childProps.events) {
         this.childProps.events.close()
       }

@@ -16,6 +16,7 @@ import {
 import { connect } from '../../utils/connect'
 import userController from '../../controllers/userController'
 import { USER_INFO } from '../../constants/enums'
+import store from '../../utils/store'
 
 class Profile extends Component {
   constructor(tagName: string, props: TProps) {
@@ -37,10 +38,13 @@ class Profile extends Component {
       })
     }
 
+    const avatarURL = (store.getState().user as TUser)?.avatar
+    const fullAvatarURL = avatarURL ? `https://ya-praktikum.tech/api/v2/user/profile/avatar${avatarURL}` : '';
+
     if (!this.children.profilePhoto) {
       this.children.profilePhoto = new Avatar('div', {
         attr: { class: 'profile-photo' },
-        url: data?.avatar || '',
+        url: fullAvatarURL || data?.avatar || '',
         needOverlay: true,
         events: {
           click: this._handleAvatarClick.bind(this)
@@ -194,7 +198,9 @@ class Profile extends Component {
     event.preventDefault()
     this.validateProfile(context)
     const data = this.getValues(context)
-    userController.submitChanges(data as TUser).then(response => {
+    const newData = store.getState().profile
+    const res = Object.assign({}, newData, data)
+    userController.submitChanges(res as TUser).then(response => {
       if (response === 200) {
         this.getContent()?.remove()
       }
