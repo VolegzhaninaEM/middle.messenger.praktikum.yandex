@@ -2,6 +2,7 @@ import authApi from '../api/authApi'
 import { ROUTES } from '../constants/enums'
 import Router from '../router/router'
 import { TSignInData, TSignUpData } from '../types/types'
+import store from '../utils/store'
 import { validateForm } from '../utils/validators'
 
 class AuthController {
@@ -15,6 +16,8 @@ class AuthController {
       try {
         const response = await this.api.signIn(data)
         if (response.status === 200) {
+          const userData = await this.api.fetchUser()
+          store.set('user', userData)
           Router.go(ROUTES.CHATS)
         } else if (response.status === 500) {
           Router.go(ROUTES.ERROR)

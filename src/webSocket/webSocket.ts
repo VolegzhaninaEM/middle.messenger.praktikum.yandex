@@ -1,8 +1,12 @@
 import { TMessageInfo } from '../types/types'
 
 export class ChatWebSocket {
-  protected socket: WebSocket | null = null
+  protected socket: WebSocket | null = null;
 
+  constructor() {
+    // Инициализация свойств
+    this.socket = null;
+  }
   connect(
     chatId: number,
     userId: number,
@@ -58,7 +62,7 @@ export class ChatWebSocket {
 
   sendMessage(message: string) {
     if (this.socket && this.socket.readyState === WebSocket.OPEN) {
-      this.socket.send(JSON.stringify({ content: message, type: 'message' }))
+      this.socket.send(JSON.stringify({ content: JSON.stringify(message), type: 'message' }))
     }
   }
 

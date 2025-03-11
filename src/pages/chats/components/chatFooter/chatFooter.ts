@@ -9,15 +9,20 @@ import {
   SendIcon
 } from '../../../../components'
 import { ChatWebSocket } from '../../../../webSocket/webSocket'
+import store from '../../../../utils/store'
 
 interface IFooter {
   hasErrors: boolean
   error: string
 }
+
+type TChatWindowProps = TProps & {
+  socket?: ChatWebSocket; // Указываем тип для socket
+}
 export class ChatFooter extends Component implements IFooter {
   error: string = ''
   hasErrors: boolean = false
-  constructor(tagName: string, props: TProps) {
+  constructor(tagName: string, props: TChatWindowProps) {
     super(tagName, {
       ...props,
       attr: { class: 'chat__footer' },
@@ -68,13 +73,11 @@ export class ChatFooter extends Component implements IFooter {
   async handleClick(event: SubmitEvent, context: Component) {
     event.preventDefault()
     this._handleError(context)
+    store.getState()
     try {
       const message = this.childProps.message as string
       ;(this.childProps.socket as ChatWebSocket).sendMessage(
-        JSON.stringify({
-          content: message,
-          type: 'message'
-        })
+        message
       )
 
       console.log('Сообщение отправлено:', message)

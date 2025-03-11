@@ -4,8 +4,6 @@ import { TProps, TChildren, TArrayChildren } from '../types/types'
 import Handlebars from 'handlebars'
 import { EVENTS } from '../constants/enums'
 import { IEvents } from '../constants/interface'
-import { ChatWebSocket } from '../webSocket/webSocket'
-
 type TEvents = {
   on: Function
   off: Function
@@ -19,7 +17,6 @@ export abstract class Component {
   public children: TChildren
   public arrayChildren: TArrayChildren
   public childProps: TProps & Partial<TEvents>
-  public webSocket: ChatWebSocket
   eventBus: () => EventBus<IEvents>
 
   /** JSDoc
@@ -37,7 +34,6 @@ export abstract class Component {
       props
     }
 
-    this.webSocket = new ChatWebSocket()
     this.children = this._makePropsProxy(children) as TChildren
     this.childProps = this._makePropsProxy(childProps)
     this.arrayChildren = this._makePropsProxy(arrayChildren) as TArrayChildren
