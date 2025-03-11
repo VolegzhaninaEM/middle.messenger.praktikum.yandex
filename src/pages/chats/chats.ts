@@ -7,7 +7,6 @@ import { Sidebar } from './components/sidebar/sidebar'
 import { connect } from '../../utils/connect'
 import chatController from '../../controllers/chatController'
 import store from '../../utils/store'
-import authController from '../../controllers/authController'
 import { ChatWebSocket } from '../../webSocket/webSocket'
 
 export class ChatPage extends Component {
