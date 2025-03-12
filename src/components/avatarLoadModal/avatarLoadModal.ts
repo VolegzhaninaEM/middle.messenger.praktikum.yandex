@@ -8,6 +8,7 @@ import { IEvents } from '../../constants/interface'
 import { CloseButton, SubmitButton } from '..'
 import userApi from '../../api/userApi'
 import store from '../../utils/store'
+import resourcesAPI from '../../api/resourcesAPI'
 export class AvatarLoadModal extends Component {
   constructor(tagName: string, props: TProps) {
     super(tagName, {
@@ -76,7 +77,8 @@ export class AvatarLoadModal extends Component {
       formData.append('avatar', file) // Добавляем файл в FormData
 
       const profileResponse = await userApi.changeAvatar(formData)
-      store.set('profile', profileResponse.response)
+      store.set('user', profileResponse.response)
+
       if (this.childProps.events) {
         this.childProps.events.close()
       }

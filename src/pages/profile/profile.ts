@@ -21,8 +21,7 @@ import store from '../../utils/store'
 class Profile extends Component {
   constructor(tagName: string, props: TProps) {
     super(tagName, { ...props, hasErrors: false, error: '' })
-
-    const { data = {} as TUser } = props.attr || {}
+    const data = store.getState().user as TUser
 
     if (!this.children.closeButton) {
       this.children.closeButton = new CloseButton('div', {
@@ -39,12 +38,11 @@ class Profile extends Component {
     }
 
     const avatarURL = (store.getState().user as TUser)?.avatar
-    const fullAvatarURL = avatarURL ? `https://ya-praktikum.tech/api/v2/user/profile/avatar${avatarURL}` : '';
 
     if (!this.children.profilePhoto) {
       this.children.profilePhoto = new Avatar('div', {
         attr: { class: 'profile-photo' },
-        url: fullAvatarURL || data?.avatar || '',
+        url: avatarURL || data?.avatar || '',
         needOverlay: true,
         events: {
           click: this._handleAvatarClick.bind(this)
@@ -198,7 +196,7 @@ class Profile extends Component {
     event.preventDefault()
     this.validateProfile(context)
     const data = this.getValues(context)
-    const newData = store.getState().profile
+    const newData = store.getState().user
     const res = Object.assign({}, newData, data)
     userController.submitChanges(res as TUser).then(response => {
       if (response === 200) {

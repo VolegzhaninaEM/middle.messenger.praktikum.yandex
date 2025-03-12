@@ -96,17 +96,20 @@ export class ChatHeader extends Component {
       login,
       chatId: this.childProps.chatId as number
     })
+
     this.children.addUserModal.getContent()?.remove()
   }
 
   async handleSubmitRemove(event: Event) {
     event.preventDefault()
-    const chatId = (store.getState().user as TUser ).id
-    const login =
-      this.children.addUserModal.children.chatName.getValue() as string
-    console.log('handleSubmitAdd', { login, chatId })
-    await chatController.removeUser({ login, chatId })
-    this.children.addUserModal.getContent()?.remove()
+    const component: Component = this.children.removeUserModal.children.chatName
+    const login = component.getValue() as string
+    console.log('handleSubmitAdd', { login, chatId: this.childProps.chatId })
+    await chatController.removeUser({
+      login,
+      chatId: this.childProps.chatId as number
+    })
+    this.children.removeUserModal.getContent()?.remove()
   }
 
   public open(content: Component) {
