@@ -8,7 +8,8 @@ export class TextInput extends Component {
       ...props,
       attr: {
         ...props.attr,
-        class: 'input-field'
+        class: 'input-field',
+        value: ''
       }
     })
   }

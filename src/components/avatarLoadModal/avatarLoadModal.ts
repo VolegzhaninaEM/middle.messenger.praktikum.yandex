@@ -76,7 +76,8 @@ export class AvatarLoadModal extends Component {
       formData.append('avatar', file) // Добавляем файл в FormData
 
       const profileResponse = await userApi.changeAvatar(formData)
-      store.set('profile', profileResponse.response)
+      store.set('user', profileResponse.response)
+
       if (this.childProps.events) {
         this.childProps.events.close()
       }

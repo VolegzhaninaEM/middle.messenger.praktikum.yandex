@@ -4,7 +4,9 @@ import { Indexed } from '../types/types'
 import { isEqual } from './helpers'
 import store from './store'
 
-export function connect(mapStateToProps: (state: Indexed<unknown>) => Indexed<unknown>) {
+export function connect(
+  mapStateToProps: (state: Indexed<unknown>) => Indexed<unknown>
+) {
   return function (Block: typeof Component) {
     return class extends Block {
       constructor(tagName = 'div', props = {}) {

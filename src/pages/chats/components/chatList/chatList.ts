@@ -11,16 +11,18 @@ class ChatList extends Component {
     const chatsData = store.getState().chats
 
     if (!this.arrayChildren.chatList) {
-      this.arrayChildren.chatList = (chatsData as TChatsData[]).map((chat: TChatsData) => {
-        return new ChatPreview('div', {
-          ...chat,
-          attr: { class: 'chat__list' },
-          events: {
-            click: (event: unknown) =>
-              this.selectChat(event as Event, chat.id as number)
-          }
-        })
-      })
+      this.arrayChildren.chatList = (chatsData as TChatsData[]).map(
+        (chat: TChatsData) => {
+          return new ChatPreview('div', {
+            ...chat,
+            attr: { class: 'chat__list' },
+            events: {
+              click: (event: unknown) =>
+                this.selectChat(event as Event, chat.id as number)
+            }
+          })
+        }
+      )
     }
   }
 
@@ -28,7 +30,7 @@ class ChatList extends Component {
     event.preventDefault()
     this.selectedChatId = chatId
     store.set('selectedChatId', chatId)
-    
+
     console.log('Выбранный чат:', chatId)
 
     // Уведомляем родительский компонент о выборе чата

@@ -100,7 +100,7 @@ class ChatController {
         if (response.status === 500) {
           Router.go(ROUTES.ERROR)
         } else if (response.status !== 200) {
-          throw new Error(response.responseText)
+          throw new Error(response.response.reason)
         }
       } else {
         throw new Error('User not found')

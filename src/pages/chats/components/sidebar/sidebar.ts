@@ -1,4 +1,5 @@
 import { PasswordChagePage, Profile } from '../../..'
+import resourcesAPI from '../../../../api/resourcesAPI'
 import {
   ChatName,
   DropdownIcon,
@@ -118,9 +119,19 @@ export class Sidebar extends Component {
 
   public async openModal(event: Event) {
     event.preventDefault()
+
+    const avatarURL = (store.getState().user as TUser)?.avatar
+
+    let avatar
+
+    if (avatarURL) {
+      avatar = await resourcesAPI.getResources(avatarURL)
+      store.set('user.avatar', avatar.responseURL)
+    }
+
     const profileModal = new Profile('div', {
       href: '/profile',
-      attr: { class: 'chat__overlay', data: this.childProps.data }
+      attr: { class: 'chat__overlay' }
     })
     this.open(profileModal)
   }
@@ -162,7 +173,8 @@ export class Sidebar extends Component {
 
   async handleSubmitNewChat(event: Event) {
     event.preventDefault()
-    const title = this.children.newChatModal.children.chatName.getValue() as string
+    const title =
+      this.children.newChatModal.children.chatName.getValue() as string
     await chatController.createChat({ title }).then(async response => {
       if (response.id) {
         this.children.newChatModal.getContent()?.remove()
@@ -180,7 +192,7 @@ export class Sidebar extends Component {
   }
 
   public toggleMenu(_event: ToggleEvent, context: Component) {
-    (context.children.menuButton as ToggleIcon).toggleMenu()
+    ;(context.children.menuButton as ToggleIcon).toggleMenu()
   }
 
   public logout(event: Event) {

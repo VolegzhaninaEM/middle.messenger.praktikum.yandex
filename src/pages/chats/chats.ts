@@ -10,8 +10,8 @@ import store from '../../utils/store'
 import { ChatWebSocket } from '../../webSocket/webSocket'
 
 export class ChatPage extends Component {
-  chatWebSocket: ChatWebSocket;
-  
+  chatWebSocket: ChatWebSocket
+
   constructor(tagName: string = 'main', props: TProps) {
     super(tagName, {
       ...props,
@@ -20,8 +20,8 @@ export class ChatPage extends Component {
       }
     })
 
-    this.chatWebSocket = new ChatWebSocket();
-    console.log(this.chatWebSocket.connect); 
+    this.chatWebSocket = new ChatWebSocket()
+    console.log(this.chatWebSocket.connect)
   }
 
   async componentDidMount() {
@@ -48,17 +48,18 @@ export class ChatPage extends Component {
   public async openChat(chatId: number): Promise<void> {
     try {
       // Получаем токен для чата
-      const token = (await chatController.getChatToken(chatId) as TToken).token
+      const token = ((await chatController.getChatToken(chatId)) as TToken)
+        .token
       const userId = (store.getState().user as TUser).id
       if (!token || !userId) {
-        console.error('Токен или ID пользователя отсутствуют');
-        return;
+        console.error('Токен или ID пользователя отсутствуют')
+        return
       }
 
       store.set('token', token)
-      store.set('selectedChatId', chatId);
+      store.set('selectedChatId', chatId)
 
-      this.connectToChat(chatId, userId, token);
+      this.connectToChat(chatId, userId, token)
 
       if (this.children.chatWindow) {
         this.destroy(this.children.chatWindow)
@@ -79,16 +80,12 @@ export class ChatPage extends Component {
 
   connectToChat(chatId: number, userId: number, token: string): void {
     // Подключаемся к новому чату
-    this.chatWebSocket.connect(
-      chatId,
-      userId,
-      token,
-      (message) => {
-        // Обновляем сообщения в store
-        const currentMessages = store.getState().messages as TMessageInfo[]|| [];
-        store.set('messages', [...currentMessages, message]);
-      }
-    );
+    this.chatWebSocket.connect(chatId, userId, token, message => {
+      // Обновляем сообщения в store
+      const currentMessages =
+        (store.getState().messages as TMessageInfo[]) || []
+      store.set('messages', [...currentMessages, message])
+    })
   }
 
   destroy(element: Component): void {
