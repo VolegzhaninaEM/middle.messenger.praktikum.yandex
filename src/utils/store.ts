@@ -5,7 +5,6 @@ import { set } from './helpers'
 
 class Store extends EventBus<Record<string, (...args: unknown[]) => void>> {
   private state: Indexed<unknown> = {}
-  
 
   public getState() {
     return this.state

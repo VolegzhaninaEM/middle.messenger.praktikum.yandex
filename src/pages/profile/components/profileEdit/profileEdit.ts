@@ -110,7 +110,7 @@ class Profile extends Component {
   }
 
   private _handleAvatarClick() {
-    (this.uploadModal as AvatarLoadModal).open()
+    ;(this.uploadModal as AvatarLoadModal).open()
   }
 
   getValues(context: Component) {

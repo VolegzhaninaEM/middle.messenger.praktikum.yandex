@@ -17,7 +17,7 @@ import { EmptyChat } from '../chatWindowEmpty/chatWindowEmpty'
 import { default as template } from './chatWindow.hbs?raw'
 
 type TChatWindowProps = TProps & {
-  socket?: ChatWebSocket; // Указываем тип для socket
+  socket?: ChatWebSocket // Указываем тип для socket
 }
 export class ChatWindow extends Component {
   private storeInfo: Indexed<unknown>
@@ -29,13 +29,12 @@ export class ChatWindow extends Component {
 
     // Подписываемся на изменения в store
     store.on(StoreEvents.Updated, () => {
-      this.updateMessages(); // Перерисовываем компонент при изменении сообщений
-    });
+      this.updateMessages() // Перерисовываем компонент при изменении сообщений
+    })
 
-      if (!this.arrayChildren.messageHistory) {
-        this.arrayChildren.messageHistory = []
-      }
-    
+    if (!this.arrayChildren.messageHistory) {
+      this.arrayChildren.messageHistory = []
+    }
 
     if (!this.children.header && token) {
       this.children.header = new ChatHeader('div', {
@@ -70,8 +69,8 @@ export class ChatWindow extends Component {
   }
 
   updateMessages(): void {
-    const messages = store.getState().messages || [];
-    this.setProps({ messages }); // Обновляем свойства компонента
+    const messages = store.getState().messages || []
+    this.setProps({ messages }) // Обновляем свойства компонента
     this.displayMessage(messages as TMessageInfo)
   }
 

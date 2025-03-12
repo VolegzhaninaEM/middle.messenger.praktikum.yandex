@@ -8,7 +8,6 @@ import { IEvents } from '../../constants/interface'
 import { CloseButton, SubmitButton } from '..'
 import userApi from '../../api/userApi'
 import store from '../../utils/store'
-import resourcesAPI from '../../api/resourcesAPI'
 export class AvatarLoadModal extends Component {
   constructor(tagName: string, props: TProps) {
     super(tagName, {

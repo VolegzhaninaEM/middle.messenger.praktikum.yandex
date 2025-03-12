@@ -17,7 +17,7 @@ interface IFooter {
 }
 
 type TChatWindowProps = TProps & {
-  socket?: ChatWebSocket; // Указываем тип для socket
+  socket?: ChatWebSocket // Указываем тип для socket
 }
 export class ChatFooter extends Component implements IFooter {
   error: string = ''
@@ -76,9 +76,7 @@ export class ChatFooter extends Component implements IFooter {
     store.getState()
     try {
       const message = this.childProps.message as string
-      ;(this.childProps.socket as ChatWebSocket).sendMessage(
-        message
-      )
+      ;(this.childProps.socket as ChatWebSocket).sendMessage(message)
 
       console.log('Сообщение отправлено:', message)
 

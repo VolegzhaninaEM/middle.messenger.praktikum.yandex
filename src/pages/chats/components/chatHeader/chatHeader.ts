@@ -6,8 +6,7 @@ import {
 } from '../../../../components'
 import chatController from '../../../../controllers/chatController'
 import { Component } from '../../../../services/component'
-import { TProps, TUser } from '../../../../types/types'
-import store from '../../../../utils/store'
+import { TProps } from '../../../../types/types'
 import { default as template } from './chatHeader.hbs?raw'
 import './chatHeader.less'
 

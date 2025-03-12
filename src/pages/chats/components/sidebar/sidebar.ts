@@ -131,7 +131,7 @@ export class Sidebar extends Component {
 
     const profileModal = new Profile('div', {
       href: '/profile',
-      attr: { class: 'chat__overlay'}
+      attr: { class: 'chat__overlay' }
     })
     this.open(profileModal)
   }
