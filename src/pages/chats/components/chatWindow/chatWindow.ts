@@ -23,35 +23,34 @@ type TChatWindowProps = TProps & {
 }
 class ChatWindow extends Component {
   private storeInfo: Indexed<unknown>
+  private previousMessages: TMessageInfo[] = []
   constructor(tagName: string, props: TChatWindowProps) {
     super(tagName, props)
     this.storeInfo = { ...store.getState(), selectedChatId: null }
-    const token = this.storeInfo.token
+    const token = this.storeInfo.token as string
     const chatId = this.storeInfo.selectedChatId
 
     // Подписываемся на изменения в store
     store.on(StoreEvents.Updated, () => {
-      const currentMessages = store.getState().messages as TMessageInfo[] || []
+      const currentMessages =
+        (store.getState().messages as TMessageInfo[]) || []
 
-      if (!isEqual(this.previousMessages, currentMessages)) {
+      if (!isEqual(this.previousMessages, currentMessages) && this.childProps.socket ) {
         console.log('Сообщения изменились:', currentMessages)
 
-        const newChatId = store.getState().selectedChatId
-      // Если выбран новый чат
-      if (newChatId !== this.storeInfo.selectedChatId) {
-        // Обновляем состояние storeInfo
-        this.storeInfo = store.getState()
-
-        // Очищаем сообщения при переключении на другой чат
-        this.setProps({ messages: [] })
-
-        // Обновляем сообщения для нового чата
-        this.updateMessages()
-      }
-      // Если выбран тот же чат, но добавлены новые сообщения
-      if (this.storeInfo.inputMessage) {
-        this.handleNewMessages() // Перерисовываем компонент при изменении сообщений
-      }
+        const newChatId = store.getState().selectedChatId as number
+        // Если выбран новый чат
+        if (newChatId !== chatId) {
+          // Обновляем состояние storeInfo
+          this.storeInfo = store.getState()
+          
+          // Обновляем сообщения для нового чата
+          this.updateMessages()
+        }
+        // Если выбран тот же чат, но добавлены новые сообщения
+        if (this.storeInfo.inputMessage) {
+          this.handleNewMessages() // Перерисовываем компонент при изменении сообщений
+        }
       }
     })
 
@@ -115,7 +114,7 @@ class ChatWindow extends Component {
     )
 
     // Текущие сообщения
-    const currentMessages = this.childProps.messages as TMessageInfo[] || []
+    const currentMessages = (this.childProps.messages as TMessageInfo[]) || []
 
     // Находим новые сообщения (по id)
     const newMessages = filteredMessages.filter(
@@ -178,8 +177,7 @@ class ChatWindow extends Component {
         return new ChatMessage('div', {
           attr: { class: `message ${senderClass}` },
           message: {
-            text:
-              messageInfo.content,
+            text: messageInfo.content,
             time: messageInfo.time
           }
         })

@@ -64,6 +64,8 @@ export class ChatPage extends Component {
       store.set('selectedChatId', chatId)
 
       this.connectToChat(chatId, userId, token)
+       // Запрашиваем историю сообщений для нового чата
+       ;(this.chatWebSocket as ChatWebSocket).getMessageHistory()
 
       if (this.children.chatWindow) {
         this.destroy(this.children.chatWindow)

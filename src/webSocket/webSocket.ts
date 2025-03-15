@@ -35,11 +35,15 @@ export class ChatWebSocket {
         const parsedData = JSON.parse(data)
 
         if (Array.isArray(parsedData)) {
-          parsedData.forEach(message => onMessage(message)) // Обрабатываем массив сообщений
+          const currentMessages =
+            (store.getState().messages as TMessageInfo[]) || []
+          parsedData.forEach(message => {
+            currentMessages.push(message)
+          })
+          store.set('messages', [...currentMessages]) // Обрабатываем массив сообщений
         } else if (parsedData.content) {
           onMessage(parsedData) // Обрабатываем одно сообщение
         }
-        console.log(parsedData)
       } catch (error) {
         // Если данные не являются JSON, выводим их в консоль или игнорируем
         console.warn('Получено не JSON-сообщение:', data)
@@ -63,23 +67,24 @@ export class ChatWebSocket {
 
   sendMessage(message: string) {
     if (this.socket && this.socket.readyState === WebSocket.OPEN) {
-      const messageText = typeof message === 'string' ? message : JSON.stringify(message)
-  
+      const messageText =
+        typeof message === 'string' ? message : JSON.stringify(message)
+
       // Отправляем сообщение через WebSocket
       this.socket.send(
         JSON.stringify({ content: messageText, type: 'message' })
       )
 
       const storeInfo = store.getState()
-  
+
       // Добавляем отправленное сообщение в store
-      const currentMessages = storeInfo.messages as TMessageInfo[] || []
+      const currentMessages = (storeInfo.messages as TMessageInfo[]) || []
       const messageId = currentMessages.length ? ++currentMessages.length : 1
       const newMessage = {
         id: messageId, // Уникальный ID для сообщения
         content: JSON.stringify(messageText),
         time: new Date().toISOString(),
-        type: "message",
+        type: 'message',
         user_id: (storeInfo.user as TUser).id,
         chat_id: storeInfo.selectedChatId
       }
