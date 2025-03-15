@@ -28,25 +28,25 @@ class ChatWindow extends Component {
     super(tagName, props)
     this.storeInfo = { ...store.getState(), selectedChatId: null }
     const token = this.storeInfo.token as string
-    const chatId = this.storeInfo.selectedChatId
+    const chatId = this.childProps.selectedChatId
 
     // Подписываемся на изменения в store
     store.on(StoreEvents.Updated, () => {
       const currentMessages =
         (store.getState().messages as TMessageInfo[]) || []
 
-      if (!isEqual(this.previousMessages, currentMessages) && this.childProps.socket ) {
+      if (
+        !isEqual(this.previousMessages, currentMessages) &&
+        this.childProps.socket
+      ) {
         console.log('Сообщения изменились:', currentMessages)
-
-        const newChatId = store.getState().selectedChatId as number
         // Если выбран новый чат
-        if (newChatId !== chatId) {
           // Обновляем состояние storeInfo
           this.storeInfo = store.getState()
-          
+
           // Обновляем сообщения для нового чата
           this.updateMessages()
-        }
+        
         // Если выбран тот же чат, но добавлены новые сообщения
         if (this.storeInfo.inputMessage) {
           this.handleNewMessages() // Перерисовываем компонент при изменении сообщений
@@ -92,12 +92,16 @@ class ChatWindow extends Component {
     }
   }
 
+  componentDidUpdate(oldProps: TProps, newProps: TProps) {
+    return oldProps !== newProps
+  }
+
   updateMessages(): void {
     const messages = (store.getState().messages as TMessageInfo[]) || []
     const selectedChatId = store.getState().selectedChatId
     // Фильтруем сообщения по выбранному чату
     const filteredMessages = messages.filter(
-      (message: TMessageInfo) => message.chat_id === selectedChatId
+      (message: TMessageInfo) => message?.chat_id === selectedChatId
     )
 
     this.setProps({ messages: filteredMessages }) // Обновляем свойства компонента
@@ -110,7 +114,7 @@ class ChatWindow extends Component {
 
     // Фильтруем сообщения по выбранному чату
     const filteredMessages = messages.filter(
-      (message: TMessageInfo) => message.chat_id === selectedChatId
+      (message: TMessageInfo) => message?.chat_id === selectedChatId
     )
 
     // Текущие сообщения
@@ -142,58 +146,48 @@ class ChatWindow extends Component {
     }
   }
 
-  displayMessage(message: TMessageInfo[] | TMessageInfo): void {
-    let currentMessages = (this.childProps.messages as TMessageInfo[]) || []
-    // Если это массив сообщений (история)
-    if (Array.isArray(message)) {
-      currentMessages = [...message] // Заменяем старые сообщения новыми
-    }
-    // Если это одно сообщение
-    else if (message.content && message.time) {
-      const isDuplicate = currentMessages.some(msg => msg.id === message.id)
-      if (!isDuplicate) {
-        currentMessages = [...currentMessages, message] // Добавляем новое сообщение
-      }
-    }
+  displayMessage(messages: TMessageInfo[]): void {
+    // Очищаем текущие дочерние компоненты
+    this.arrayChildren.messageHistory = []
 
     // Сортируем сообщения по времени
-    currentMessages
+    const currentMessages = messages
       .sort((a, b) => new Date(a.time).getTime() - new Date(b.time).getTime())
       .reverse()
 
-    this.setProps({ messages: currentMessages })
+    // Создаем новые дочерние компоненты для каждого сообщения
+    const components = currentMessages.map((messageInfo: TMessageInfo) => {
+      const senderClass =
+        (this.storeInfo.user as TUser).id !== messageInfo.user_id
+          ? 'message__outcoming'
+          : 'message__incoming'
 
-    if (this.arrayChildren.messageHistory.length) {
-      this.arrayChildren.messageHistory = []
-    }
+      return new ChatMessage('div', {
+        attr: { class: `message ${senderClass}` },
+        message: {
+          text: messageInfo.content,
+          time: messageInfo.time
+        }
+      })
+    })
 
-    if (!this.arrayChildren.messageHistory.length) {
-      const messagesList = this.childProps.messages as []
-      const components = messagesList?.map((messageInfo: TMessageInfo) => {
-        const senderClass =
-          (this.storeInfo.user as TUser).id !== messageInfo.user_id
-            ? 'message__outcoming'
-            : 'message__inpcoming'
-        return new ChatMessage('div', {
-          attr: { class: `message ${senderClass}` },
-          message: {
-            text: messageInfo.content,
-            time: messageInfo.time
-          }
-        })
-      })
-      this.arrayChildren.messageHistory = components.map(component => {
-        return component
-      })
-    }
+    // Обновляем массив дочерних компонентов
+    this.arrayChildren.messageHistory = components
+
+    // Передаем новые сообщения в свойства компонента
+    this.setProps({ messages })
   }
 
   render(): DocumentFragment {
-    return this.compile(template, this.childProps)
+    return this.compile(template, {
+      ...this.childProps,
+      children: this.children,
+    })
   }
 }
 
 const withChats = connect(state => ({
-  chats: state.chats
+  chats: state.chats,
+  messages: state.messages
 }))
 export default withChats(ChatWindow)

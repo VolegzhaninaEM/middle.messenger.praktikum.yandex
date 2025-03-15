@@ -74,7 +74,8 @@ export class ChatPage extends Component {
       this.children.chatWindow = new ChatWindow('div', {
         attr: { id: 'chat__window', class: 'chat__window' },
         title: 'Start messaging',
-        socket: this.chatWebSocket
+        socket: this.chatWebSocket,
+        selectedChatId: chatId
       })
 
       console.log('Чат открыт:', chatId)
