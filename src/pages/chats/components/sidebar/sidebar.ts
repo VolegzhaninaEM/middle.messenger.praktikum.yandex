@@ -179,6 +179,7 @@ class Sidebar extends Component {
       this.children.newChatModal.children.chatName.getValue() as string
     await chatController.createChat({ title }).then(async response => {
       if (response.id) {
+        this.children.newChatModal.children.chatName.setValue('')
         this.children.newChatModal.getContent()?.remove()
         const chatsData = await chatController.getChats({})
         store.set('chats', chatsData)

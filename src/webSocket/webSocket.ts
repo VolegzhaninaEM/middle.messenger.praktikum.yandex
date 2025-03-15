@@ -38,10 +38,32 @@ export class ChatWebSocket {
           const currentMessages =
             (store.getState().messages as TMessageInfo[]) || []
           parsedData.forEach(message => {
+            if (!message.chat_id) {
+              message.chat_id = store.getState().selectedChatId
+            }
+            // Проверяем, существует ли сообщение с таким id
+            const isDuplicate = currentMessages.some(
+              msg => msg.id === message.id
+            )
+            if (!isDuplicate) {
+              if (!message.chat_id) {
+                message.chat_id = store.getState().selectedChatId
+              }
+            }
             currentMessages.push(message)
           })
           store.set('messages', [...currentMessages]) // Обрабатываем массив сообщений
         } else if (parsedData.content) {
+          if (!parsedData.chat_id) {
+            parsedData.chat_id = store.getState().selectedChatId
+          }
+          const currentMessages = (store.getState().messages as TMessageInfo[]) || []
+          const isDuplicate = currentMessages.some(msg => msg.id === parsedData.id)
+          if (!isDuplicate) {
+            if (!parsedData.chat_id) {
+              parsedData.chat_id = store.getState().selectedChatId
+            }
+          }
           onMessage(parsedData) // Обрабатываем одно сообщение
         }
       } catch (error) {

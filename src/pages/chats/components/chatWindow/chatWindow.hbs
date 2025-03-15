@@ -1,18 +1,18 @@
 {{header}}
 <div class='chat__message'>
   {{#if isEmpty}}
-  <div class="chat__message-empty">
-    {{isEmpty}}
-  </div>
-   {{else}}
-   <div class="chat__message-list">
-    <div class="chat__message-container">
-{{messageHistory}}
+    <div class='chat__message-empty'>
+      {{emptyTitle}}
     </div>
-    
-   </div>
-   
-{{/if}}
+  {{else}}
+    <div class='chat__message-list'>
+      <div class='chat__message-container'>
+        {{messageHistory}}
+      </div>
+
+    </div>
+
+  {{/if}}
 
 </div>
 {{footer}}

@@ -14,6 +14,10 @@ export class TextInput extends Component {
     })
   }
 
+  setValue(text: string) {
+    ;(this.element as HTMLInputElement).value = text
+  }
+
   getValue() {
     return (this.element as HTMLInputElement).value
   }

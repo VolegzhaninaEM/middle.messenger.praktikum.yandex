@@ -41,7 +41,7 @@ class ChatList extends Component {
 
   selectChat(event: Event, chatId: number): void {
     event.preventDefault()
-    this.selectedChatId = chatId
+    store.set('selectedChatId', chatId)
 
     console.log('Выбранный чат:', chatId)
 

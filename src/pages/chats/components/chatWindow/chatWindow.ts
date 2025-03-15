@@ -36,10 +36,14 @@ class ChatWindow extends Component {
         (store.getState().messages as TMessageInfo[]) || []
 
       if (
-        !isEqual(this.previousMessages, currentMessages) &&
-        this.childProps.socket
+        !isEqual(this.previousMessages, currentMessages)
       ) {
+        this.previousMessages = currentMessages
         console.log('Сообщения изменились:', currentMessages)
+
+        // Обновляем isEmpty
+        this.setProps({ isEmpty: currentMessages.length === 0 })
+
         // Если выбран тот же чат, но добавлены новые сообщения
         if (this.storeInfo.inputMessage) {
           this.handleNewMessages() // Перерисовываем компонент при изменении сообщений
@@ -53,6 +57,10 @@ class ChatWindow extends Component {
         }
       }
     })
+
+    // Инициализируем isEmpty
+    const initialMessages = (store.getState().messages as TMessageInfo[]) || []
+    this.setProps({ isEmpty: initialMessages.length === 0 })
 
     this.storeInfo = store.getState()
 
@@ -70,8 +78,8 @@ class ChatWindow extends Component {
     const chatInfo = (this.storeInfo.chats as TChatData[]).find(
       (chat: TChatsData) => chat.id === chatId
     )
-    if ((!this.children.isEmpty && !token) || !chatInfo?.last_message) {
-      this.children.isEmpty = new EmptyChat('div', {
+    if ((!this.children.emptyTitle && !token) || !chatInfo?.last_message) {
+      this.children.emptyTitle = new EmptyChat('div', {
         title: this.childProps.token
           ? 'Start messaging'
           : 'Select a chat to start messaging',
@@ -104,8 +112,8 @@ class ChatWindow extends Component {
       (message: TMessageInfo) => message?.chat_id === selectedChatId
     )
 
-    this.childProps.messages = filteredMessages
-    this.displayMessage(filteredMessages)
+    this.childProps.messages = [...filteredMessages]
+    this.displayMessage([...filteredMessages])
   }
 
   handleNewMessages(): void {
@@ -136,6 +144,10 @@ class ChatWindow extends Component {
       )
 
       this.childProps.messages = updatedMessages
+
+      // Обновляем isEmpty
+      this.setProps({ isEmpty: updatedMessages.length === 0 })
+
       this.displayMessage(updatedMessages)
     }
   }
@@ -156,17 +168,17 @@ class ChatWindow extends Component {
     const components = currentMessages.map((messageInfo: TMessageInfo) => {
       if (messageInfo) {
         const senderClass =
-        (this.storeInfo.user as TUser).id !== messageInfo.user_id
-          ? 'message__outcoming'
-          : 'message__incoming'
+          (this.storeInfo.user as TUser).id !== messageInfo.user_id
+            ? 'message__outcoming'
+            : 'message__incoming'
 
-      return new ChatMessage('div', {
-        attr: { class: `message ${senderClass}` },
-        message: {
-          text: messageInfo.content,
-          time: messageInfo.time
-        }
-      })
+        return new ChatMessage('div', {
+          attr: { class: `message ${senderClass}` },
+          message: {
+            text: messageInfo.content,
+            time: messageInfo.time
+          }
+        })
       }
     })
 
