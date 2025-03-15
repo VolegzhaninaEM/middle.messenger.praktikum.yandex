@@ -37,10 +37,6 @@ class ChatList extends Component {
         }
       })
     }
-
-    this.setProps({
-      showMoreButton: this.children.showMoreButton
-    })
   }
 
   selectChat(event: Event, chatId: number): void {
@@ -108,9 +104,6 @@ class ChatList extends Component {
         }
       })
     })
-
-    // Перерисовываем компонент
-    this.setProps({ chats: limitedChats })
   }
 
   render(): DocumentFragment {

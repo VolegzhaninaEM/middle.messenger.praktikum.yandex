@@ -21,8 +21,6 @@ class Sidebar extends Component {
   constructor(tagName: string, props: TProps) {
     super(tagName, props)
 
-    this.setProps({ data: store.getState().user as TUser })
-
     const dropdownMenu: Component[] = [
       new ToggleActions('li', {
         href: '/profile',
@@ -144,7 +142,7 @@ class Sidebar extends Component {
     event.preventDefault()
     const passwordModal = new PasswordChagePage('div', {
       href: '/password',
-      attr: { class: 'chat__overlay', data: this.childProps.data as TUser }
+      attr: { class: 'chat__overlay' }
     })
     this.open(passwordModal)
   }
@@ -181,9 +179,9 @@ class Sidebar extends Component {
       this.children.newChatModal.children.chatName.getValue() as string
     await chatController.createChat({ title }).then(async response => {
       if (response.id) {
-        // this.children.newChatModal.getContent()?.remove()
-        // const chatsData = await chatController.getChats({})
-        // store.set('chats', chatsData)
+        this.children.newChatModal.getContent()?.remove()
+        const chatsData = await chatController.getChats({})
+        store.set('chats', chatsData)
       }
     })
   }

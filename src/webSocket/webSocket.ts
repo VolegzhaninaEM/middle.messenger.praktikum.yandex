@@ -82,7 +82,7 @@ export class ChatWebSocket {
       const messageId = currentMessages.length ? ++currentMessages.length : 1
       const newMessage = {
         id: messageId, // Уникальный ID для сообщения
-        content: JSON.stringify(messageText),
+        content: messageText,
         time: new Date().toISOString(),
         type: 'message',
         user_id: (storeInfo.user as TUser).id,

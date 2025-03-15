@@ -40,16 +40,16 @@ class ChatWindow extends Component {
         this.childProps.socket
       ) {
         console.log('Сообщения изменились:', currentMessages)
-        // Если выбран новый чат
+        // Если выбран тот же чат, но добавлены новые сообщения
+        if (this.storeInfo.inputMessage) {
+          this.handleNewMessages() // Перерисовываем компонент при изменении сообщений
+        } else {
+          // Если выбран новый чат
           // Обновляем состояние storeInfo
           this.storeInfo = store.getState()
 
           // Обновляем сообщения для нового чата
           this.updateMessages()
-        
-        // Если выбран тот же чат, но добавлены новые сообщения
-        if (this.storeInfo.inputMessage) {
-          this.handleNewMessages() // Перерисовываем компонент при изменении сообщений
         }
       }
     })
@@ -104,7 +104,7 @@ class ChatWindow extends Component {
       (message: TMessageInfo) => message?.chat_id === selectedChatId
     )
 
-    this.setProps({ messages: filteredMessages }) // Обновляем свойства компонента
+    this.childProps.messages = filteredMessages
     this.displayMessage(filteredMessages)
   }
 
@@ -123,7 +123,7 @@ class ChatWindow extends Component {
     // Находим новые сообщения (по id)
     const newMessages = filteredMessages.filter(
       (newMessage: TMessageInfo) =>
-        !currentMessages.some((msg: TMessageInfo) => msg.id === newMessage.id)
+        !currentMessages.some((msg: TMessageInfo) => msg?.id === newMessage.id)
     )
 
     if (newMessages.length > 0) {
@@ -135,7 +135,7 @@ class ChatWindow extends Component {
         (a, b) => new Date(a.time).getTime() - new Date(b.time).getTime()
       )
 
-      this.setProps({ messages: updatedMessages })
+      this.childProps.messages = updatedMessages
       this.displayMessage(updatedMessages)
     }
   }
@@ -147,9 +147,6 @@ class ChatWindow extends Component {
   }
 
   displayMessage(messages: TMessageInfo[]): void {
-    // Очищаем текущие дочерние компоненты
-    this.arrayChildren.messageHistory = []
-
     // Сортируем сообщения по времени
     const currentMessages = messages
       .sort((a, b) => new Date(a.time).getTime() - new Date(b.time).getTime())
@@ -157,7 +154,8 @@ class ChatWindow extends Component {
 
     // Создаем новые дочерние компоненты для каждого сообщения
     const components = currentMessages.map((messageInfo: TMessageInfo) => {
-      const senderClass =
+      if (messageInfo) {
+        const senderClass =
         (this.storeInfo.user as TUser).id !== messageInfo.user_id
           ? 'message__outcoming'
           : 'message__incoming'
@@ -169,19 +167,21 @@ class ChatWindow extends Component {
           time: messageInfo.time
         }
       })
+      }
     })
 
     // Обновляем массив дочерних компонентов
     this.arrayChildren.messageHistory = components
 
     // Передаем новые сообщения в свойства компонента
-    this.setProps({ messages })
+    this.childProps.messages = currentMessages
   }
 
   render(): DocumentFragment {
     return this.compile(template, {
       ...this.childProps,
       children: this.children,
+      arrayChildren: this.arrayChildren
     })
   }
 }
