@@ -26,14 +26,10 @@ export class ToggleIcon extends Component implements IDropdownMenu {
 
   public toggleMenu() {
     this.isOpen = !this.isOpen
-    if (this._element) {
-      this._element.innerHTML = ''
-    }
-
     // Рендерим новый контент и добавляем его в DOM вручную
     const newContent = this.render()
-    if (this._element) {
-      this._element.appendChild(newContent)
+    if (this.element) {
+      this.element.replaceChildren(newContent)
     }
   }
 

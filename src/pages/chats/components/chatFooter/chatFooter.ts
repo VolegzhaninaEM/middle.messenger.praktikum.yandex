@@ -26,6 +26,10 @@ export class ChatFooter extends Component implements IFooter {
     super(tagName, {
       ...props,
       attr: { class: 'chat__footer' },
+      events: {
+        ...props.events,
+        keydown: (event: unknown) => this.handleKeyDown(event as KeyboardEvent)
+      },
       hasErrors: false,
       error: ''
     })
@@ -64,28 +68,27 @@ export class ChatFooter extends Component implements IFooter {
     }
   }
 
-  getMessage(context: Component) {
-    return {
-      message: (context.children.inputMessage as ChatMessageInput).getValue()
-    }
+  componentDidUpdate(oldProps: TProps, newProps: TProps) {
+    return oldProps !== newProps
   }
 
-  async handleClick(event: SubmitEvent, context: Component) {
+  getMessage(context: Component) {
+    return (context.children.inputMessage as ChatMessageInput).getValue()
+  }
+
+  async handleClick(event: SubmitEvent | KeyboardEvent, context: Component) {
     event.preventDefault()
-    this._handleError(context)
-    store.getState()
     try {
-      const message = this.childProps.message as string
+      const newMessage = this.getMessage(context)
+      store.set('inputMessage', newMessage)
+      const message = newMessage as string
       ;(this.childProps.socket as ChatWebSocket).sendMessage(message)
 
+      this._handleError(context)
       console.log('Сообщение отправлено:', message)
-
       // Очищаем поле ввода после успешной отправки
-      const input = this.element?.querySelector(
-        '.message__input'
-      ) as HTMLInputElement | null
-      if (input) {
-        input.value = ''
+      if (this.children.inputMessage) {
+        ;(context.children.inputMessage as ChatMessageInput).setValue('')
       }
     } catch (error) {
       console.error('Ошибка при отправке сообщения:', error)
@@ -95,31 +98,27 @@ export class ChatFooter extends Component implements IFooter {
 
   private _handleError(context: Component) {
     const data = this.getMessage(context)
-    const errors = validateForm(data as TInputMessage)
+    const errors = validateForm({ message: data } as TInputMessage)
     if (errors) {
       this.hasErrors = true
-      this.setProps({
-        hasErrors: true
-      })
 
       this.children.error.setProps({
         errorMessage: errors.message // Обновляем состояние
       })
     } else {
       this.hasErrors = false
-      this.setProps({
-        hasErrors: false,
-        message: data
-      })
       console.log(data)
     }
   }
 
+  private handleKeyDown(event: KeyboardEvent): void {
+    if (event.key === 'Enter') {
+      // Если нажата клавиша Enter, отправляем сообщение
+      this.handleClick(event, this)
+    }
+  }
+
   render() {
-    return this.compile(template, {
-      ...this.childProps,
-      hasErrors: this.hasErrors,
-      error: this.error
-    })
+    return this.compile(template, this.childProps)
   }
 }

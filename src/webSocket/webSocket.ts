@@ -1,4 +1,5 @@
-import { TMessageInfo } from '../types/types'
+import { TMessageInfo, TUser } from '../types/types'
+import store from '../utils/store'
 
 export class ChatWebSocket {
   protected socket: WebSocket | null = null
@@ -34,11 +35,37 @@ export class ChatWebSocket {
         const parsedData = JSON.parse(data)
 
         if (Array.isArray(parsedData)) {
-          parsedData.forEach(message => onMessage(message)) // Обрабатываем массив сообщений
+          const currentMessages =
+            (store.getState().messages as TMessageInfo[]) || []
+          parsedData.forEach(message => {
+            if (!message.chat_id) {
+              message.chat_id = store.getState().selectedChatId
+            }
+            // Проверяем, существует ли сообщение с таким id
+            const isDuplicate = currentMessages.some(
+              msg => msg.id === message.id
+            )
+            if (!isDuplicate) {
+              if (!message.chat_id) {
+                message.chat_id = store.getState().selectedChatId
+              }
+            }
+            currentMessages.push(message)
+          })
+          store.set('messages', [...currentMessages]) // Обрабатываем массив сообщений
         } else if (parsedData.content) {
+          if (!parsedData.chat_id) {
+            parsedData.chat_id = store.getState().selectedChatId
+          }
+          const currentMessages = (store.getState().messages as TMessageInfo[]) || []
+          const isDuplicate = currentMessages.some(msg => msg.id === parsedData.id)
+          if (!isDuplicate) {
+            if (!parsedData.chat_id) {
+              parsedData.chat_id = store.getState().selectedChatId
+            }
+          }
           onMessage(parsedData) // Обрабатываем одно сообщение
         }
-        console.log(parsedData)
       } catch (error) {
         // Если данные не являются JSON, выводим их в консоль или игнорируем
         console.warn('Получено не JSON-сообщение:', data)
@@ -62,9 +89,28 @@ export class ChatWebSocket {
 
   sendMessage(message: string) {
     if (this.socket && this.socket.readyState === WebSocket.OPEN) {
+      const messageText =
+        typeof message === 'string' ? message : JSON.stringify(message)
+
+      // Отправляем сообщение через WebSocket
       this.socket.send(
-        JSON.stringify({ content: JSON.stringify(message), type: 'message' })
+        JSON.stringify({ content: messageText, type: 'message' })
       )
+
+      const storeInfo = store.getState()
+
+      // Добавляем отправленное сообщение в store
+      const currentMessages = (storeInfo.messages as TMessageInfo[]) || []
+      const messageId = currentMessages.length ? ++currentMessages.length : 1
+      const newMessage = {
+        id: messageId, // Уникальный ID для сообщения
+        content: messageText,
+        time: new Date().toISOString(),
+        type: 'message',
+        user_id: (storeInfo.user as TUser).id,
+        chat_id: storeInfo.selectedChatId
+      }
+      store.set('messages', [...currentMessages, newMessage])
     }
   }
 
