@@ -1,4 +1,5 @@
-import { TMessageInfo } from '../types/types'
+import { TMessageInfo, TUser } from '../types/types'
+import store from '../utils/store'
 
 export class ChatWebSocket {
   protected socket: WebSocket | null = null
@@ -62,9 +63,27 @@ export class ChatWebSocket {
 
   sendMessage(message: string) {
     if (this.socket && this.socket.readyState === WebSocket.OPEN) {
+      const messageText = typeof message === 'string' ? message : JSON.stringify(message)
+  
+      // Отправляем сообщение через WebSocket
       this.socket.send(
-        JSON.stringify({ content: JSON.stringify(message), type: 'message' })
+        JSON.stringify({ content: messageText, type: 'message' })
       )
+
+      const storeInfo = store.getState()
+  
+      // Добавляем отправленное сообщение в store
+      const currentMessages = storeInfo.messages as TMessageInfo[] || []
+      const messageId = currentMessages.length ? ++currentMessages.length : 1
+      const newMessage = {
+        id: messageId, // Уникальный ID для сообщения
+        content: JSON.stringify(messageText),
+        time: new Date().toISOString(),
+        type: "message",
+        user_id: (storeInfo.user as TUser).id,
+        chat_id: storeInfo.selectedChatId
+      }
+      store.set('messages', [...currentMessages, newMessage])
     }
   }
 

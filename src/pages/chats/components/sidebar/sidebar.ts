@@ -11,12 +11,13 @@ import chatController from '../../../../controllers/chatController'
 import userController from '../../../../controllers/userController'
 import { Component } from '../../../../services/component'
 import { TProps, TUser } from '../../../../types/types'
+import { connect } from '../../../../utils/connect'
 import store from '../../../../utils/store'
 import { default as ChatList } from '../chatList/chatList'
 import { Search } from '../search/search'
 import { default as template } from './sidebar.hbs?raw'
 
-export class Sidebar extends Component {
+class Sidebar extends Component {
   constructor(tagName: string, props: TProps) {
     super(tagName, props)
 
@@ -90,6 +91,9 @@ export class Sidebar extends Component {
 
     if (!this.children.chatList) {
       this.children.chatList = new ChatList('div', {
+        attr: {
+          class: 'chat__list'
+        },
         chats: [],
         events: {
           onChatSelect: (chatId: number) => this.openChat(chatId)
@@ -177,9 +181,9 @@ export class Sidebar extends Component {
       this.children.newChatModal.children.chatName.getValue() as string
     await chatController.createChat({ title }).then(async response => {
       if (response.id) {
-        this.children.newChatModal.getContent()?.remove()
-        const chatsData = await chatController.getChats({})
-        store.set('chats', chatsData)
+        // this.children.newChatModal.getContent()?.remove()
+        // const chatsData = await chatController.getChats({})
+        // store.set('chats', chatsData)
       }
     })
   }
@@ -216,8 +220,7 @@ function displayResults(results: TUser[]): void {
   if (!resultsContainer) return
 
   // Очищаем предыдущие результаты
-  resultsContainer.innerHTML = ''
-
+  resultsContainer.remove()
   // Добавляем новые результаты
   results.forEach(result => {
     const resultItem = document.createElement('div')
@@ -226,3 +229,8 @@ function displayResults(results: TUser[]): void {
     resultsContainer.appendChild(resultItem)
   })
 }
+
+const withChats = connect(state => ({
+  chats: state.chats
+}))
+export default withChats(Sidebar)

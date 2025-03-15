@@ -3,6 +3,7 @@ import chatApi from '../api/chatApi'
 import { ROUTES } from '../constants/enums'
 import Router from '../router/router'
 import { TChatsData } from '../types/types'
+import store from '../utils/store'
 import userController from './userController'
 
 class ChatController {
@@ -10,7 +11,11 @@ class ChatController {
     try {
       const response = await chatApi.getChats({ offset, limit })
       if (response.status === 200) {
-        return response.response
+        const existingChats = (store.getState().chats as TChatsData[]) || []
+        const newChats = response.response.slice(0, limit)
+        const updatedChats = [...existingChats, ...newChats] // Добавляем новые чаты к существующим
+        store.set('chats', updatedChats) // Обновляем store
+        return newChats
       } else if (response.status === 500) {
         Router.go(ROUTES.ERROR)
       } else {

@@ -2,13 +2,12 @@ import './chats.less'
 import { Component } from '../../services/component'
 import { default as template } from './chats.hbs?raw'
 import { TMessageInfo, TProps, TToken, TUser } from '../../types/types'
-import { ChatWindow } from './components/chatWindow/chatWindow'
-import { Sidebar } from './components/sidebar/sidebar'
+import { default as ChatWindow } from './components/chatWindow/chatWindow'
+import { default as Sidebar } from './components/sidebar/sidebar'
 import { connect } from '../../utils/connect'
 import chatController from '../../controllers/chatController'
 import store from '../../utils/store'
 import { ChatWebSocket } from '../../webSocket/webSocket'
-
 export class ChatPage extends Component {
   chatWebSocket: ChatWebSocket
 
@@ -25,7 +24,10 @@ export class ChatPage extends Component {
   }
 
   async componentDidMount() {
-    const chats: Array<TUser> = await chatController.getChats({})
+    const chats = await chatController.getChats({
+      offset: 0,
+      limit: 5
+    })
     store.set('chats', chats)
     this.initData()
   }
@@ -47,6 +49,8 @@ export class ChatPage extends Component {
 
   public async openChat(chatId: number): Promise<void> {
     try {
+      // Очищаем сообщения при переключении чатов
+      store.set('messages', [])
       // Получаем токен для чата
       const token = ((await chatController.getChatToken(chatId)) as TToken)
         .token
