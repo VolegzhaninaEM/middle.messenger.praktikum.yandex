@@ -10,7 +10,7 @@ export class EventBus<
     this.listeners[event].push(callback)
   }
 
-  emit(event: string, ...args: any[]): void {
+  emit<T extends unknown[]>(event: string, ...args: T): void {
     if (!this.listeners[event]) {
       return
     }

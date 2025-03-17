@@ -95,7 +95,7 @@ export function validateForm(formData: TData) {
 
   // Проверка message
   if (validateFields.message in formData) {
-    if (!formData.message || formData.message.trim() === '') {
+    if (!formData.message || (formData.message as string).trim() === '') {
       errors.message = 'Сообщение не должно быть пустым'
     }
   }

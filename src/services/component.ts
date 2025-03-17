@@ -4,14 +4,13 @@ import { TProps, TChildren, TArrayChildren } from '../types/types'
 import Handlebars from 'handlebars'
 import { EVENTS } from '../constants/enums'
 import { IEvents } from '../constants/interface'
-
 type TEvents = {
   on: Function
   off: Function
   emit: Function
 }
 export abstract class Component {
-  [x: string]: any
+  [x: string]: unknown
   protected _element: HTMLElement | null = null
   protected _meta: { tagName: string; props: TProps }
   private _id: string | null = null
@@ -110,11 +109,16 @@ export abstract class Component {
     return true
   }
 
+  public getValue(): string | void {}
+
+  public setValue(_text: string): void {}
+
   public setProps = (nextProps: TProps): void => {
     if (!nextProps) {
       return
     }
 
+    console.log('Setting new props:', nextProps)
     Object.assign(this.childProps, nextProps)
   }
 
@@ -198,7 +202,17 @@ export abstract class Component {
       const stub = fragment.content.querySelector(`[data-id="${child._id}"]`)
       const content = child.getContent()
 
-      if (stub) stub.replaceWith(content as HTMLElement)
+      if (stub && content && stub.parentNode) {
+        stub.replaceWith(content as HTMLElement)
+      } else if (!stub) {
+        console.warn(
+          `Stub already replaced or not found for child with id: ${child._id}`
+        )
+      } else {
+        console.error(
+          `Stub not found or already replaced for child with id: ${child._id}`
+        )
+      }
     })
 
     Object.entries(this.arrayChildren).forEach(([key, arr]) => {

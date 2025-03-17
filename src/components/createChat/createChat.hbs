@@ -1,0 +1,11 @@
+<main class='modal'>
+  {{title}}
+  {{closeButton}}
+  <form class="modal__form">
+    {{chatName}}
+    {{#if hasErrors}}
+      {{error}}
+    {{/if}}
+    {{saveButton}}
+  </form>
+</main>

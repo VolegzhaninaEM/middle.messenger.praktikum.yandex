@@ -1,6 +1,6 @@
 import { Component } from '../../services/component'
 import { default as template } from './changePassword.hbs?raw'
-import { TData, TProps } from '../../types/types'
+import { TData, TPassword, TProps } from '../../types/types'
 import { validateForm } from '../../utils/validators'
 import {
   CloseButton,
@@ -8,21 +8,16 @@ import {
   SubmitButton,
   TextInput
 } from '../../components'
+import userController from '../../controllers/userController'
 
 export class PasswordChagePage extends Component {
-  constructor(tagName: string, props: TProps) {
+  constructor(tagName: string = 'div', props: TProps = {}) {
     super(tagName, { ...props, hasErrors: false, error: '' })
 
     if (!this.children.closeButton) {
       this.children.closeButton = new CloseButton('div', {
         events: {
-          click: () => {
-            // Логика закрытия модального окна
-            const app = document.getElementById('app')
-            if (app) {
-              app.removeChild(this.getContent() as Node)
-            }
-          }
+          click: () => this.close()
         }
       })
     }
@@ -42,17 +37,6 @@ export class PasswordChagePage extends Component {
       attr: {
         placeholder: 'New Password',
         name: 'newPassword',
-        type: 'password'
-      },
-      events: {
-        blur: () => this.validatePassword(this)
-      }
-    })
-
-    this.children.newPasswordControl = new TextInput('input', {
-      attr: {
-        placeholder: 'New Password Control',
-        name: 'newPasswordControl',
         type: 'password'
       },
       events: {
@@ -86,8 +70,7 @@ export class PasswordChagePage extends Component {
     const fieldsValues = {}
     values.push(
       { oldPassword: context.children.oldPassword.getValue() },
-      { newPassword: context.children.newPassword.getValue() },
-      { newPasswordControl: context.children.newPasswordControl.getValue() }
+      { newPassword: context.children.newPassword.getValue() }
     )
 
     values.forEach(item => {
@@ -114,9 +97,16 @@ export class PasswordChagePage extends Component {
     }
   }
 
-  handleSubmit(event: Event, context: Component) {
+  async handleSubmit(event: Event, context: Component) {
     event.preventDefault()
+    const data = this.getValues(context) as TPassword
     this.validatePassword(context)
+    await userController.changePassword(data)
+    this.close()
+  }
+
+  close() {
+    this.getContent()?.remove()
   }
 
   render(): DocumentFragment {

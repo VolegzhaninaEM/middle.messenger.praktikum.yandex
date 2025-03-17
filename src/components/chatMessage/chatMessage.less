@@ -1,14 +1,38 @@
 @import url("../../styles/variables.less");
 
 .message {
-    &__input {
-        width: 98%;
-        height: 40px;
-        padding: 0 10px;
-        background: @base-white;
-        border-radius: 10px;
-        border: 1px solid @dark-grey;
-        font-size: 16px;
-        color: @dark-beige
+    background: @base-white;
+    border-top-right-radius: 12px;
+    border-bottom-left-radius: 12px;
+    border-bottom-right-radius: 12px;
+    height: max-content;
+    width: max-content;
+    padding: 10px;
+    margin-bottom: 10px;
+
+    &__info {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        height: 9px;
+    }
+
+    &__text {
+        text-align: left;
+        font-size: 12px;
+    }
+
+    &__time {
+        font-size: 9px;
+    }
+
+    &__outcoming {
+        align-self: flex-end;
+        background: @pale-green;
+        color: @base-white
+    }
+
+    &__incoming {
+        align-self: flex-start;
     }
 }

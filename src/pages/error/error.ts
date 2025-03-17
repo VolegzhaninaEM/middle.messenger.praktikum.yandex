@@ -3,8 +3,8 @@ import { default as template } from './error.hbs?raw'
 import { Component } from '../../services/component'
 import { TProps } from '../../types/types'
 
-export class Error extends Component {
-  constructor(tagName: string, props: TProps) {
+export class ErrorPage extends Component {
+  constructor(tagName: string = 'div', props: TProps = {}) {
     super(tagName, props)
   }
 

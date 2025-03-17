@@ -8,9 +8,14 @@ export class TextInput extends Component {
       ...props,
       attr: {
         ...props.attr,
-        class: 'input-field'
+        class: 'input-field',
+        value: props.attr.value || ''
       }
     })
+  }
+
+  setValue(text: string) {
+    ;(this.element as HTMLInputElement).value = text
   }
 
   getValue() {

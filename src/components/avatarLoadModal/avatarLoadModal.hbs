@@ -1,6 +1,8 @@
 <div class="modal-overlay">
   <div class="modal-content">
-    <span class="close-btn" onclick="{{onClose}}">×</span>
-    <div class="upload-text" onclick="{{handleClick}}">Загрузите файл</div>
+    {{closeButton}}
+    <div>Load New Photo</div>
+    <div class="upload-text" id="uploadButton" onclick="{{handleClick}}">{{title}}</div>
+    {{saveButton}}
   </div>
 </div>
