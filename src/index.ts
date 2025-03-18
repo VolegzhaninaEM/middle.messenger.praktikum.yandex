@@ -9,7 +9,7 @@ async function checkAuth(): Promise<boolean> {
     const response = await authApi.fetchUser()
 
     if (response.status === 200) {
-      store.set('user', {...response.response}) // Сохраняем данные пользователя в store
+      store.set('user', { ...response.response }) // Сохраняем данные пользователя в store
       return true // Пользователь авторизован
     }
 

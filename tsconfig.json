@@ -12,6 +12,14 @@
     "noUnusedParameters": true,   
     "skipLibCheck": true,          
     "resolveJsonModule": true,
-    "allowSyntheticDefaultImports": true
-  }
+    "allowSyntheticDefaultImports": true,
+    "baseUrl": "./",
+    "paths": {
+      "@/*": ["src/*"]
+    }
+  },
+  "include": [
+    "src",
+    "global.d.ts"
+  ]
 }

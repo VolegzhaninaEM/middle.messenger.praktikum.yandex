@@ -57,8 +57,11 @@ export class ChatWebSocket {
           if (!parsedData.chat_id) {
             parsedData.chat_id = store.getState().selectedChatId
           }
-          const currentMessages = (store.getState().messages as TMessageInfo[]) || []
-          const isDuplicate = currentMessages.some(msg => msg.id === parsedData.id)
+          const currentMessages =
+            (store.getState().messages as TMessageInfo[]) || []
+          const isDuplicate = currentMessages.some(
+            msg => msg.id === parsedData.id
+          )
           if (!isDuplicate) {
             if (!parsedData.chat_id) {
               parsedData.chat_id = store.getState().selectedChatId
@@ -68,7 +71,7 @@ export class ChatWebSocket {
         }
       } catch (error) {
         // Если данные не являются JSON, выводим их в консоль или игнорируем
-        console.warn('Получено не JSON-сообщение:', data)
+        console.warn('Получено не JSON-сообщение:', error)
       }
     }
 

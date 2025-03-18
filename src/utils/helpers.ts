@@ -2,7 +2,7 @@ import { Indexed } from '../types/types'
 
 export function trim(value: string, symbol?: string) {
   if (symbol) {
-    let regex = new RegExp(`[${symbol}]`, 'gi')
+    const regex = new RegExp(`[${symbol}]`, 'gi')
     return value.replace(regex, '')
   }
 
@@ -20,7 +20,7 @@ export function merge(
     // Извлекаем последнюю пару объектов из стека
     const [left, right] = stack.pop()!
 
-    for (let key in right) {
+    for (const key in right) {
       if (!right.hasOwnProperty(key)) {
         continue
       }
