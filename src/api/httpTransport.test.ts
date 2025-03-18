@@ -28,7 +28,7 @@ describe('HttpTransport', () => {
     } as unknown as jest.Mocked<XMLHttpRequest>
 
     // Переопределяем XMLHttpRequest глобально
-    window.XMLHttpRequest = jest.fn(() => mockXhr) as any
+    window.XMLHttpRequest = jest.fn(() => mockXhr) as unknown as typeof XMLHttpRequest
   })
 
   describe('request()', () => {
@@ -51,9 +51,17 @@ describe('HttpTransport', () => {
 
       http.request(API_URL + url, options)
 
-      expect(mockXhr.open).toHaveBeenCalledWith('POST', `${http['API_URL']}/api${url}`)
-      expect(mockXhr.setRequestHeader).toHaveBeenCalledWith('Content-Type', 'application/json')
-      expect(mockXhr.send).toHaveBeenCalledWith(JSON.stringify({ key: 'value' }))
+      expect(mockXhr.open).toHaveBeenCalledWith(
+        'POST',
+        `${http['API_URL']}/api${url}`
+      )
+      expect(mockXhr.setRequestHeader).toHaveBeenCalledWith(
+        'Content-Type',
+        'application/json'
+      )
+      expect(mockXhr.send).toHaveBeenCalledWith(
+        JSON.stringify({ key: 'value' })
+      )
     })
 
     it('Должен корректно обрабатывать FormData', async () => {
@@ -65,7 +73,10 @@ describe('HttpTransport', () => {
 
       http.request(API_URL + url, options)
 
-      expect(mockXhr.open).toHaveBeenCalledWith('POST', `${http['API_URL']}/api${url}`)
+      expect(mockXhr.open).toHaveBeenCalledWith(
+        'POST',
+        `${http['API_URL']}/api${url}`
+      )
       expect(mockXhr.setRequestHeader).not.toHaveBeenCalled() // Заголовки не устанавливаются для FormData
       expect(mockXhr.send).toHaveBeenCalledWith(formData)
     })
@@ -93,9 +104,17 @@ describe('HttpTransport', () => {
 
       http.post(url, options)
 
-      expect(mockXhr.open).toHaveBeenCalledWith('POST', `${http['API_URL']}/api${url}`)
-      expect(mockXhr.setRequestHeader).toHaveBeenCalledWith('Content-Type', 'application/json')
-      expect(mockXhr.send).toHaveBeenCalledWith(JSON.stringify({ key: 'value' }))
+      expect(mockXhr.open).toHaveBeenCalledWith(
+        'POST',
+        `${http['API_URL']}/api${url}`
+      )
+      expect(mockXhr.setRequestHeader).toHaveBeenCalledWith(
+        'Content-Type',
+        'application/json'
+      )
+      expect(mockXhr.send).toHaveBeenCalledWith(
+        JSON.stringify({ key: 'value' })
+      )
     })
   })
 
@@ -106,9 +125,17 @@ describe('HttpTransport', () => {
 
       http.put(url, options)
 
-      expect(mockXhr.open).toHaveBeenCalledWith('PUT', `${http['API_URL']}/api${url}`)
-      expect(mockXhr.setRequestHeader).toHaveBeenCalledWith('Content-Type', 'application/json')
-      expect(mockXhr.send).toHaveBeenCalledWith(JSON.stringify({ key: 'value' }))
+      expect(mockXhr.open).toHaveBeenCalledWith(
+        'PUT',
+        `${http['API_URL']}/api${url}`
+      )
+      expect(mockXhr.setRequestHeader).toHaveBeenCalledWith(
+        'Content-Type',
+        'application/json'
+      )
+      expect(mockXhr.send).toHaveBeenCalledWith(
+        JSON.stringify({ key: 'value' })
+      )
     })
   })
 })

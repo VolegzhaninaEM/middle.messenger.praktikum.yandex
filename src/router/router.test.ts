@@ -36,8 +36,8 @@ describe('Router', () => {
       }
     }
     // Очищаем состояние перед каждым тестом
-    ;(router as any).routes = []
-    ;(router as any)._currentRoute = null
+    router['routes'] = []
+    router['_currentRoute'] = null
 
     const mockComponent = new MockBlock()
     router.use('/', mockComponent)
@@ -49,7 +49,7 @@ describe('Router', () => {
   afterEach(() => {
     // Очищаем моки после каждого теста
     jest.clearAllMocks()
-    ;(window.testCtx.location as any).pathname = '/'
+    ;(window.testCtx.location as unknown as Location).pathname = '/'
   })
 
   describe('use()', () => {
@@ -59,7 +59,7 @@ describe('Router', () => {
 
       router.use(pathname, mockComponent)
 
-      const routes = (router as any).routes
+      const routes = router.routes
       expect(routes[0]).toBeDefined()
       expect(routes.length).toBe(3)
     })
@@ -67,9 +67,9 @@ describe('Router', () => {
 
   describe('start()', () => {
     it('Должен звать _onRoute с текущим путем', () => {
-      const mockOnRoute = jest.spyOn(router as any, '_onRoute')
+      const mockOnRoute = jest.spyOn(router as unknown as { _onRoute: (pathname: string) => void }, '_onRoute')
       const initialPathname = '/'
-      ;(window.testCtx.location as any).pathname = initialPathname
+      ;(window.testCtx.location as unknown as Location).pathname = initialPathname
 
       router.start()
 
@@ -77,7 +77,7 @@ describe('Router', () => {
     })
 
     it('Должен звать _onRoute когда срабатывает событие popstate', () => {
-      const mockOnRoute = jest.spyOn(router as any, '_onRoute')
+      const mockOnRoute = jest.spyOn(router as unknown as { _onRoute: (pathname: string) => void }, '_onRoute')
       router.start()
 
       const newPathname = '/new-path'
@@ -96,7 +96,7 @@ describe('Router', () => {
   describe('go()', () => {
     it('Должен изменять историю через pushState и вызывать _onRoute', () => {
       const mockPushState = jest.spyOn(window.history, 'pushState')
-      const mockOnRoute = jest.spyOn(router as any, '_onRoute')
+      const mockOnRoute = jest.spyOn(router as unknown as { _onRoute: (pathname: string) => void }, '_onRoute')
 
       const newPathname = '/new-path'
 

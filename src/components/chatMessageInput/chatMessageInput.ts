@@ -27,7 +27,7 @@ export class ChatMessageInput extends Component {
   }
 
   setValue(text: string) {
-    (this.element as HTMLInputElement).value = text
+    ;(this.element as HTMLInputElement).value = text
     store.set('inputMessage', text)
   }
 

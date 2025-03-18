@@ -35,18 +35,21 @@ describe('Component', () => {
       const componentWithProps = new MockComponent('div', props)
 
       expect(componentWithProps.children).toHaveProperty('child', mockChild)
-      expect(componentWithProps.arrayChildren).toHaveProperty('array', mockArrayChild)
+      expect(componentWithProps.arrayChildren).toHaveProperty(
+        'array',
+        mockArrayChild
+      )
       expect(componentWithProps.childProps).toHaveProperty('text', 'Hello')
     })
   })
 
   describe('setProps()', () => {
     it('Должен обновлять свойства', () => {
-        component.setProps({ newText: 'Updated' })
-    
-        // Проверяем, что свойства обновились
-        expect(component.childProps).toHaveProperty('newText', 'Updated')
-      })
+      component.setProps({ newText: 'Updated' })
+
+      // Проверяем, что свойства обновились
+      expect(component.childProps).toHaveProperty('newText', 'Updated')
+    })
   })
 
   describe('show() and hide()', () => {
@@ -83,7 +86,9 @@ describe('Component', () => {
       const fragment = componentWithProps.compile(template, props)
 
       // Проверяем, что stubs заменены на реальные элементы
-      const childStub = fragment.querySelector(`[data-id="${mockChild['_id']}"]`)
+      const childStub = fragment.querySelector(
+        `[data-id="${mockChild['_id']}"]`
+      )
       const arrayStub = fragment.querySelector(
         `[data-id="array_${mockArrayChild[0]['_id']}"]`
       )
