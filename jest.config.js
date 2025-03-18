@@ -1,4 +1,3 @@
-// jest.config.js
 export default {
   preset: 'ts-jest', // Используем ts-jest для TypeScript
   testEnvironment: 'jsdom', // Для тестирования DOM-элементов

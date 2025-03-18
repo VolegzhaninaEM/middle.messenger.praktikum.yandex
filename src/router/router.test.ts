@@ -1,4 +1,3 @@
-// tests/router.test.ts
 import { describe, it, expect, beforeEach, afterEach } from '@jest/globals'
 import Router from './router'
 import { Component } from '@/services/component'
@@ -17,7 +16,6 @@ describe('Router', () => {
   let router: typeof Router
 
   beforeEach(() => {
-    // Получаем экземпляр Singleton
     router = Router
 
     window.testCtx = {
@@ -56,14 +54,11 @@ describe('Router', () => {
 
   describe('use()', () => {
     it('Проверяем добавление путей', () => {
-      // Arrange (подготовка)
       const mockComponent: Component = new MockBlock()
       const pathname = '/test'
 
-      // Act (действие)
       router.use(pathname, mockComponent)
 
-      // Assert (проверка)
       const routes = (router as any).routes
       expect(routes[0]).toBeDefined()
       expect(routes.length).toBe(3)
@@ -72,20 +67,16 @@ describe('Router', () => {
 
   describe('start()', () => {
     it('Должен звать _onRoute с текущим путем', () => {
-      // Arrange (подготовка)
       const mockOnRoute = jest.spyOn(router as any, '_onRoute')
       const initialPathname = '/'
       ;(window.testCtx.location as any).pathname = initialPathname
 
-      // Act (действие)
       router.start()
 
-      // Assert (проверка)
       expect(mockOnRoute).toHaveBeenCalledWith(initialPathname)
     })
 
     it('Должен звать _onRoute когда срабатывает событие popstate', () => {
-      // Arrange (подготовка)
       const mockOnRoute = jest.spyOn(router as any, '_onRoute')
       router.start()
 
@@ -98,23 +89,19 @@ describe('Router', () => {
       })
       window.dispatchEvent(popStateEvent)
 
-      // Assert (проверка)
       expect(mockOnRoute).toHaveBeenCalledWith(newPathname)
     })
   })
 
   describe('go()', () => {
     it('Должен изменять историю через pushState и вызывать _onRoute', () => {
-      // Arrange (подготовка)
       const mockPushState = jest.spyOn(window.history, 'pushState')
       const mockOnRoute = jest.spyOn(router as any, '_onRoute')
 
       const newPathname = '/new-path'
 
-      // Act (действие)
       router.go(newPathname)
 
-      // Assert (проверка)
       expect(mockPushState).toHaveBeenCalledWith({}, '', newPathname)
       expect(mockOnRoute).toHaveBeenCalledWith(newPathname)
     })
@@ -124,10 +111,8 @@ describe('Router', () => {
     it('Должен вызвать history.back', () => {
       const mockBack = jest.spyOn(window.history, 'back')
 
-      // Act (действие)
       router.back()
 
-      // Assert (проверка)
       expect(mockBack).toHaveBeenCalled()
       expect(mockBack).toHaveBeenCalledTimes(1)
     })
@@ -137,10 +122,8 @@ describe('Router', () => {
     it('Должен вызвать history.forward', () => {
       const mockBack = jest.spyOn(window.history, 'forward')
 
-      // Act (действие)
       router.forward()
 
-      // Assert (проверка)
       expect(mockBack).toHaveBeenCalled()
       expect(mockBack).toHaveBeenCalledTimes(1)
     })

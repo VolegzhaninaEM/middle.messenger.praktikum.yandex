@@ -1,5 +1,3 @@
-// global.d.ts
-
 // Расширяем глобальный объект Window
 interface Window {
     testCtx: {

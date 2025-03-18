@@ -1,4 +1,3 @@
-// tests/component.test.ts
 import { describe, it, expect, beforeEach } from '@jest/globals'
 import { Component } from './component'
 import { EVENTS } from '@/constants/enums'
