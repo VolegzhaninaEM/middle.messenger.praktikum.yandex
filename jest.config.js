@@ -7,5 +7,5 @@ export default {
     '^@/(.*)$': '<rootDir>/src/$1', // Поддержка псевдонимов
     '\\.(css|less|scss|sass)$': 'identity-obj-proxy' // Игнорируем стили
   },
-  testMatch: ['**/tests/**/*.test.[jt]s?(x)'] // Где искать тесты
+  testMatch: ['**/*.test.[jt]s?(x)'] // Где искать тесты
 }
