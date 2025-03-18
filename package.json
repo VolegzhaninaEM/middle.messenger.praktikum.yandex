@@ -11,7 +11,7 @@
     "eslint-config-airbnb": "^19.0.4",
     "eslint-config-prettier": "^10.0.1",
     "eslint-plugin-prettier": "^5.2.3",
-    "husky": "^9.1.7",
+    "husky": "^8.0.0",
     "jest": "^29.7.0",
     "jest-environment-jsdom": "^29.7.0",
     "less": "^4.2.1",
@@ -47,11 +47,12 @@
     "lint:less": "stylelint \"**/*.less\"",
     "format:ts": "prettier --write \"**/*.ts\"",
     "format:less": "stylelint \"**/*.less\" --fix",
-    "test": "jest"
+    "test": "jest",
+    "prepare": "husky install"
   },
   "husky": {
     "hooks": {
-      "pre-commit": "npm-run-all test lint:ts lint:less lint:typecheck"
+      "pre-commit": "npx npm-run-all test lint:ts lint:less lint:typecheck"
     }
   },
   "type": "module",
