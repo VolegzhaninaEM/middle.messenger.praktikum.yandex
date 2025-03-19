@@ -18,7 +18,6 @@ import userController from '../../controllers/userController'
 import { USER_INFO } from '../../constants/enums'
 import store from '../../utils/store'
 
-data = 2
 class Profile extends Component {
   constructor(tagName: string, props: TProps) {
     super(tagName, { ...props, hasErrors: false, error: '' })

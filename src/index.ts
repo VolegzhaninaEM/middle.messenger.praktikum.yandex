@@ -26,8 +26,11 @@ async function checkAuth(): Promise<boolean> {
   if (isAuthenticated) {
     Router.go(ROUTES.CHATS)
   } else {
-    const currentPath = window.location.pathname
-    currentPath ? Router.go(ROUTES.SIGN_UP) : Router.go(ROUTES.LOGIN)
+    if (window.location.pathname) {
+      Router.go(ROUTES.SIGN_UP)
+    } else {
+      Router.go(ROUTES.LOGIN)
+    }
   }
 
   // Определяем маршруты
