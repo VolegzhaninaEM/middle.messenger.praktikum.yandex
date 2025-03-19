@@ -1,0 +1,11 @@
+{
+  "*.{js,ts,tsx}": [
+    "prettier --write \"**/*.ts\"",
+    "stylelint \"**/*.less\" --fix",
+    "git add"
+  ],
+  "*.less": [
+    "stylelint --fix",
+    "git add"
+  ]
+}

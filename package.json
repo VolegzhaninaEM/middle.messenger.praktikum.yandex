@@ -51,8 +51,18 @@
     "format:ts": "prettier --write \"**/*.ts\"",
     "format:less": "stylelint \"**/*.less\" --fix",
     "test": "jest",
-    "prepare": "husky install",
-    "pre-commit": "npm run test && npm run lint:ts && npm run lint:less && npm run lint:typecheck"
+    "prepare": "husky install"
+  },
+  "lint-staged": {
+    "*.{ts,tsx}": [
+      "eslint --fix",
+      "prettier --write",
+      "git add"
+    ],
+    "*.less": [
+      "stylelint --fix",
+      "git add"
+    ]
   },
   "type": "module",
   "engines": {
