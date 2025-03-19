@@ -54,15 +54,6 @@
     "prepare": "husky install",
     "pre-commit": "npm-run-all test lint-staged"
   },
-  "lint-staged": {
-    "*.{ts,tsx}": [
-      "eslint --fix",
-      "prettier --write"
-    ],
-    "*.less": [
-      "stylelint --fix"
-    ]
-  },
   "type": "module",
   "engines": {
     "node": ">20.11.0"
