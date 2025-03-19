@@ -57,12 +57,10 @@
   "lint-staged": {
     "*.{ts,tsx}": [
       "eslint --fix",
-      "prettier --write",
-      "git add"
+      "prettier --write"
     ],
     "*.less": [
-      "stylelint --fix",
-      "git add"
+      "stylelint --fix"
     ]
   },
   "type": "module",
