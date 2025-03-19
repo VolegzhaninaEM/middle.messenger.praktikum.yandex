@@ -1,7 +1,7 @@
 import { v4 as makeUUID } from 'uuid'
 import { EventBus } from './eventBus'
 import { TProps, TChildren, TArrayChildren } from '../types/types'
-import Handlebars from 'handlebars'
+import * as Handlebars from 'handlebars'
 import { EVENTS } from '../constants/enums'
 import { IEvents } from '../constants/interface'
 type TEvents = {

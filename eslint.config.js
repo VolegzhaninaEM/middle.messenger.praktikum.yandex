@@ -7,7 +7,6 @@ export default [
   { languageOptions: { globals: globals.browser } },
   {
     rules: {
-      "no-unused-vars": "error",
       // Игнорировать переменные и аргументы, начинающиеся с "_"
       '@typescript-eslint/no-unused-vars': [
         'warn',

@@ -9,3 +9,9 @@ interface Window {
     location: (prop: string, val: string) => void
   }
 }
+
+// global.d.ts
+declare module '*.hbs?raw' {
+  const content: string
+  export default content
+}

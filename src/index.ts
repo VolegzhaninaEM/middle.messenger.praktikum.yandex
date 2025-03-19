@@ -19,7 +19,6 @@ async function checkAuth(): Promise<boolean> {
     return false
   }
 }
-a = 444
 
 ;(async () => {
   const isAuthenticated = await checkAuth()
