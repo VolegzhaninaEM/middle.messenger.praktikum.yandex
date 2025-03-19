@@ -1,4 +1,8 @@
-#!/usr/bin/env sh
-. "$(dirname -- "$0")/_/husky.sh"
+#!/bin/sh
+. "$(dirname "$0")/_/husky.sh"
 
+echo "Running tests..."
+npm run test
+
+echo "Running lint-staged..."
 npx lint-staged

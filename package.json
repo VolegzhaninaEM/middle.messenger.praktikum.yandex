@@ -51,7 +51,8 @@
     "format:ts": "prettier --write \"**/*.ts\"",
     "format:less": "stylelint \"**/*.less\" --fix",
     "test": "jest",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "pre-commit": "npm-run-all test lint-staged"
   },
   "lint-staged": {
     "*.{ts,tsx}": [
