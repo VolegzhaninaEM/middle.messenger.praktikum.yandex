@@ -36,4 +36,5 @@ https://sprint1-volegzhanina.netlify.app/
 - Тестами покрыты компоненты Component, HttpTransport, Router
 - Настроены pre-commit hooks
 - Запуск тестов по команде npm run test
+- Линтинг на пре-коммите использует lint-staged
 
