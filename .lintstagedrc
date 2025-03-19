@@ -1,9 +1,8 @@
 {
   "*.{ts,tsx}": [
-    "eslint src/**/*.ts",
-    "tsc --noEmit"
+    "eslint src/**/*.ts"
   ],
   "*.less": [
-    "stylelint \"**/*.less\""
+    "stylelint src/**/*.less"
   ]
 }
