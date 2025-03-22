@@ -35,9 +35,7 @@ class ChatWindow extends Component {
       const currentMessages =
         (store.getState().messages as TMessageInfo[]) || []
 
-      if (
-        !isEqual(this.previousMessages, currentMessages)
-      ) {
+      if (!isEqual(this.previousMessages, currentMessages)) {
         this.previousMessages = currentMessages
         console.log('Сообщения изменились:', currentMessages)
 

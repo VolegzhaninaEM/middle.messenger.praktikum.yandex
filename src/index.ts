@@ -9,7 +9,7 @@ async function checkAuth(): Promise<boolean> {
     const response = await authApi.fetchUser()
 
     if (response.status === 200) {
-      store.set('user', {...response.response}) // Сохраняем данные пользователя в store
+      store.set('user', { ...response.response }) // Сохраняем данные пользователя в store
       return true // Пользователь авторизован
     }
 
@@ -26,8 +26,11 @@ async function checkAuth(): Promise<boolean> {
   if (isAuthenticated) {
     Router.go(ROUTES.CHATS)
   } else {
-    const currentPath = window.location.pathname
-    currentPath ? Router.go(ROUTES.SIGN_UP) : Router.go(ROUTES.LOGIN)
+    if (window.location.pathname) {
+      Router.go(ROUTES.SIGN_UP)
+    } else {
+      Router.go(ROUTES.LOGIN)
+    }
   }
 
   // Определяем маршруты

@@ -9,7 +9,7 @@ export function connect(
     return class extends Block {
       constructor(tagName = 'div', props = {}) {
         // сохраняем начальное состояние
-        let state = mapStateToProps(store.getState())
+        const state = mapStateToProps(store.getState())
 
         super(tagName, { ...props, ...state })
       }

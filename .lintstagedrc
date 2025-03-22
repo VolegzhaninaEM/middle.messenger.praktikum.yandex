@@ -1,0 +1,8 @@
+{
+  "*.{ts,tsx}": [
+    "eslint src/**/*.ts"
+  ],
+  "*.less": [
+    "stylelint src/**/*.less"
+  ]
+}

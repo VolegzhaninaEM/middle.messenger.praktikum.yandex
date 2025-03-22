@@ -1,13 +1,13 @@
 import { v4 as makeUUID } from 'uuid'
 import { EventBus } from './eventBus'
 import { TProps, TChildren, TArrayChildren } from '../types/types'
-import Handlebars from 'handlebars'
+import * as Handlebars from 'handlebars'
 import { EVENTS } from '../constants/enums'
 import { IEvents } from '../constants/interface'
 type TEvents = {
-  on: Function
-  off: Function
-  emit: Function
+  on: (event: string, callback: (...args: unknown[]) => void) => void
+  off: (event: string, callback: (...args: unknown[]) => void) => void
+  emit: (event: string, ...args: unknown[]) => void
 }
 export abstract class Component {
   [x: string]: unknown
@@ -241,21 +241,16 @@ export abstract class Component {
   }
 
   private _makePropsProxy(props: TProps): TProps {
-    // Можно и так передать this
-    // Такой способ больше не применяется с приходом ES6+
-    const self = this
-
     return new Proxy(props, {
       get(target: TProps, prop: string): unknown {
         const value = target[prop]
         return typeof value === 'function' ? value.bind(target) : value
       },
-      set(target: TProps, prop: string, value: unknown) {
+      set: (target: TProps, prop: string, value: unknown): boolean => {
         target[prop] = value
 
         // Запускаем обновление компоненты
-        // Плохой cloneDeep, в следующей итерации нужно заставлять добавлять cloneDeep им самим
-        self.eventBus().emit(EVENTS.FLOW_CDU, { ...target }, target)
+        this.eventBus().emit(EVENTS.FLOW_CDU, { ...target }, target)
         return true
       },
       deleteProperty(): never {

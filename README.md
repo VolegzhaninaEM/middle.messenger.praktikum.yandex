@@ -31,3 +31,10 @@ https://sprint1-volegzhanina.netlify.app/
 - Внедрены HTTP API чатов, авторизации и пользователей
 - Подключены WebSocket для работы с real-time сообщениями
 - Добавлена проверка авторизации и редирект
+
+## Sprint 4
+- Тестами покрыты компоненты Component, HttpTransport, Router
+- Настроены pre-commit hooks
+- Запуск тестов по команде npm run test
+- Линтинг на пре-коммите использует lint-staged
+
